@@ -22,10 +22,10 @@ import com.google.api.codegen.ApiaryConfig;
 import com.google.api.codegen.SnippetSetRunner;
 import com.google.api.codegen.csharp.CSharpDiscoveryContext;
 import com.google.api.codegen.csharp.CSharpSnippetSetRunner;
+import com.google.api.codegen.discovery.config.go.GoTypeNameGenerator;
 import com.google.api.codegen.discovery.config.java.JavaTypeNameGenerator;
+import com.google.api.codegen.discovery.transformer.go.GoSampleMethodToViewTransformer;
 import com.google.api.codegen.discovery.transformer.java.JavaSampleMethodToViewTransformer;
-import com.google.api.codegen.go.GoDiscoveryContext;
-import com.google.api.codegen.go.GoSnippetSetRunner;
 import com.google.api.codegen.nodejs.NodeJSDiscoveryContext;
 import com.google.api.codegen.nodejs.NodeJSSnippetSetRunner;
 import com.google.api.codegen.php.PhpDiscoveryContext;
@@ -81,13 +81,15 @@ public class MainDiscoveryProviderFactory implements DiscoveryProviderFactory {
           .build();
 
     } else if (id.equals(GO)) {
-      return CommonDiscoveryProvider.newBuilder()
-          .setContext(new GoDiscoveryContext(service, apiaryConfig))
-          .setSnippetSetRunner(
-              new GoSnippetSetRunner<Method>(SnippetSetRunner.SNIPPET_RESOURCE_ROOT))
-          .setSnippetFileName(id + "/" + DEFAULT_SNIPPET_FILE)
+      return ViewModelProvider.newBuilder()
+          .setMethods(service.getApis(0).getMethodsList())
+          .setApiaryConfig(apiaryConfig)
+          .setSnippetSetRunner(new CommonSnippetSetRunner(new CommonRenderingUtil()))
+          .setMethodToViewTransformer(new GoSampleMethodToViewTransformer())
+          .setOverrides(sampleConfigOverrides)
+          .setTypeNameGenerator(new GoTypeNameGenerator())
+          .setOutputRoot(outputRoot)
           .build();
-
     } else if (id.equals(JAVA)) {
       return ViewModelProvider.newBuilder()
           .setMethods(service.getApis(0).getMethodsList())

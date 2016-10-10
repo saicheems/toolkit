@@ -18,38 +18,14 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.google.api.codegen.SnippetSetRunner;
-import com.google.api.codegen.viewmodel.ViewModel;
+import com.google.api.codegen.discovery.config.AuthType;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class SampleView implements ViewModel {
-
-  @Override
-  public abstract String templateFileName();
-
-  @Override
-  public abstract String outputPath();
-
-  @Override
-  public String resourceRoot() {
-    return SnippetSetRunner.SNIPPET_RESOURCE_ROOT;
-  }
-
-  public abstract String apiTitle();
-
-  public abstract String apiName();
-
-  public abstract String apiVersion();
-
-  @Nullable
-  public abstract List<String> imports();
-
-  public abstract SampleAuthView auth();
+public abstract class SampleBodyView {
 
   public abstract String serviceVarName();
 
-  @Nullable
   public abstract String serviceTypeName();
 
   public abstract String methodVerb();
@@ -58,42 +34,51 @@ public abstract class SampleView implements ViewModel {
 
   public abstract String requestVarName();
 
-  @Nullable
   public abstract String requestTypeName();
 
   public abstract boolean hasRequestBody();
 
-  @Nullable
   public abstract String requestBodyVarName();
 
-  @Nullable
   public abstract String requestBodyTypeName();
 
   public abstract boolean hasResponse();
 
-  @Nullable
   public abstract String responseVarName();
 
-  @Nullable
   public abstract String responseTypeName();
 
   public abstract List<SampleFieldView> fields();
 
-  @Nullable
   public abstract List<String> fieldVarNames();
 
   public abstract boolean isPageStreaming();
 
-  @Nullable
-  public abstract SamplePageStreamingView pageStreaming();
+  public abstract String resourceFieldName();
+
+  public abstract String resourceGetterName();
+
+  public abstract String resourceVarName();
+
+  public abstract String resourceTypeName();
+
+  public abstract boolean isResourceMap();
 
   public abstract boolean hasMediaUpload();
 
   public abstract boolean hasMediaDownload();
 
+  public abstract AuthType authType();
+
+  public abstract String authInstructionsUrl();
+
+  public abstract List<String> authScopes();
+
+  public abstract boolean isAuthScopesSingular();
+
   // Java specific section...
   @Nullable
-  public abstract String className();
+  public abstract Boolean isResourceSetterInRequestBody();
 
   @Nullable
   public abstract String createServiceFuncName();
@@ -101,6 +86,15 @@ public abstract class SampleView implements ViewModel {
   // Node.js specific section...
   @Nullable
   public abstract String googleImportVarName();
+
+  @Nullable
+  public abstract String pageVarName();
+
+  @Nullable
+  public abstract String handlePageVarName();
+
+  @Nullable
+  public abstract String authFuncName();
 
   // Go specific section...
   @Nullable
@@ -110,34 +104,14 @@ public abstract class SampleView implements ViewModel {
   public abstract String clientVarName();
 
   @Nullable
-  public abstract String contextVarName();
+  public abstract List<String> authScopeConsts();
 
   public static Builder newBuilder() {
-    return new AutoValue_SampleView.Builder();
+    return new AutoValue_SampleBodyView.Builder();
   }
 
   @AutoValue.Builder
   public static abstract class Builder {
-
-    public abstract Builder templateFileName(String val);
-
-    /*
-     * Since the semantics of output path generation differ from GAPIC and
-     * discovery, this field should only ever contain the name of the output
-     * file. The rest of the path is generated and prefixed in ViewModel, where
-     * there is access to the service configuration.
-     */
-    public abstract Builder outputPath(String val);
-
-    public abstract Builder apiTitle(String val);
-
-    public abstract Builder apiName(String val);
-
-    public abstract Builder apiVersion(String val);
-
-    public abstract Builder imports(List<String> val);
-
-    public abstract Builder auth(SampleAuthView val);
 
     public abstract Builder serviceVarName(String val);
 
@@ -159,6 +133,8 @@ public abstract class SampleView implements ViewModel {
 
     public abstract Builder hasResponse(boolean val);
 
+    public abstract Builder resourceFieldName(String val);
+
     public abstract Builder responseVarName(String val);
 
     public abstract Builder responseTypeName(String val);
@@ -169,24 +145,44 @@ public abstract class SampleView implements ViewModel {
 
     public abstract Builder isPageStreaming(boolean val);
 
-    public abstract Builder pageStreaming(SamplePageStreamingView val);
+    public abstract Builder resourceGetterName(String val);
+
+    public abstract Builder resourceVarName(String val);
+
+    public abstract Builder resourceTypeName(String val);
+
+    public abstract Builder isResourceMap(boolean val);
 
     public abstract Builder hasMediaUpload(boolean val);
 
     public abstract Builder hasMediaDownload(boolean val);
 
-    public abstract Builder className(String val);
+    public abstract Builder authType(AuthType val);
+
+    public abstract Builder authInstructionsUrl(String val);
+
+    public abstract Builder authScopes(List<String> val);
+
+    public abstract Builder isAuthScopesSingular(boolean val);
+
+    public abstract Builder isResourceSetterInRequestBody(Boolean val);
 
     public abstract Builder createServiceFuncName(String val);
 
     public abstract Builder googleImportVarName(String val);
 
+    public abstract Builder pageVarName(String val);
+
+    public abstract Builder handlePageVarName(String val);
+
+    public abstract Builder authFuncName(String val);
+
     public abstract Builder servicePackageName(String val);
 
     public abstract Builder clientVarName(String val);
 
-    public abstract Builder contextVarName(String val);
+    public abstract Builder authScopeConsts(List<String> val);
 
-    public abstract SampleView build();
+    public abstract SampleBodyView build();
   }
 }
