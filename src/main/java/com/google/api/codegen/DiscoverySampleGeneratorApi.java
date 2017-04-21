@@ -47,7 +47,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 /** Main class for the discovery doc fragment generator. */
-public class DiscoveryFragmentGeneratorApi {
+public class DiscoverySampleGeneratorApi {
   public static final Option<String> DISCOVERY_DOC =
       ToolOptions.createOption(
           String.class,
@@ -87,7 +87,7 @@ public class DiscoveryFragmentGeneratorApi {
   private final String dataPath;
 
   /** Constructs a discovery doc fragment generator API based on given options. */
-  public DiscoveryFragmentGeneratorApi(ToolOptions options) {
+  public DiscoverySampleGeneratorApi(ToolOptions options) {
     this.options = options;
     this.dataPath = getDataPath();
   }

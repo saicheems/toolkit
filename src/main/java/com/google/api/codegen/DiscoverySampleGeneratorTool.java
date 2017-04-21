@@ -25,10 +25,10 @@ import org.apache.commons.cli.Options;
 // Example usage: (assuming environment variable BASE is the base directory of the project
 // containing the YAML config, discovery doc, and output)
 //
-//     DiscoveryFragmentGeneratorTool --discovery_doc=$BASE/<service>.json \
+//     DiscoverySampleGeneratorTool --discovery_doc=$BASE/<service>.json \
 //        --gapic_yaml=$BASE/<service>_gapic.yaml \
 //        --output=$BASE
-public class DiscoveryFragmentGeneratorTool {
+public class DiscoverySampleGeneratorTool {
   public static void main(String[] args) throws Exception {
     Options options = new Options();
     options.addOption("h", "help", false, "show usage");
@@ -93,13 +93,13 @@ public class DiscoveryFragmentGeneratorTool {
       throws Exception {
 
     ToolOptions options = ToolOptions.create();
-    options.set(DiscoveryFragmentGeneratorApi.DISCOVERY_DOC, discoveryDoc);
+    options.set(DiscoverySampleGeneratorApi.DISCOVERY_DOC, discoveryDoc);
     options.set(
-        DiscoveryFragmentGeneratorApi.GENERATOR_CONFIG_FILES, Arrays.asList(generatorConfigs));
-    options.set(DiscoveryFragmentGeneratorApi.OVERRIDE_FILES, overridesFile);
-    options.set(DiscoveryFragmentGeneratorApi.OUTPUT_FILE, outputDirectory);
-    options.set(DiscoveryFragmentGeneratorApi.AUTH_INSTRUCTIONS_URL, authInstructions);
-    DiscoveryFragmentGeneratorApi generator = new DiscoveryFragmentGeneratorApi(options);
+        DiscoverySampleGeneratorApi.GENERATOR_CONFIG_FILES, Arrays.asList(generatorConfigs));
+    options.set(DiscoverySampleGeneratorApi.OVERRIDE_FILES, overridesFile);
+    options.set(DiscoverySampleGeneratorApi.OUTPUT_FILE, outputDirectory);
+    options.set(DiscoverySampleGeneratorApi.AUTH_INSTRUCTIONS_URL, authInstructions);
+    DiscoverySampleGeneratorApi generator = new DiscoverySampleGeneratorApi(options);
     generator.run();
   }
 }

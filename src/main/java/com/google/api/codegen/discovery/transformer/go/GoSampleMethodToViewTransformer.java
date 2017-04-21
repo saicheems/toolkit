@@ -14,7 +14,7 @@
  */
 package com.google.api.codegen.discovery.transformer.go;
 
-import com.google.api.codegen.discovery.config.AuthType;
+import com.google.api.codegen.discovery.viewmodel.AuthType;
 import com.google.api.codegen.discovery.config.FieldInfo;
 import com.google.api.codegen.discovery.config.MethodInfo;
 import com.google.api.codegen.discovery.config.SampleConfig;

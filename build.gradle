@@ -120,7 +120,7 @@ dependencies {
 task discoJar(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
   archiveName = "discoGen-${version}.jar"
   manifest {
-    attributes "Main-Class": "com.google.api.codegen.DiscoveryFragmentGeneratorTool"
+    attributes "Main-Class": "com.google.api.codegen.DiscoverySampleGeneratorTool"
   }
   from sourceSets.main.output
   configurations = [ project.configurations.runtime ]
@@ -434,11 +434,11 @@ task runGrpcMetadataGen(type: JavaExec) {
   }
 }
 
-// Task to run DiscoveryFragmentGeneratorTool
+// Task to run DiscoverySampleGeneratorTool
 // =================================================================
 task runDiscoGen(type: JavaExec) {
   classpath = sourceSets.main.runtimeClasspath
-  main = 'com.google.api.codegen.DiscoveryFragmentGeneratorTool'
+  main = 'com.google.api.codegen.DiscoverySampleGeneratorTool'
   if (project.hasProperty('clargs')) {
     args = clargs.split(',').toList()
   }
@@ -446,7 +446,7 @@ task runDiscoGen(type: JavaExec) {
 
 task runDiscoBatch(type: JavaExec) {
   classpath = sourceSets.main.runtimeClasspath
-  main = 'com.google.api.codegen.DiscoveryFragmentGeneratorBatch'
+  main = 'com.google.api.codegen.DiscoverySampleGeneratorBatch'
   if (project.hasProperty('clargs')) {
     args = clargs.split(',').toList()
   }
