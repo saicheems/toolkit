@@ -16,8 +16,11 @@ package com.google.api.codegen;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.codegen.discovery.DiscoveryNode;
 import com.google.api.codegen.discovery.DiscoveryProvider;
 import com.google.api.codegen.discovery.DiscoveryProviderFactory;
+import com.google.api.codegen.discovery.Document;
+import com.google.api.codegen.discovery.Method;
 import com.google.api.codegen.util.ClassInstantiator;
 import com.google.api.tools.framework.model.DiagCollector;
 import com.google.api.tools.framework.model.SimpleDiagCollector;
@@ -31,12 +34,11 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.TypeLiteral;
-import com.google.protobuf.Api;
 import com.google.protobuf.Message;
-import com.google.protobuf.Method;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -93,10 +95,10 @@ public class DiscoverySampleGeneratorApi {
   }
 
   protected void process() throws Exception {
-    DiscoveryImporter discovery =
-        DiscoveryImporter.parse(
-            com.google.common.io.Files.newReader(
-                new File(options.get(DISCOVERY_DOC)), Charset.forName("UTF8")));
+    File file = new File(options.get(DISCOVERY_DOC));
+    Reader reader = com.google.common.io.Files.newReader(file, Charset.forName("UTF8"));
+    JsonNode node = new ObjectMapper().readTree(reader);
+    Document document = Document.from(new DiscoveryNode(node));
 
     // Read the YAML config and convert it to proto.
     List<String> configFileNames = options.get(GENERATOR_CONFIG_FILES);
@@ -114,10 +116,9 @@ public class DiscoverySampleGeneratorApi {
     List<JsonNode> overrides = new ArrayList<>();
     for (String filename : filenames) {
       try {
-        BufferedReader reader =
+        BufferedReader bufferedReader =
             com.google.common.io.Files.newReader(new File(filename), Charset.forName("UTF8"));
-        ObjectMapper mapper = new ObjectMapper();
-        overrides.add(mapper.readTree(reader));
+        overrides.add(new ObjectMapper().readTree(bufferedReader));
       } catch (FileNotFoundException e) {
         // Do nothing if the overrides file doesn't exist. Avoiding crashes for
         // this scenario makes parts of the automation around samplegen simpler.
@@ -129,19 +130,12 @@ public class DiscoverySampleGeneratorApi {
     String factory = generator.getFactory();
     String id = generator.getId();
 
-    String authInstructions = options.get(AUTH_INSTRUCTIONS_URL);
-    ApiaryConfig apiaryConfig = discovery.getConfig();
-    apiaryConfig.setAuthInstructionsUrl(parseAuthInstructionsUrl(authInstructions, id));
-
     DiscoveryProviderFactory providerFactory = createProviderFactory(factory);
-    DiscoveryProvider provider =
-        providerFactory.create(discovery.getService(), apiaryConfig, overrides, id);
+    DiscoveryProvider provider = providerFactory.create(document, overrides, id);
 
-    for (Api api : discovery.getService().getApisList()) {
-      for (Method method : api.getMethodsList()) {
-        Map<String, Doc> files = provider.generate(method);
-        ToolUtil.writeFiles(files, options.get(OUTPUT_FILE));
-      }
+    for (Method method : document.methods()) {
+      Map<String, Doc> files = provider.generate(method);
+      ToolUtil.writeFiles(files, options.get(OUTPUT_FILE));
     }
   }
 

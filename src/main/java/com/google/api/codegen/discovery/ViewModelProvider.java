@@ -18,15 +18,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
-import com.google.api.codegen.ApiaryConfig;
-import com.google.api.codegen.discovery.config.ApiaryConfigToSampleConfigConverter;
-import com.google.api.codegen.discovery.config.SampleConfig;
-import com.google.api.codegen.discovery.config.TypeNameGenerator;
-import com.google.api.codegen.discovery.transformer.SampleMethodToViewTransformer;
+import com.google.api.codegen.discovery.transformer.SampleTransformer;
 import com.google.api.codegen.rendering.CommonSnippetSetRunner;
 import com.google.api.codegen.viewmodel.ViewModel;
 import com.google.api.tools.framework.snippet.Doc;
-import com.google.protobuf.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -35,46 +30,34 @@ import java.util.TreeMap;
 /*
  * Calls the MethodToViewTransformer on a method with the provided ApiaryConfig.
  *
- * Responsible for generating the SampleConfig, merging with optional overrides,
+ * Responsible for generating the Document, merging with optional overrides,
  * and calling the MethodToViewTransformer.
  */
 public class ViewModelProvider implements DiscoveryProvider {
 
-  private final List<Method> methods;
-  private final ApiaryConfig apiaryConfig;
+  private final Document document;
   private final CommonSnippetSetRunner snippetSetRunner;
-  private final SampleMethodToViewTransformer methodToViewTransformer;
-  private final List<JsonNode> sampleConfigOverrides;
-  private final TypeNameGenerator typeNameGenerator;
+  private final SampleTransformer sampleTransformer;
+  private final List<JsonNode> overrides;
   private final String outputRoot;
 
   private ViewModelProvider(
-      List<Method> methods,
-      ApiaryConfig apiaryConfig,
+      Document document,
       CommonSnippetSetRunner snippetSetRunner,
-      SampleMethodToViewTransformer methodToViewTransformer,
-      List<JsonNode> sampleConfigOverrides,
-      TypeNameGenerator typeNameGenerator,
+      SampleTransformer methodToViewTransformer,
+      List<JsonNode> overrides,
       String outputRoot) {
-    this.methods = methods;
-    this.apiaryConfig = apiaryConfig;
+    this.document = document;
     this.snippetSetRunner = snippetSetRunner;
-    this.methodToViewTransformer = methodToViewTransformer;
-    this.sampleConfigOverrides = sampleConfigOverrides;
-    this.typeNameGenerator = typeNameGenerator;
+    this.sampleTransformer = methodToViewTransformer;
+    this.overrides = overrides;
     this.outputRoot = outputRoot;
   }
 
   @Override
   public Map<String, Doc> generate(Method method) {
-    // Before the transformer step, we generate the SampleConfig and apply overrides if available.
-    // TODO(saicheems): Once all MVVM refactoring is done, change
-    // DiscoveryProvider to generate a single SampleConfig and provide one
-    // method at a time.
-    SampleConfig sampleConfig =
-        new ApiaryConfigToSampleConfigConverter(methods, apiaryConfig, typeNameGenerator).convert();
-    sampleConfig = override(sampleConfig, sampleConfigOverrides);
-    ViewModel surfaceDoc = methodToViewTransformer.transform(method, sampleConfig);
+    Document overriddenDocument = override(document, overrides);
+    ViewModel surfaceDoc = sampleTransformer.transform(overriddenDocument, method);
     Doc doc = snippetSetRunner.generate(surfaceDoc);
     Map<String, Doc> docs = new TreeMap<>();
     if (doc == null) {
@@ -85,27 +68,26 @@ public class ViewModelProvider implements DiscoveryProvider {
   }
 
   /**
-   * Applies sampleConfigOverrides to sampleConfig.
+   * Applies overrides to document.
    *
-   * <p>If sampleConfigOverrides is null, sampleConfig is returned as is.
+   * <p>If overrides is null, document is returned as is.
    */
-  private static SampleConfig override(
-      SampleConfig sampleConfig, List<JsonNode> sampleConfigOverrides) {
-    if (sampleConfigOverrides.isEmpty()) {
-      return sampleConfig;
+  private static Document override(Document document, List<JsonNode> overrides) {
+    if (overrides.isEmpty()) {
+      return document;
     }
     // We use JSON merging to facilitate this override mechanism:
-    // 1. Convert the SampleConfig into a JSON tree.
+    // 1. Convert the Document into a JSON tree.
     // 2. Convert the overrides into JSON trees with arbitrary schema.
-    // 3. Overwrite object fields of the SampleConfig tree where field names match.
-    // 4. Convert the modified SampleConfig tree back into a SampleConfig.
+    // 3. Overwrite object fields of the Document tree where field names match.
+    // 4. Convert the modified Document tree back into a Document.
     ObjectMapper mapper = new ObjectMapper().registerModule(new GuavaModule());
-    JsonNode tree = mapper.valueToTree(sampleConfig);
-    for (JsonNode override : sampleConfigOverrides) {
+    JsonNode tree = mapper.valueToTree(document);
+    for (JsonNode override : overrides) {
       merge((ObjectNode) tree, (ObjectNode) override);
     }
     try {
-      return mapper.treeToValue(tree, SampleConfig.class);
+      return mapper.treeToValue(tree, Document.class);
     } catch (Exception e) {
       throw new RuntimeException("failed to parse config to node: " + e.getMessage());
     }
@@ -154,23 +136,16 @@ public class ViewModelProvider implements DiscoveryProvider {
   }
 
   public static class Builder {
-    private List<Method> methods;
-    private ApiaryConfig apiaryConfig;
+    private Document document;
     private CommonSnippetSetRunner snippetSetRunner;
-    private SampleMethodToViewTransformer methodToViewTransformer;
-    private List<JsonNode> sampleConfigOverrides;
-    private TypeNameGenerator typeNameGenerator;
+    private SampleTransformer sampleTransformer;
+    private List<JsonNode> overrides;
     private String outputRoot;
 
     private Builder() {}
 
-    public Builder setMethods(List<Method> methods) {
-      this.methods = methods;
-      return this;
-    }
-
-    public Builder setApiaryConfig(ApiaryConfig apiaryConfig) {
-      this.apiaryConfig = apiaryConfig;
+    public Builder setDocument(Document document) {
+      this.document = document;
       return this;
     }
 
@@ -179,19 +154,13 @@ public class ViewModelProvider implements DiscoveryProvider {
       return this;
     }
 
-    public Builder setMethodToViewTransformer(
-        SampleMethodToViewTransformer methodToViewTransformer) {
-      this.methodToViewTransformer = methodToViewTransformer;
+    public Builder setMethodToViewTransformer(SampleTransformer sampleTransformer) {
+      this.sampleTransformer = sampleTransformer;
       return this;
     }
 
     public Builder setOverrides(List<JsonNode> overrides) {
-      this.sampleConfigOverrides = overrides;
-      return this;
-    }
-
-    public Builder setTypeNameGenerator(TypeNameGenerator typeNameGenerator) {
-      this.typeNameGenerator = typeNameGenerator;
+      this.overrides = overrides;
       return this;
     }
 
@@ -202,13 +171,7 @@ public class ViewModelProvider implements DiscoveryProvider {
 
     public ViewModelProvider build() {
       return new ViewModelProvider(
-          methods,
-          apiaryConfig,
-          snippetSetRunner,
-          methodToViewTransformer,
-          sampleConfigOverrides,
-          typeNameGenerator,
-          outputRoot);
+          document, snippetSetRunner, sampleTransformer, overrides, outputRoot);
     }
   }
 }

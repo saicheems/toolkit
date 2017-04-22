@@ -1,4 +1,4 @@
-/* Copyright 2016 Google Inc
+/* Copyright 2017 Google Inc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,16 @@
  */
 package com.google.api.codegen.discovery.viewmodel;
 
-import com.google.api.codegen.discovery.viewmodel.LineView;
-import com.google.api.codegen.discovery.viewmodel.MediaView;
+import com.google.api.codegen.discovery.Schema;
 import com.google.auto.value.AutoValue;
-
 import java.util.List;
 
 @AutoValue
-public abstract class MethodView {
+public abstract class MethodInfoView {
 
-  public abstract List<LineView> fields();
-
-  public abstract boolean hasMediaDownload();
-
-  public abstract boolean hasMediaUpload();
+  public static Builder newBuilder() {
+    return new AutoValue_MethodInfoView.Builder();
+  }
 
   public abstract boolean hasRequestBody();
 
@@ -37,26 +33,26 @@ public abstract class MethodView {
 
   public abstract boolean isScopesSingular();
 
-  public abstract LineView request();
+  public abstract String pageStreamingResourcePropertyName();
 
-  public abstract LineView requestBody();
+  public abstract Schema.Type pageStreamingResourceType();
 
-  public abstract String resourceGetterFunc();
+  public abstract String parametersPageTokenPropertyName();
 
-  public abstract LineView response();
+  public abstract String requestBodyPageTokenPropertyName();
 
-  public abstract String responseVar();
+  public abstract String responsePageTokenPropertyName();
 
   public abstract List<String> scopes();
 
-  public static Builder newBuilder() {return new AutoValue_MethodView.Builder()}
+  public abstract boolean supportsMediaDownload();
+
+  public abstract boolean supportsMediaUpload();
 
   @AutoValue.Builder
-  public abstract class Builder {
+  public abstract static class Builder {
 
-    public abstract Builder fields(List<LineView> val);
-
-    public abstract Builder hasMediaDownload(boolean val);
+    public abstract MethodInfoView build();
 
     public abstract Builder hasRequestBody(boolean val);
 
@@ -66,14 +62,20 @@ public abstract class MethodView {
 
     public abstract Builder isScopesSingular(boolean val);
 
-    public abstract Builder request(LineView val);
+    public abstract Builder pageStreamingResourcePropertyName(String val);
 
-    public abstract Builder resourceGetterFunc(String val);
+    public abstract Builder pageStreamingResourceType(Schema.Type val);
 
-    public abstract Builder response(LineView val);
+    public abstract Builder parametersPageTokenPropertyName(String val);
 
-    public abstract Builder responseVar(String val);
+    public abstract Builder requestBodyPageTokenPropertyName(String val);
+
+    public abstract Builder responsePageTokenPropertyName(String val);
 
     public abstract Builder scopes(List<String> val);
+
+    public abstract Builder supportsMediaDownload(boolean val);
+
+    public abstract Builder supportsMediaUpload(boolean val);
   }
 }

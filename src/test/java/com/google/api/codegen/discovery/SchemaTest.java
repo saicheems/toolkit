@@ -27,7 +27,7 @@ import org.junit.Test;
 
 public class SchemaTest {
   @Test
-  public void testSchema() throws IOException {
+  public void testSchemaFromJson() throws IOException {
     String file = "src/test/java/com/google/api/codegen/discoverytestdata/schema.json";
     Reader reader = new InputStreamReader(new FileInputStream(new File(file)));
 
@@ -85,5 +85,10 @@ public class SchemaTest {
 
     Truth.assertThat(properties.get("uint64").type()).isEqualTo(Schema.Type.STRING);
     Truth.assertThat(properties.get("uint64").format()).isEqualTo(Schema.Format.UINT64);
+  }
+
+  @Test
+  public void testSchemaFromNull() {
+    Truth.assertThat(Schema.from(null).type() == Schema.Type.EMPTY);
   }
 }

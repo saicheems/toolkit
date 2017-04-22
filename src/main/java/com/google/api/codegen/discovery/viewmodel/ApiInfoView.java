@@ -1,4 +1,4 @@
-/* Copyright 2016 Google Inc
+/* Copyright 2017 Google Inc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,19 @@
  */
 package com.google.api.codegen.discovery.viewmodel;
 
+import com.google.api.codegen.discovery.Document;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class ApiView {
+public abstract class ApiInfoView {
+
+  public static Builder newBuilder() {
+    return new AutoValue_ApiInfoView.Builder();
+  }
 
   public abstract String authInstructionsUrl();
 
-  public abstract AuthType authType();
+  public abstract Document.AuthType authType();
 
   public abstract String discoveryDocUrl();
 
@@ -31,21 +36,21 @@ public abstract class ApiView {
 
   public abstract String version();
 
-  public static Builder newBuilder() {return new AutoValue_ApiView.Builder();}
-
   @AutoValue.Builder
-  public abstract class Builder {
+  public abstract static class Builder {
 
     public abstract Builder authInstructionsUrl(String val);
 
-    public abstract Builder authType(AuthType val);
+    public abstract Builder authType(Document.AuthType val);
 
-    public abstract String discoveryDocUrl(String val);
+    public abstract ApiInfoView build();
 
-    public abstract String name(String val);
+    public abstract Builder discoveryDocUrl(String val);
 
-    public abstract String title(String val);
+    public abstract Builder name(String val);
 
-    public abstract String version(String val);
+    public abstract Builder title(String val);
+
+    public abstract Builder version(String val);
   }
 }

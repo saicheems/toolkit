@@ -16,6 +16,8 @@ package com.google.api.codegen.discovery;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,8 +31,8 @@ import org.junit.Test;
 
 public class MethodTest {
   @Test
-  public void testMethod() throws IOException {
-    String file = "src/test/java/com/google/api/codegen/discoverytestdata/method_.json";
+  public void testMethodFromJson() throws IOException {
+    String file = "src/test/java/com/google/api/codegen/discoverytestdata/method.json";
     Reader reader = new InputStreamReader(new FileInputStream(new File(file)));
 
     ObjectMapper mapper = new ObjectMapper();
@@ -42,16 +44,15 @@ public class MethodTest {
     Truth.assertThat(method.description()).isEqualTo("Get a baz!");
     Truth.assertThat(method.httpMethod()).isEqualTo("GET");
     Truth.assertThat(method.id()).isEqualTo("foo.bar.baz.get");
-    Truth.assertThat(method.parameterOrder()).isEqualTo(Arrays.asList("p1", "p2"));
 
-    Map<String, Schema> parameters = method.parameters();
+    Map<String, Schema> properties = method.parameters();
+    Truth.assertThat(ImmutableList.copyOf(properties.keySet())).isEqualTo(Arrays.asList("p2", "p1", "p3"));
+    Truth.assertThat(properties.get("p1").type()).isEqualTo(Schema.Type.STRING);
+    Truth.assertThat(properties.get("p1").required()).isTrue();
+    Truth.assertThat(properties.get("p1").location()).isEqualTo("path");
 
-    Truth.assertThat(parameters.get("p1").type()).isEqualTo(Schema.Type.STRING);
-    Truth.assertThat(parameters.get("p1").required()).isTrue();
-    Truth.assertThat(parameters.get("p1").location()).isEqualTo("path");
-
-    Truth.assertThat(parameters.get("p2").type()).isEqualTo(Schema.Type.STRING);
-    Truth.assertThat(parameters.get("p2").location()).isEqualTo("query");
+    Truth.assertThat(properties.get("p2").type()).isEqualTo(Schema.Type.STRING);
+    Truth.assertThat(properties.get("p2").location()).isEqualTo("query");
 
     Truth.assertThat(method.resourceHierarchy()).isEqualTo(resourceHierarchy);
     Truth.assertThat(method.request().reference()).isEqualTo("GetBazRequest");

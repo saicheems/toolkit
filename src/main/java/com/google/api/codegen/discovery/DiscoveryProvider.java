@@ -15,7 +15,6 @@
 package com.google.api.codegen.discovery;
 
 import com.google.api.tools.framework.snippet.Doc;
-import com.google.protobuf.Method;
 import java.util.Map;
 
 /** A DiscoveryProvider performs fragment generation using discovery-based input. */

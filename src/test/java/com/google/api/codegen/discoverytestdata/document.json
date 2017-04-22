@@ -1,4 +1,11 @@
 {
+  "auth": {
+    "oauth2": {
+      "scopes": {
+        "https://example.com/foo": {}
+      }
+    }
+  },
   "description": "My API!",
   "methods": {
     "foo": {

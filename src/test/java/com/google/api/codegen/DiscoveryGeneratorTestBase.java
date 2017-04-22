@@ -16,15 +16,16 @@ package com.google.api.codegen;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.codegen.discovery.DiscoveryNode;
 import com.google.api.codegen.discovery.DiscoveryProvider;
+import com.google.api.codegen.discovery.Document;
 import com.google.api.codegen.discovery.MainDiscoveryProviderFactory;
+import com.google.api.codegen.discovery.Method;
 import com.google.api.tools.framework.model.SimpleDiagCollector;
 import com.google.api.tools.framework.model.testing.ConfigBaselineTestCase;
 import com.google.api.tools.framework.snippet.Doc;
 import com.google.common.io.Files;
-import com.google.protobuf.Api;
 import com.google.protobuf.MessageOrBuilder;
-import com.google.protobuf.Method;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
@@ -50,7 +51,7 @@ public abstract class DiscoveryGeneratorTestBase extends ConfigBaselineTestCase 
   private final String[] gapicConfigFileNames;
   private final JsonNode overridesJson;
   protected ConfigProto config;
-  protected DiscoveryImporter discoveryImporter;
+  protected Document document;
 
   public DiscoveryGeneratorTestBase(
       String name, String discoveryDocFileName, String[] gapicConfigFileNames) {
@@ -77,11 +78,9 @@ public abstract class DiscoveryGeneratorTestBase extends ConfigBaselineTestCase 
 
   protected void setupDiscovery() {
     try {
-      discoveryImporter =
-          DiscoveryImporter.parse(
-              new StringReader(
-                  getTestDataLocator()
-                      .readTestData(getTestDataLocator().findTestData(discoveryDocFileName))));
+      URL url = getTestDataLocator().findTestData(discoveryDocFileName);
+      StringReader reader = new StringReader(getTestDataLocator().readTestData(url));
+      document = Document.from(new DiscoveryNode(new ObjectMapper().readTree(reader)));
     } catch (IOException e) {
       throw new IllegalArgumentException("Problem creating Generator", e);
     }
@@ -100,24 +99,18 @@ public abstract class DiscoveryGeneratorTestBase extends ConfigBaselineTestCase 
 
     String id = generator.getId();
 
-    // This field is manually populated to test the end-to-end behavior of the
-    // "auth_instructions" flag.
-    discoveryImporter.getConfig().setAuthInstructionsUrl("https://foo.com/bar");
     List<JsonNode> overrides = new ArrayList<JsonNode>();
     if (overridesJson != null) {
       overrides.add(overridesJson);
     }
     DiscoveryProvider provider =
-        MainDiscoveryProviderFactory.defaultCreate(
-            discoveryImporter.getService(), discoveryImporter.getConfig(), overrides, id);
+        MainDiscoveryProviderFactory.defaultCreate(document, overrides, id);
 
     Doc output = Doc.EMPTY;
-    for (Api api : discoveryImporter.getService().getApisList()) {
-      for (Method method : api.getMethodsList()) {
-        Map<String, Doc> docs = provider.generate(method);
-        for (Doc doc : docs.values()) {
-          output = Doc.joinWith(Doc.BREAK, output, doc);
-        }
+    for (Method method : document.methods()) {
+      Map<String, Doc> docs = provider.generate(method);
+      for (Doc doc : docs.values()) {
+        output = Doc.joinWith(Doc.BREAK, output, doc);
       }
     }
     return Doc.vgroup(output);

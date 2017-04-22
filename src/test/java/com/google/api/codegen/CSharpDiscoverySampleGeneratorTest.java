@@ -23,19 +23,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-/** Java discovery doc fragment generator baseline tests. */
 @RunWith(Parameterized.class)
-public class JavaDiscoveryFragmentGeneratorTest extends DiscoveryGeneratorTestBase {
+public class CSharpDiscoverySampleGeneratorTest extends DiscoveryGeneratorTestBase {
 
-  public JavaDiscoveryFragmentGeneratorTest(
+  public CSharpDiscoverySampleGeneratorTest(
       String name, String discoveryDocFileName, String[] gapicConfigFileNames) {
     super(name, discoveryDocFileName, gapicConfigFileNames);
   }
 
-  /**
-   * Declares test parameters, each one an array of values passed to the constructor, with the first
-   * element a name, the second a discovery doc, and the third a partial GAPIC config.
-   */
   @Parameters(name = "{0}")
   public static List<Object[]> testedConfigs() {
     File dir =
@@ -47,9 +42,9 @@ public class JavaDiscoveryFragmentGeneratorTest extends DiscoveryGeneratorTestBa
       String fileName = file.getName();
       builder.add(
           new Object[] {
-            "java_" + fileName,
+            "csharp_" + fileName,
             "discoveries/" + fileName,
-            new String[] {"com/google/api/codegen/java/java_discovery.yaml"}
+            new String[] {"com/google/api/codegen/csharp/csharp_discovery.yaml"}
           });
     }
     return builder.build();
@@ -57,11 +52,8 @@ public class JavaDiscoveryFragmentGeneratorTest extends DiscoveryGeneratorTestBa
 
   @Before
   public void putTestDirectory() {
-    getTestDataLocator().addTestDataSource(this.getClass(), "testdata/discoveries/java");
+    getTestDataLocator().addTestDataSource(this.getClass(), "testdata/discoveries/csharp");
   }
-
-  // Tests
-  // =====
 
   @Test
   public void fragments() throws Exception {

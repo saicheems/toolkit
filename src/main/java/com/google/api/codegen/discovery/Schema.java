@@ -14,9 +14,10 @@
  */
 package com.google.api.codegen.discovery;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
-import java.util.HashMap;
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
+
 import javax.annotation.Nullable;
 
 /**
@@ -26,6 +27,126 @@ import javax.annotation.Nullable;
  */
 @AutoValue
 public abstract class Schema {
+
+  /**
+   * Returns true if this schema contains a property with the given name.
+   *
+   * @param name the name of the property.
+   * @return whether or not this schema has a property with the given name.
+   */
+  public boolean hasProperty(String name) {
+    return properties().keySet().contains(name);
+  }
+
+  /**
+   * Returns a schema constructed from root, or an empty schema if root has no children.
+   *
+   * @param root the root node to parse.
+   * @return a schema.
+   */
+  public static Schema from(DiscoveryNode root) {
+    if (root.isEmpty()) {
+      return empty();
+    }
+    Schema additionalProperties = Schema.from(root.getObject("additionalProperties"));
+    String defaultValue = root.getString("default");
+    String description = root.getString("description");
+    Format format = Format.getEnum(root.getString("format"));
+    String id = root.getString("id");
+    String location = root.getString("location");
+    String pattern = root.getString("pattern");
+
+    ImmutableMap.Builder<String, Schema> propertiesBuilder = ImmutableMap.builder();
+    DiscoveryNode propertiesNode = root.getObject("properties");
+    for (String name : propertiesNode.fieldNames()) {
+      propertiesBuilder.put(name, Schema.from(propertiesNode.getObject(name)));
+    }
+
+    String reference = root.getString("$ref");
+    boolean repeated = root.getBoolean("repeated");
+    boolean required = root.getBoolean("required");
+    Type type = Type.getEnum(root.getString("type"));
+
+    return new AutoValue_Schema(
+        additionalProperties,
+        defaultValue,
+        description,
+        format,
+        id,
+        location,
+        pattern,
+        propertiesBuilder.build(),
+        reference,
+        repeated,
+        required,
+        type);
+  }
+
+  public static Schema empty() {
+    ImmutableMap<String, Schema> properties = ImmutableMap.of();
+    return new AutoValue_Schema(
+        null,
+        "",
+        "",
+        Format.EMPTY,
+        "",
+        "",
+        "",
+        properties,
+        "",
+        false,
+        false,
+        Type.EMPTY);
+  }
+
+  /** @return the schema of the additionalProperties, or null if none. */
+  @JsonProperty("additionalProperties")
+  @Nullable
+  public abstract Schema additionalProperties();
+
+  /** @return the default value. */
+  @JsonProperty("defaultValue")
+  public abstract String defaultValue();
+
+  /** @return the description. */
+  @JsonProperty("description")
+  public abstract String description();
+
+  /** @return the format. */
+  @JsonProperty("format")
+  public abstract Format format();
+
+  /** @return the ID. */
+  @JsonProperty("id")
+  public abstract String id();
+
+  /** @return the location. */
+  @JsonProperty("location")
+  public abstract String location();
+
+  /** @return the pattern. */
+  @JsonProperty("pattern")
+  public abstract String pattern();
+
+  /** @return the map of property names to schemas. */
+  @JsonProperty("properties")
+  public abstract ImmutableMap<String, Schema> properties();
+
+  /** @return the reference. */
+  @JsonProperty("reference")
+  public abstract String reference();
+
+  /** @return whether or not the schema is repeated. */
+  @JsonProperty("repeated")
+  public abstract boolean repeated();
+
+  /** @return whether or not the schema is required. */
+  @JsonProperty("required")
+  public abstract boolean required();
+
+  /** @return the type. */
+  @JsonProperty("type")
+  public abstract Type type();
 
   /** The set of types a schema can represent. */
   public enum Type {
@@ -90,82 +211,4 @@ public abstract class Schema {
       throw new IllegalArgumentException("unknown format: " + text);
     }
   }
-
-  /**
-   * Returns a schema constructed from root.
-   *
-   * @param root the root node to parse.
-   * @return a schema.
-   */
-  public static Schema from(DiscoveryNode root) {
-    if (root.size() == 0) {
-      return null;
-    }
-    Schema additionalProperties = Schema.from(root.getObject("additionalProperties"));
-    String defaultValue = root.getString("default");
-    String description = root.getString("description");
-    Format format = Format.getEnum(root.getString("format"));
-    String id = root.getString("id");
-    String location = root.getString("location");
-    String pattern = root.getString("pattern");
-    Map<String, Schema> properties = new HashMap<String, Schema>();
-    DiscoveryNode propertiesNode = root.getObject("properties");
-    for (String name : propertiesNode.fieldNames()) {
-      properties.put(name, Schema.from(propertiesNode.getObject(name)));
-    }
-    String reference = root.getString("$ref");
-    boolean repeated = root.getBoolean("repeated");
-    boolean required = root.getBoolean("required");
-    Type type = Type.getEnum(root.getString("type"));
-
-    return new AutoValue_Schema(
-        additionalProperties,
-        defaultValue,
-        description,
-        format,
-        id,
-        location,
-        pattern,
-        properties,
-        reference,
-        repeated,
-        required,
-        type);
-  }
-
-  /** @return the schema of the additionalProperties, or null if none. */
-  @Nullable
-  public abstract Schema additionalProperties();
-
-  /** @return the default value. */
-  public abstract String defaultValue();
-
-  /** @return the description. */
-  public abstract String description();
-
-  /** @return the format. */
-  public abstract Format format();
-
-  /** @return the ID. */
-  public abstract String id();
-
-  /** @return the location. */
-  public abstract String location();
-
-  /** @return the pattern. */
-  public abstract String pattern();
-
-  /** @return the map of property names to schemas. */
-  public abstract Map<String, Schema> properties();
-
-  /** @return the reference. */
-  public abstract String reference();
-
-  /** @return whether or not the schema is repeated. */
-  public abstract boolean repeated();
-
-  /** @return whether or not the schema is required. */
-  public abstract boolean required();
-
-  public abstract Type type();
 }

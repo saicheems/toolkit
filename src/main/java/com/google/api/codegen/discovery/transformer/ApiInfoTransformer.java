@@ -1,4 +1,4 @@
-/* Copyright 2016 Google Inc
+/* Copyright 2017 Google Inc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,19 @@
  */
 package com.google.api.codegen.discovery.transformer;
 
-import com.google.api.codegen.discovery.config.SampleConfig;
-import com.google.api.codegen.viewmodel.ViewModel;
-import com.google.protobuf.Method;
+import com.google.api.codegen.discovery.Document;
+import com.google.api.codegen.discovery.viewmodel.ApiInfoView;
 
-/*
- * Transforms a Method into a ViewModel instance that can be rendered by a template engine.
- */
-public interface SampleMethodToViewTransformer {
+public class ApiInfoTransformer {
 
-  ViewModel transform(Method method, SampleConfig sampleConfig);
+  public static ApiInfoView transform(Document document) {
+    return ApiInfoView.newBuilder()
+        .authInstructionsUrl(document.authInstructionsUrl())
+        .authType(document.authType())
+        .discoveryDocUrl(document.discoveryDocUrl())
+        .name(document.name())
+        .title(document.title())
+        .version(document.version())
+        .build();
+  }
 }

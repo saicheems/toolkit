@@ -27,10 +27,9 @@ import java.util.List;
  */
 public class DiscoveryNode {
 
-  private JsonNode jsonNode;
-
   private static JsonNode EMPTY_ARRAY_JSON_NODE = JsonNodeFactory.instance.arrayNode();
   private static JsonNode EMPTY_OBJECT_JSON_NODE = JsonNodeFactory.instance.objectNode();
+  private JsonNode jsonNode;
 
   /**
    * Constructs a DiscoveryNode that wraps jsonNode.
@@ -50,11 +49,6 @@ public class DiscoveryNode {
   public String asText() {
     Preconditions.checkArgument(jsonNode.isTextual());
     return jsonNode.asText();
-  }
-
-  /** @return the number of child nodes this node contains. */
-  public int size() {
-    return jsonNode.size();
   }
 
   /**
@@ -150,5 +144,24 @@ public class DiscoveryNode {
     }
     Preconditions.checkArgument(jsonNode.get(fieldName).isTextual());
     return jsonNode.get(fieldName).asText();
+  }
+
+  /**
+   * Returns true if this node is an object node and if it has the key fieldName.
+   *
+   * @param fieldName key of the child node.
+   * @return whether or not this node has the key fieldName.
+   */
+  public boolean has(String fieldName) {
+    Preconditions.checkArgument(jsonNode.isObject());
+    return jsonNode.has(fieldName);
+  }
+
+  /** @return true if this node has no children. */
+  public boolean isEmpty() { return jsonNode.size() == 0; }
+
+  /** @return the number of child nodes this node contains. */
+  public int size() {
+    return jsonNode.size();
   }
 }

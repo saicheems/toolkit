@@ -14,12 +14,15 @@
  */
 package com.google.api.codegen.discovery;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Nullable;
 
 /**
  * A representation of a Discovery Document method.
@@ -41,15 +44,26 @@ public abstract class Method implements Comparable<Method> {
     String httpMethod = root.getString("httpMethod");
     String id = root.getString("id");
     List<String> parameterOrder = new ArrayList<>();
-    for (DiscoveryNode idNode : root.getArray("parameterOrder").elements()) {
-      parameterOrder.add(idNode.asText());
+    for (DiscoveryNode nameNode : root.getArray("parameterOrder").elements()) {
+      parameterOrder.add(nameNode.asText());
     }
-    Map<String, Schema> parameters = new HashMap<>();
+
     DiscoveryNode parametersNode = root.getObject("parameters");
-    for (String name : parametersNode.fieldNames()) {
-      Schema schema = Schema.from(parametersNode.getObject(name));
-      parameters.put(name, schema);
+    // Since parameterOrder and parameters should mirror one another, we perform a series of checks to ensure they contain the same names.
+    if (parametersNode.isEmpty()) {
+      // 1. if parameters is empty there should not be any names in parameterOrder.
+      Preconditions.checkState(parameterOrder.isEmpty());
+    } else {
+      // 2. parameters and parameterOrder should always be the same size.
+      Preconditions.checkState(parametersNode.size() == parameterOrder.size());
+      // 3. parameters and parameterOrder should have the same names.
+      Preconditions.checkState(parametersNode.fieldNames().containsAll(parameterOrder));
     }
+    ImmutableMap.Builder<String, Schema> parametersBuilder = ImmutableMap.builder();
+    for (String name : parameterOrder) {
+      parametersBuilder.put(name, Schema.from(parametersNode.getObject(name)));
+    }
+
     Schema request = Schema.from(root.getObject("request"));
     Schema response = Schema.from(root.getObject("response"));
     List<String> scopes = new ArrayList<>();
@@ -63,53 +77,57 @@ public abstract class Method implements Comparable<Method> {
         description,
         httpMethod,
         id,
-        parameterOrder,
-        parameters,
-        resourceHierarchy,
+        parametersBuilder.build(),
         request,
+        ImmutableList.copyOf(resourceHierarchy),
         response,
         scopes,
         supportsMediaDownload,
         supportsMediaUpload);
   }
 
-  /** @return the description. */
-  public abstract String description();
-
-  /** @return the HTTP method. */
-  public abstract String httpMethod();
-
-  /** @return the ID. */
-  public abstract String id();
-
-  /** @return the parameter order. */
-  public abstract List<String> parameterOrder();
-
-  /** @return the map of parameter names to schemas. */
-  public abstract Map<String, Schema> parameters();
-
-  /** @return the in-order list of parent resources. */
-  public abstract List<String> resourceHierarchy();
-
-  /** @return the request schema, or null if none. */
-  @Nullable
-  public abstract Schema request();
-
-  /** @return the response schema, or null if none. */
-  @Nullable
-  public abstract Schema response();
-
-  /** @return the list of scopes. */
-  public abstract List<String> scopes();
-
-  /** @return whether or not the method supports media download. */
-  public abstract boolean supportsMediaDownload();
-
-  /** @return whether or not the method supports media upload. */
-  public abstract boolean supportsMediaUpload();
-
   @Override
   public int compareTo(Method other) {
     return id().compareTo(other.id());
   }
+
+  /** @return the description. */
+  @JsonProperty("description")
+  public abstract String description();
+
+  /** @return the HTTP method. */
+  @JsonProperty("httpMethod")
+  public abstract String httpMethod();
+
+  /** @return the ID. */
+  @JsonProperty("id")
+  public abstract String id();
+
+  /** @return the map of parameter names to schemas. */
+  @JsonProperty("parameters")
+  public abstract ImmutableMap<String, Schema> parameters();
+
+  /** @return the request schema, or null if none. */
+  @JsonProperty("request")
+  public abstract Schema request();
+
+  /** @return the in-order list of parent resources. */
+  @JsonProperty("resourceHierarchy")
+  public abstract List<String> resourceHierarchy();
+
+  /** @return the response schema, or null if none. */
+  @JsonProperty("response")
+  public abstract Schema response();
+
+  /** @return the list of scopes. */
+  @JsonProperty("scopes")
+  public abstract List<String> scopes();
+
+  /** @return whether or not the method supports media download. */
+  @JsonProperty("supportsMediaDownload")
+  public abstract boolean supportsMediaDownload();
+
+  /** @return whether or not the method supports media upload. */
+  @JsonProperty("supportsMediaUpload")
+  public abstract boolean supportsMediaUpload();
 }

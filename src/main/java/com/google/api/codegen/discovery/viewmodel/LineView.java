@@ -1,4 +1,4 @@
-/* Copyright 2016 Google Inc
+/* Copyright 2017 Google Inc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
 package com.google.api.codegen.discovery.viewmodel;
 
 import com.google.auto.value.AutoValue;
-
 import java.util.List;
 
 // Intended to support blocks like:
@@ -67,14 +66,18 @@ import java.util.List;
 @AutoValue
 public abstract class LineView {
 
+  public static Builder newBuilder() {
+    return new AutoValue_LineView.Builder();
+  }
+
   public abstract List<LineView> lines();
 
   public abstract String text();
 
-  public static Builder newBuilder() {return new AutoValue_LineView.Builder();}
-
   @AutoValue.Builder
-  public abstract class Builder {
+  public abstract static class Builder {
+
+    public abstract LineView build();
 
     public abstract Builder lines(List<LineView> val);
 

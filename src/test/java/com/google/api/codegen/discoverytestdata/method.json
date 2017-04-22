@@ -1,45 +1,36 @@
 {
- "name": "pubsub",
- "version": "v1",
- "title": "Google Cloud Pub/Sub API",
- "documentationLink": "https://cloud.google.com/pubsub/docs",
- "baseUrl": "https://pubsub.googleapis.com/",
- "resources": {
-  "projects": {
-   "resources": {
-    "topics": {
-     "methods": {
-      "setIamPolicy": {
-       "id": "pubsub.projects.topics.setIamPolicy",
-       "path": "v1/{+resource}:setIamPolicy",
-       "httpMethod": "POST",
-       "description": "Sets the access control policy on the specified resource. Replaces any existing policy.",
-       "parameters": {
-        "resource": {
-         "type": "string",
-         "description": "REQUIRED: The resource for which policy is being specified. `resource` is usually specified as a path, such as, `projects/{project}/zones/{zone}/disks/{disk}`. The format for the path specified in this value is resource specific and is specified in the documentation for the respective SetIamPolicy rpc.",
-         "required": true,
-         "pattern": "^projects/[^/]*/topics/[^/]*$",
-         "location": "path"
-        }
-       },
-       "parameterOrder": [
-        "resource"
-       ],
-       "request": {
-        "$ref": "SetIamPolicyRequest"
-       },
-       "response": {
-        "$ref": "Policy"
-       },
-       "scopes": [
-        "https://www.googleapis.com/auth/cloud-platform",
-        "https://www.googleapis.com/auth/pubsub"
-       ]
-      }
-     }
+  "description": "Get a baz!",
+  "httpMethod": "GET",
+  "id": "foo.bar.baz.get",
+  "parameterOrder": [
+    "p2",
+    "p1",
+    "p3"
+  ],
+  "parameters": {
+    "p1": {
+      "type": "string",
+      "required": true,
+      "location": "path"
+    },
+    "p2": {
+      "type": "string",
+      "location": "query"
+    },
+    "p3": {
+      "type": "integer"
     }
-   }
-  }
- }
+  },
+  "request": {
+    "$ref": "GetBazRequest"
+  },
+  "response": {
+    "$ref": "Baz"
+  },
+  "scopes": [
+    "https://www.example.com/foo",
+    "https://www.example.com/bar"
+  ],
+  "supportsMediaDownload": true,
+  "supportsMediaUpload": true
 }
