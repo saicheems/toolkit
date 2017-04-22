@@ -46,8 +46,6 @@ public abstract class SampleView implements ViewModel {
 
   public abstract List<LineView> fieldLines();
 
-  public abstract List<String> imports();
-
   public abstract MethodInfoView methodInfo();
 
   public abstract String namespaceName(); // C#
@@ -65,9 +63,9 @@ public abstract class SampleView implements ViewModel {
 
   public abstract String pageTokenFieldName();
 
-  public abstract LineView requestLine();
-
   public abstract LineView requestBodyLine();
+
+  public abstract LineView requestLine();
 
   @Override
   public String resourceRoot() {
@@ -85,6 +83,8 @@ public abstract class SampleView implements ViewModel {
   @Override
   public abstract String templateFileName();
 
+  public abstract List<LineView> usingLines(); // C#
+
   @AutoValue.Builder
   public abstract static class Builder {
 
@@ -97,8 +97,6 @@ public abstract class SampleView implements ViewModel {
     public abstract Builder className(String val);
 
     public abstract Builder fieldLines(List<LineView> val);
-
-    public abstract Builder imports(List<String> val);
 
     public abstract Builder methodInfo(MethodInfoView val);
 
@@ -116,9 +114,9 @@ public abstract class SampleView implements ViewModel {
 
     public abstract Builder pageTokenFieldName(String val);
 
-    public abstract Builder requestLine(LineView val);
-
     public abstract Builder requestBodyLine(LineView val);
+
+    public abstract Builder requestLine(LineView val);
 
     public abstract Builder responseLine(LineView val);
 
@@ -129,5 +127,7 @@ public abstract class SampleView implements ViewModel {
     public abstract Builder serviceVarName(String val);
 
     public abstract Builder templateFileName(String val);
+
+    public abstract Builder usingLines(List<LineView> val);
   }
 }

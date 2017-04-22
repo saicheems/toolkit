@@ -17,7 +17,6 @@ package com.google.api.codegen.discovery;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,13 +45,14 @@ public class MethodTest {
     Truth.assertThat(method.id()).isEqualTo("foo.bar.baz.get");
 
     Map<String, Schema> properties = method.parameters();
-    Truth.assertThat(ImmutableList.copyOf(properties.keySet())).isEqualTo(Arrays.asList("p2", "p1", "p3"));
+    Truth.assertThat(ImmutableList.copyOf(properties.keySet()))
+        .isEqualTo(Arrays.asList("p3", "p1"));
     Truth.assertThat(properties.get("p1").type()).isEqualTo(Schema.Type.STRING);
     Truth.assertThat(properties.get("p1").required()).isTrue();
     Truth.assertThat(properties.get("p1").location()).isEqualTo("path");
 
-    Truth.assertThat(properties.get("p2").type()).isEqualTo(Schema.Type.STRING);
-    Truth.assertThat(properties.get("p2").location()).isEqualTo("query");
+    Truth.assertThat(properties.get("p3").type()).isEqualTo(Schema.Type.INTEGER);
+    Truth.assertThat(properties.get("p3").required()).isTrue();
 
     Truth.assertThat(method.resourceHierarchy()).isEqualTo(resourceHierarchy);
     Truth.assertThat(method.request().reference()).isEqualTo("GetBazRequest");

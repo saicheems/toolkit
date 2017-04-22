@@ -19,10 +19,8 @@ import com.google.auto.value.AutoValue;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A representation of a Discovery Document method.
@@ -49,19 +47,24 @@ public abstract class Method implements Comparable<Method> {
     }
 
     DiscoveryNode parametersNode = root.getObject("parameters");
-    // Since parameterOrder and parameters should mirror one another, we perform a series of checks to ensure they contain the same names.
-    if (parametersNode.isEmpty()) {
+    ImmutableMap.Builder<String, Schema> parametersBuilder = ImmutableMap.builder();
+    for (String name : parameterOrder) {
+      Schema schema = Schema.from(parametersNode.getObject(name));
+      // We only care about required parameters.
+      if (schema.required()) {
+        parametersBuilder.put(name, schema);
+      }
+    }
+    ImmutableMap<String, Schema> parameters = parametersBuilder.build();
+    // Sanity check that parameters mirrors parameterOrder.
+    if (parameters.isEmpty()) {
       // 1. if parameters is empty there should not be any names in parameterOrder.
       Preconditions.checkState(parameterOrder.isEmpty());
     } else {
       // 2. parameters and parameterOrder should always be the same size.
-      Preconditions.checkState(parametersNode.size() == parameterOrder.size());
+      Preconditions.checkState(parameters.size() == parameterOrder.size());
       // 3. parameters and parameterOrder should have the same names.
-      Preconditions.checkState(parametersNode.fieldNames().containsAll(parameterOrder));
-    }
-    ImmutableMap.Builder<String, Schema> parametersBuilder = ImmutableMap.builder();
-    for (String name : parameterOrder) {
-      parametersBuilder.put(name, Schema.from(parametersNode.getObject(name)));
+      Preconditions.checkState(parameters.keySet().containsAll(parameterOrder));
     }
 
     Schema request = Schema.from(root.getObject("request"));
@@ -77,7 +80,7 @@ public abstract class Method implements Comparable<Method> {
         description,
         httpMethod,
         id,
-        parametersBuilder.build(),
+        parameters,
         request,
         ImmutableList.copyOf(resourceHierarchy),
         response,

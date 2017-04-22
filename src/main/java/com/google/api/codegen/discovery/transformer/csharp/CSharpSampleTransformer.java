@@ -56,23 +56,25 @@ public class CSharpSampleTransformer implements SampleTransformer {
     }
     builder.fieldLines(fieldLines);
 
-    builder.imports(new ArrayList<String>()); // TODO
-
     builder.methodInfo(MethodInfoTransformer.transform(document, method));
 
     builder.namespaceName(""); // TODO
 
     builder.nextPageTokenFieldName(""); // TODO
 
-    builder.pageStreamingResourceFieldName("");
+    builder.outputPath(method.id() + ".frag.cs");
 
-    builder.pageStreamingResourceTypeName("");
+    builder.pageStreamingResourceFieldName(""); // TODO
+
+    builder.pageStreamingResourceTypeName(""); // TODO
+
+    builder.pageStreamingResourceVarName(""); // TODO
 
     builder.pageTokenFieldName("");
 
-    builder.requestLine(CSharpLineTransformer.generateRequestLine(method));
-
     builder.requestBodyLine(CSharpLineTransformer.generateRequestLine(method));
+
+    builder.requestLine(CSharpLineTransformer.generateRequestLine(method));
 
     builder.responseLine(CSharpLineTransformer.generateRequestLine(method));
 
@@ -85,6 +87,9 @@ public class CSharpSampleTransformer implements SampleTransformer {
     builder.serviceTypeName(""); // TODO
 
     builder.templateFileName(TEMPLATE_FILENAME);
+
+    List<LineView> usingLines = new ArrayList<>(); // TODO
+    builder.usingLines(usingLines);
 
     return builder.build();
   }

@@ -17,7 +17,6 @@ package com.google.api.codegen.discovery;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
-
 import javax.annotation.Nullable;
 
 /**
@@ -85,18 +84,7 @@ public abstract class Schema {
   public static Schema empty() {
     ImmutableMap<String, Schema> properties = ImmutableMap.of();
     return new AutoValue_Schema(
-        null,
-        "",
-        "",
-        Format.EMPTY,
-        "",
-        "",
-        "",
-        properties,
-        "",
-        false,
-        false,
-        Type.EMPTY);
+        null, "", "", Format.EMPTY, "", "", "", properties, "", false, false, Type.EMPTY);
   }
 
   /** @return the schema of the additionalProperties, or null if none. */
@@ -190,7 +178,8 @@ public abstract class Schema {
     INT32("int32"),
     INT64("int64"),
     UINT32("uint32"),
-    UINT64("uint64");
+    UINT64("uint64"),
+    UNKNOWN("");
 
     private String text;
 
@@ -203,12 +192,16 @@ public abstract class Schema {
      * @return the enum representing the raw JSON format.
      */
     public static Format getEnum(String text) {
+      if (text.isEmpty()) {
+        return EMPTY;
+      }
       for (Format f : values()) {
         if (f.text.equals(text)) {
           return f;
         }
       }
-      throw new IllegalArgumentException("unknown format: " + text);
+      // TODO(saicheems): Warn about unknown formats? I saw "google-datetime" in pubsub for example.
+      return UNKNOWN;
     }
   }
 }

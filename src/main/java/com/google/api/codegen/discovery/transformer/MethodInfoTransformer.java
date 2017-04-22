@@ -19,9 +19,8 @@ import com.google.api.codegen.discovery.Method;
 import com.google.api.codegen.discovery.Schema;
 import com.google.api.codegen.discovery.viewmodel.MethodInfoView;
 import com.google.common.collect.ImmutableList;
-
-import javax.validation.constraints.NotNull;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 
 public class MethodInfoTransformer {
 
@@ -99,7 +98,6 @@ public class MethodInfoTransformer {
       return "";
     }
     schema = document.dereferenceSchema(schema);
-
     // Look for the first repeated resource.
     for (String name : schema.properties().keySet()) {
       if (schema.properties().get(name).repeated()) {

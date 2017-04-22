@@ -17,7 +17,6 @@ package com.google.api.codegen.discovery;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +29,8 @@ import java.util.List;
  */
 @AutoValue
 public abstract class Document {
+
+  // TODO(saicheems): Assert that all references link to a valid schema?
 
   private static final String CLOUD_PLATFORM_SCOPE =
       "https://www.googleapis.com/auth/cloud-platform";
@@ -78,26 +79,6 @@ public abstract class Document {
         versionModule);
   }
 
-  /**
-   * Returns the schema the given schema references.
-   *
-   * <p>If the reference property of a schema is non-empty, then it references another schema. This
-   * method returns the schema that the given schema eventually references. If the given schema does
-   * not reference another schema, it is returned. If schema is null, null is returned.
-   *
-   * @param schema the schema to dereference.
-   * @return the first non-reference schema, or null if schema is null.
-   */
-  public Schema dereferenceSchema(Schema schema) {
-    if (schema == null) {
-      return null;
-    }
-    if (!schema.reference().isEmpty()) {
-      return dereferenceSchema(schemas().get(schema));
-    }
-    return schema;
-  }
-
   private static List<Method> parseMethods(DiscoveryNode root) {
     return parseMethods(root, new ArrayList<String>());
   }
@@ -137,6 +118,26 @@ public abstract class Document {
   /** @return the auth type. */
   @JsonProperty("authType")
   public abstract AuthType authType();
+
+  /**
+   * Returns the schema the given schema references.
+   *
+   * <p>If the reference property of a schema is non-empty, then it references another schema. This
+   * method returns the schema that the given schema eventually references. If the given schema does
+   * not reference another schema, it is returned. If schema is null, null is returned.
+   *
+   * @param schema the schema to dereference.
+   * @return the first non-reference schema, or null if schema is null.
+   */
+  public Schema dereferenceSchema(Schema schema) {
+    if (schema == null) {
+      return null;
+    }
+    if (!schema.reference().isEmpty()) {
+      return dereferenceSchema(schemas().get(schema.reference()));
+    }
+    return schema;
+  }
 
   /** @return the description. */
   @JsonProperty("description")

@@ -158,7 +158,9 @@ public class DiscoveryNode {
   }
 
   /** @return true if this node has no children. */
-  public boolean isEmpty() { return jsonNode.size() == 0; }
+  public boolean isEmpty() {
+    return jsonNode.size() == 0;
+  }
 
   /** @return the number of child nodes this node contains. */
   public int size() {
