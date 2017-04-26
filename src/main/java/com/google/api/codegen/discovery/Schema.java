@@ -16,7 +16,8 @@ package com.google.api.codegen.discovery;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableMap;
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Nullable;
 
 /**
@@ -41,24 +42,37 @@ public abstract class Schema {
    * Returns a schema constructed from root, or an empty schema if root has no children.
    *
    * @param root the root node to parse.
-   * @return a schema.
    */
   public static Schema from(DiscoveryNode root) {
+    return from("", root, false);
+  }
+
+  /**
+   * Returns a schema constructed from root, or an empty schema if root has no children.
+   *
+   * @param key the name of the parameter or property this schema represents.
+   * @param root the root node to parse.
+   * @param isParameter whether or not root is a parameter description.
+   * @return a schema.
+   */
+  public static Schema from(String key, DiscoveryNode root, boolean isParameter) {
     if (root.isEmpty()) {
       return empty();
     }
-    Schema additionalProperties = Schema.from(root.getObject("additionalProperties"));
+    Schema additionalProperties = Schema.from("", root.getObject("additionalProperties"), false);
     String defaultValue = root.getString("default");
     String description = root.getString("description");
     Format format = Format.getEnum(root.getString("format"));
     String id = root.getString("id");
+    boolean isEnum = !root.getArray("enum").isEmpty();
+    Schema items = Schema.from(root.getObject("items"));
     String location = root.getString("location");
     String pattern = root.getString("pattern");
 
-    ImmutableMap.Builder<String, Schema> propertiesBuilder = ImmutableMap.builder();
+    Map<String, Schema> properties = new HashMap<>();
     DiscoveryNode propertiesNode = root.getObject("properties");
     for (String name : propertiesNode.fieldNames()) {
-      propertiesBuilder.put(name, Schema.from(propertiesNode.getObject(name)));
+      properties.put(name, Schema.from(propertiesNode.getObject(name)));
     }
 
     String reference = root.getString("$ref");
@@ -72,9 +86,13 @@ public abstract class Schema {
         description,
         format,
         id,
+        isEnum,
+        isParameter,
+        items,
+        key,
         location,
         pattern,
-        propertiesBuilder.build(),
+        properties,
         reference,
         repeated,
         required,
@@ -82,9 +100,23 @@ public abstract class Schema {
   }
 
   public static Schema empty() {
-    ImmutableMap<String, Schema> properties = ImmutableMap.of();
     return new AutoValue_Schema(
-        null, "", "", Format.EMPTY, "", "", "", properties, "", false, false, Type.EMPTY);
+        null,
+        "",
+        "",
+        Format.EMPTY,
+        "",
+        false,
+        false,
+        null,
+        "",
+        "",
+        "",
+        new HashMap<String, Schema>(),
+        "",
+        false,
+        false,
+        Type.EMPTY);
   }
 
   /** @return the schema of the additionalProperties, or null if none. */
@@ -108,6 +140,29 @@ public abstract class Schema {
   @JsonProperty("id")
   public abstract String id();
 
+  /** @return whether or not the schema is an enum. */
+  @JsonProperty("isEnum")
+  public abstract boolean isEnum();
+
+  /** @return whether or not this schema describes a parameter. */
+  @JsonProperty("isParameter")
+  public abstract boolean isParameter();
+
+  /**
+   * @return the schema for each element in the array if this schema is an array, or empty string if
+   *     not.
+   */
+  @JsonProperty("items")
+  @Nullable
+  public abstract Schema items();
+
+  /**
+   * @return the name of the parameter or property this schema describes, or empty string if this
+   *     schema does not describe a parameter or property.
+   */
+  @JsonProperty("key")
+  public abstract String key();
+
   /** @return the location. */
   @JsonProperty("location")
   public abstract String location();
@@ -118,7 +173,7 @@ public abstract class Schema {
 
   /** @return the map of property names to schemas. */
   @JsonProperty("properties")
-  public abstract ImmutableMap<String, Schema> properties();
+  public abstract Map<String, Schema> properties();
 
   /** @return the reference. */
   @JsonProperty("reference")
@@ -200,7 +255,7 @@ public abstract class Schema {
           return f;
         }
       }
-      // TODO(saicheems): Warn about unknown formats? I saw "google-datetime" in pubsub for example.
+      // TODO(saicheems): Warn about unkno
       return UNKNOWN;
     }
   }

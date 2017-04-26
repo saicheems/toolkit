@@ -16,7 +16,6 @@ package com.google.api.codegen.discovery;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import com.google.common.truth.Truth;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import org.junit.Test;
 
@@ -37,24 +35,24 @@ public class MethodTest {
     ObjectMapper mapper = new ObjectMapper();
     JsonNode root = mapper.readTree(reader);
 
-    List<String> resourceHierarchy = Arrays.asList("bar");
-    Method method = Method.from(new DiscoveryNode(root), resourceHierarchy);
+    Method method = Method.from(new DiscoveryNode(root));
 
     Truth.assertThat(method.description()).isEqualTo("Get a baz!");
     Truth.assertThat(method.httpMethod()).isEqualTo("GET");
     Truth.assertThat(method.id()).isEqualTo("foo.bar.baz.get");
+    Truth.assertThat(method.parameterOrder().equals(Arrays.asList("p3", "p1")));
 
-    Map<String, Schema> properties = method.parameters();
-    Truth.assertThat(ImmutableList.copyOf(properties.keySet()))
-        .isEqualTo(Arrays.asList("p3", "p1"));
-    Truth.assertThat(properties.get("p1").type()).isEqualTo(Schema.Type.STRING);
-    Truth.assertThat(properties.get("p1").required()).isTrue();
-    Truth.assertThat(properties.get("p1").location()).isEqualTo("path");
+    Map<String, Schema> parameters = method.parameters();
+    Truth.assertThat(parameters.get("p1").type()).isEqualTo(Schema.Type.STRING);
+    Truth.assertThat(parameters.get("p1").required()).isTrue();
+    Truth.assertThat(parameters.get("p1").location()).isEqualTo("path");
 
-    Truth.assertThat(properties.get("p3").type()).isEqualTo(Schema.Type.INTEGER);
-    Truth.assertThat(properties.get("p3").required()).isTrue();
+    Truth.assertThat(parameters.get("p2").type()).isEqualTo(Schema.Type.STRING);
+    Truth.assertThat(parameters.get("p2").location()).isEqualTo("query");
 
-    Truth.assertThat(method.resourceHierarchy()).isEqualTo(resourceHierarchy);
+    Truth.assertThat(parameters.get("p3").type()).isEqualTo(Schema.Type.INTEGER);
+    Truth.assertThat(parameters.get("p3").required()).isTrue();
+
     Truth.assertThat(method.request().reference()).isEqualTo("GetBazRequest");
     Truth.assertThat(method.response().reference()).isEqualTo("Baz");
     Truth.assertThat(method.scopes())

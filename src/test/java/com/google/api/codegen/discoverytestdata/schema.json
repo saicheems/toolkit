@@ -12,7 +12,10 @@
       "type": "any"
     },
     "array": {
-      "type": "array"
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     },
     "boolean": {
       "type": "boolean"
@@ -35,6 +38,12 @@
     },
     "empty": {
       "$ref": "Foo"
+    },
+    "enum": {
+      "type": "string",
+      "enum": [
+        "FOO"
+      ]
     },
     "float": {
       "type": "number",

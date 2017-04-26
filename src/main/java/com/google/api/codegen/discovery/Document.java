@@ -16,10 +16,11 @@ package com.google.api.codegen.discovery;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A representation of a Discovery Document.
@@ -51,13 +52,17 @@ public abstract class Document {
     } else {
       authType = AuthType.OAUTH_3L;
     }
+    String canonicalName = root.getString("canonicalName");
     String description = root.getString("description");
     List<Method> methods = parseMethods(root);
     Collections.sort(methods); // Ensure methods are ordered alphabetically by their ID.
     String name = root.getString("name");
+    if (canonicalName.isEmpty()) {
+      canonicalName = name;
+    }
     String revision = root.getString("revision");
     String rootUrl = root.getString("rootUrl");
-    ImmutableMap<String, Schema> schemas = parseSchemas(root);
+    Map<String, Schema> schemas = parseSchemas(root);
     String servicePath = root.getString("servicePath");
     String title = root.getString("title");
     String version = root.getString("version");
@@ -66,6 +71,7 @@ public abstract class Document {
     return new AutoValue_Document(
         "", // authInstructionsUrl (only intended to be overridden).
         authType,
+        canonicalName,
         description,
         "", // discoveryDocUrl (only intended to be overridden).
         methods,
@@ -78,46 +84,6 @@ public abstract class Document {
         version,
         versionModule);
   }
-
-  private static List<Method> parseMethods(DiscoveryNode root) {
-    return parseMethods(root, new ArrayList<String>());
-  }
-
-  private static List<Method> parseMethods(DiscoveryNode root, List<String> resourceHierarchy) {
-    List<Method> methods = new ArrayList<>();
-    DiscoveryNode methodsNode = root.getObject("methods");
-    List<String> resourceNames = methodsNode.fieldNames();
-    for (String resourceName : resourceNames) {
-      List<String> copy = new ArrayList<>(resourceHierarchy);
-      copy.add(resourceName);
-      methods.add(Method.from(methodsNode.getObject(resourceName), copy));
-    }
-    DiscoveryNode resourcesNode = root.getObject("resources");
-    resourceNames = resourcesNode.fieldNames();
-    for (String resourceName : resourceNames) {
-      List<String> copy = new ArrayList<>(resourceHierarchy);
-      copy.add(resourceName);
-      methods.addAll(parseMethods(resourcesNode.getObject(resourceName), copy));
-    }
-    return methods;
-  }
-
-  private static ImmutableMap<String, Schema> parseSchemas(DiscoveryNode root) {
-    ImmutableMap.Builder<String, Schema> schemasBuilder = ImmutableMap.builder();
-    DiscoveryNode schemasNode = root.getObject("schemas");
-    for (String name : schemasNode.fieldNames()) {
-      schemasBuilder.put(name, Schema.from(schemasNode.getObject(name)));
-    }
-    return schemasBuilder.build();
-  }
-
-  /** @return the auth instructions URL. */
-  @JsonProperty("authInstructionsUrl")
-  public abstract String authInstructionsUrl();
-
-  /** @return the auth type. */
-  @JsonProperty("authType")
-  public abstract AuthType authType();
 
   /**
    * Returns the schema the given schema references.
@@ -138,6 +104,42 @@ public abstract class Document {
     }
     return schema;
   }
+
+  private static List<Method> parseMethods(DiscoveryNode root) {
+    List<Method> methods = new ArrayList<>();
+    DiscoveryNode methodsNode = root.getObject("methods");
+    List<String> resourceNames = methodsNode.fieldNames();
+    for (String resourceName : resourceNames) {
+      methods.add(Method.from(methodsNode.getObject(resourceName)));
+    }
+    DiscoveryNode resourcesNode = root.getObject("resources");
+    resourceNames = resourcesNode.fieldNames();
+    for (String resourceName : resourceNames) {
+      methods.addAll(parseMethods(resourcesNode.getObject(resourceName)));
+    }
+    return methods;
+  }
+
+  private static Map<String, Schema> parseSchemas(DiscoveryNode root) {
+    Map<String, Schema> schemas = new HashMap<>();
+    DiscoveryNode schemasNode = root.getObject("schemas");
+    for (String name : schemasNode.fieldNames()) {
+      schemas.put(name, Schema.from(name, schemasNode.getObject(name), false));
+    }
+    return schemas;
+  }
+
+  /** @return the auth instructions URL. */
+  @JsonProperty("authInstructionsUrl")
+  public abstract String authInstructionsUrl();
+
+  /** @return the auth type. */
+  @JsonProperty("authType")
+  public abstract AuthType authType();
+
+  /** @return the canonical name. */
+  @JsonProperty("canonicalName")
+  public abstract String canonicalName();
 
   /** @return the description. */
   @JsonProperty("description")
@@ -165,7 +167,7 @@ public abstract class Document {
 
   /** @return the map of schema IDs to schemas. */
   @JsonProperty("schemas")
-  public abstract ImmutableMap<String, Schema> schemas();
+  public abstract Map<String, Schema> schemas();
 
   /** @return the service path. */
   @JsonProperty("servicePath")

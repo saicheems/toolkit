@@ -17,10 +17,10 @@ package com.google.api.codegen.discovery;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A representation of a Discovery Document method.
@@ -31,13 +31,12 @@ import java.util.List;
 public abstract class Method implements Comparable<Method> {
 
   /**
-   * Returns a method constructed from root and resourceHierarchy.
+   * Returns a method constructed from root.
    *
    * @param root the root node to parse.
-   * @param resourceHierarchy an in-order list of parent resources, or an empty list if none.
    * @return a method.
    */
-  public static Method from(DiscoveryNode root, List<String> resourceHierarchy) {
+  public static Method from(DiscoveryNode root) {
     String description = root.getString("description");
     String httpMethod = root.getString("httpMethod");
     String id = root.getString("id");
@@ -47,24 +46,15 @@ public abstract class Method implements Comparable<Method> {
     }
 
     DiscoveryNode parametersNode = root.getObject("parameters");
-    ImmutableMap.Builder<String, Schema> parametersBuilder = ImmutableMap.builder();
-    for (String name : parameterOrder) {
-      Schema schema = Schema.from(parametersNode.getObject(name));
-      // We only care about required parameters.
-      if (schema.required()) {
-        parametersBuilder.put(name, schema);
-      }
-    }
-    ImmutableMap<String, Schema> parameters = parametersBuilder.build();
-    // Sanity check that parameters mirrors parameterOrder.
-    if (parameters.isEmpty()) {
-      // 1. if parameters is empty there should not be any names in parameterOrder.
-      Preconditions.checkState(parameterOrder.isEmpty());
-    } else {
-      // 2. parameters and parameterOrder should always be the same size.
-      Preconditions.checkState(parameters.size() == parameterOrder.size());
-      // 3. parameters and parameterOrder should have the same names.
-      Preconditions.checkState(parameters.keySet().containsAll(parameterOrder));
+    HashMap<String, Schema> parameters = new HashMap<>();
+    for (String name : root.getObject("parameters").fieldNames()) {
+      Schema schema = Schema.from(name, parametersNode.getObject(name), true);
+      // TODO: Remove these checks once we're sure that parameters can't be objects/arrays.
+      // This is based on the assumption that these types can't be serialized as a query or path parameter.
+      Preconditions.checkState(schema.type() != Schema.Type.ANY);
+      Preconditions.checkState(schema.type() != Schema.Type.ARRAY);
+      Preconditions.checkState(schema.type() != Schema.Type.OBJECT);
+      parameters.put(name, schema);
     }
 
     Schema request = Schema.from(root.getObject("request"));
@@ -80,9 +70,9 @@ public abstract class Method implements Comparable<Method> {
         description,
         httpMethod,
         id,
+        parameterOrder,
         parameters,
         request,
-        ImmutableList.copyOf(resourceHierarchy),
         response,
         scopes,
         supportsMediaDownload,
@@ -106,17 +96,17 @@ public abstract class Method implements Comparable<Method> {
   @JsonProperty("id")
   public abstract String id();
 
+  /** @return the order of parameter names. */
+  @JsonProperty("parameters")
+  public abstract List<String> parameterOrder();
+
   /** @return the map of parameter names to schemas. */
   @JsonProperty("parameters")
-  public abstract ImmutableMap<String, Schema> parameters();
+  public abstract Map<String, Schema> parameters();
 
   /** @return the request schema, or null if none. */
   @JsonProperty("request")
   public abstract Schema request();
-
-  /** @return the in-order list of parent resources. */
-  @JsonProperty("resourceHierarchy")
-  public abstract List<String> resourceHierarchy();
 
   /** @return the response schema, or null if none. */
   @JsonProperty("response")

@@ -16,16 +16,11 @@ package com.google.api.codegen.discovery.transformer.csharp;
 
 import com.google.api.codegen.discovery.Document;
 import com.google.api.codegen.discovery.Method;
-import com.google.api.codegen.discovery.Schema;
 import com.google.api.codegen.discovery.transformer.ApiInfoTransformer;
 import com.google.api.codegen.discovery.transformer.MethodInfoTransformer;
 import com.google.api.codegen.discovery.transformer.SampleTransformer;
-import com.google.api.codegen.discovery.viewmodel.LineView;
 import com.google.api.codegen.discovery.viewmodel.SampleView;
 import com.google.api.codegen.viewmodel.ViewModel;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /*
  * Transforms a Method and SampleConfig into the standard discovery surface for
@@ -43,53 +38,15 @@ public class CSharpSampleTransformer implements SampleTransformer {
   private static SampleView createSampleView(Document document, Method method) {
     SampleView.Builder builder = SampleView.newBuilder();
 
+    CSharpSampleMapper mapper = new CSharpSampleMapper(document, method);
+
     builder.apiInfo(ApiInfoTransformer.transform(document));
-
-    builder.appName(""); // TODO
-
-    builder.className(""); // TODO
-
-    List<LineView> fieldLines = new ArrayList<>();
-    for (String name : method.parameters().keySet()) {
-      Map<String, Schema> properties = method.parameters().get(name).properties();
-      fieldLines.add(CSharpLineTransformer.generateFieldLine(method, properties.get(name)));
-    }
-    builder.fieldLines(fieldLines);
-
     builder.methodInfo(MethodInfoTransformer.transform(document, method));
-
-    builder.namespaceName(""); // TODO
-
-    builder.nextPageTokenFieldName(""); // TODO
-
-    builder.outputPath(method.id() + ".frag.cs");
-
-    builder.pageStreamingResourceFieldName(""); // TODO
-
-    builder.pageStreamingResourceTypeName(""); // TODO
-
-    builder.pageStreamingResourceVarName(""); // TODO
-
-    builder.pageTokenFieldName("");
-
-    builder.requestBodyLine(CSharpLineTransformer.generateRequestLine(method));
-
-    builder.requestLine(CSharpLineTransformer.generateRequestLine(method));
-
-    builder.responseLine(CSharpLineTransformer.generateRequestLine(method));
-
-    builder.responseVarName(""); // TODO
-
-    builder.serviceTypeName(""); // TODO
-
-    builder.serviceVarName(""); // TODO
-
-    builder.serviceTypeName(""); // TODO
+    builder.namespaceName(mapper.getNamespaceName());
+    builder.className(mapper.getClassName());
 
     builder.templateFileName(TEMPLATE_FILENAME);
-
-    List<LineView> usingLines = new ArrayList<>(); // TODO
-    builder.usingLines(usingLines);
+    builder.outputPath(method.id() + ".frag.cs");
 
     return builder.build();
   }

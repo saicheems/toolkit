@@ -48,7 +48,10 @@ public class SchemaTest {
     Map<String, Schema> properties = schema.properties();
 
     Truth.assertThat(properties.get("any").type()).isEqualTo(Schema.Type.ANY);
+
     Truth.assertThat(properties.get("array").type()).isEqualTo(Schema.Type.ARRAY);
+    Truth.assertThat(properties.get("array").items().type()).isEqualTo(Schema.Type.STRING);
+
     Truth.assertThat(properties.get("boolean").type()).isEqualTo(Schema.Type.BOOLEAN);
 
     Truth.assertThat(properties.get("byte").type()).isEqualTo(Schema.Type.STRING);
@@ -66,6 +69,9 @@ public class SchemaTest {
     Truth.assertThat(properties.get("empty").reference()).isEqualTo("Foo");
     Truth.assertThat(properties.get("empty").type()).isEqualTo(Schema.Type.EMPTY);
     Truth.assertThat(properties.get("empty").format()).isEqualTo(Schema.Format.EMPTY);
+
+    Truth.assertThat(properties.get("enum").type()).isEqualTo(Schema.Type.STRING);
+    Truth.assertThat(properties.get("enum").isEnum()).isTrue();
 
     Truth.assertThat(properties.get("float").type()).isEqualTo(Schema.Type.NUMBER);
     Truth.assertThat(properties.get("float").format()).isEqualTo(Schema.Format.FLOAT);

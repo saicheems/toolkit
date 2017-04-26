@@ -43,6 +43,7 @@
     }
   },
   "name": "myapi",
+  "canonicalName": "My API",
   "revision": "20170419",
   "rootUrl": "https://example.com",
   "schemas": {

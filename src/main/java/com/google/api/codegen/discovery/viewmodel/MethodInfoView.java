@@ -33,15 +33,15 @@ public abstract class MethodInfoView {
 
   public abstract boolean isScopesSingular();
 
-  public abstract String pageStreamingResourcePropertyName();
+  public abstract String pageStreamingResourceFieldName();
 
   public abstract Schema.Type pageStreamingResourceType();
 
-  public abstract String parametersPageTokenPropertyName();
+  public abstract String parametersPageTokenFieldName();
 
-  public abstract String requestBodyPageTokenPropertyName();
+  public abstract String requestBodyPageTokenFieldName();
 
-  public abstract String responsePageTokenPropertyName();
+  public abstract String responsePageTokenFieldName();
 
   public abstract List<String> scopes();
 
@@ -62,15 +62,15 @@ public abstract class MethodInfoView {
 
     public abstract Builder isScopesSingular(boolean val);
 
-    public abstract Builder pageStreamingResourcePropertyName(String val);
+    public abstract Builder pageStreamingResourceFieldName(String val);
 
     public abstract Builder pageStreamingResourceType(Schema.Type val);
 
-    public abstract Builder parametersPageTokenPropertyName(String val);
+    public abstract Builder parametersPageTokenFieldName(String val);
 
-    public abstract Builder requestBodyPageTokenPropertyName(String val);
+    public abstract Builder requestBodyPageTokenFieldName(String val);
 
-    public abstract Builder responsePageTokenPropertyName(String val);
+    public abstract Builder responsePageTokenFieldName(String val);
 
     public abstract Builder scopes(List<String> val);
 

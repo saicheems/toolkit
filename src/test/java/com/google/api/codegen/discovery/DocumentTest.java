@@ -52,20 +52,20 @@ public class DocumentTest {
     Truth.assertThat(document.authType()).isEqualTo(Document.AuthType.OAUTH_3L);
     Truth.assertThat(methods.get(0).description()).isEqualTo("Get a baz.");
     Truth.assertThat(methods.get(0).id()).isEqualTo("myapi.bar.baz.get");
+    Truth.assertThat(methods.get(0).parameterOrder()).isEqualTo(Arrays.asList("p1"));
     Map<String, Schema> parameters = methods.get(0).parameters();
     Truth.assertThat(parameters.get("p1").type()).isEqualTo(Schema.Type.BOOLEAN);
     Truth.assertThat(parameters.get("p1").required()).isTrue();
     Truth.assertThat(parameters.get("p1").location()).isEqualTo("query");
-    Truth.assertThat(methods.get(0).resourceHierarchy()).isEqualTo(Arrays.asList("bar", "baz"));
 
     Truth.assertThat(methods.get(1).description()).isEqualTo("Insert a foo.");
     Truth.assertThat(methods.get(1).id()).isEqualTo("myapi.foo.insert");
     Truth.assertThat(methods.get(1).parameters().isEmpty()).isTrue();
     Truth.assertThat(methods.get(1).request().type() == Schema.Type.EMPTY);
-    Truth.assertThat(methods.get(1).resourceHierarchy()).isEqualTo(Arrays.asList("foo"));
     Truth.assertThat(methods.get(1).response().type() == Schema.Type.EMPTY);
 
     Truth.assertThat(document.name()).isEqualTo("myapi");
+    Truth.assertThat(document.canonicalName()).isEqualTo("My API");
     Truth.assertThat(document.revision()).isEqualTo("20170419");
     Truth.assertThat(document.rootUrl()).isEqualTo("https://example.com");
 

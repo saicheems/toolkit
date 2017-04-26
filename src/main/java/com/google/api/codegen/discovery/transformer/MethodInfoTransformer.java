@@ -20,7 +20,6 @@ import com.google.api.codegen.discovery.Schema;
 import com.google.api.codegen.discovery.viewmodel.MethodInfoView;
 import com.google.common.collect.ImmutableList;
 import java.util.Set;
-import javax.validation.constraints.NotNull;
 
 public class MethodInfoTransformer {
 
@@ -30,28 +29,27 @@ public class MethodInfoTransformer {
   public static MethodInfoView transform(Document document, Method method) {
     MethodInfoView.Builder builder = MethodInfoView.newBuilder();
 
-    String parametersPageTokenPropertyName = getPageTokenNameFromSet(method.parameters().keySet());
-    String requestPageTokenPropertyName = getPageTokenNameFromSchema(document, method.request());
-    String responsePageTokenPropertyName = getPageTokenNameFromSchema(document, method.response());
+    String parametersPageTokenFieldName = getPageTokenNameFromSet(method.parameters().keySet());
+    String requestPageTokenFieldName = getPageTokenNameFromSchema(document, method.request());
+    String responsePageTokenFieldName = getPageTokenNameFromSchema(document, method.response());
 
     boolean isPageStreaming = false;
-    if (!responsePageTokenPropertyName.isEmpty()) {
-      if (!requestPageTokenPropertyName.isEmpty()) {
+    if (!responsePageTokenFieldName.isEmpty()) {
+      if (!requestPageTokenFieldName.isEmpty()) {
         isPageStreaming = true;
-      } else if (!parametersPageTokenPropertyName.isEmpty()) {
+      } else if (!parametersPageTokenFieldName.isEmpty()) {
         isPageStreaming = true;
       }
     }
 
     Schema response = document.dereferenceSchema(method.response());
-    String pageStreamingResourcePropertyName =
-        getPageStreamingResourcePropertyNameFromSchema(document, response);
+    String pageStreamingResourceFieldName =
+        getPageStreamingResourceFieldNameFromSchema(document, response);
     Schema.Type pageStreamingResourceType;
-    if (pageStreamingResourcePropertyName.isEmpty()) {
+    if (pageStreamingResourceFieldName.isEmpty()) {
       pageStreamingResourceType = Schema.Type.EMPTY;
     } else {
-      pageStreamingResourceType =
-          response.properties().get(pageStreamingResourcePropertyName).type();
+      pageStreamingResourceType = response.properties().get(pageStreamingResourceFieldName).type();
     }
 
     return builder
@@ -59,21 +57,21 @@ public class MethodInfoTransformer {
         .hasResponse(method.response().type() != Schema.Type.EMPTY)
         .isPageStreaming(isPageStreaming)
         .isScopesSingular(method.scopes().size() == 1)
-        .pageStreamingResourcePropertyName(pageStreamingResourcePropertyName)
+        .pageStreamingResourceFieldName(pageStreamingResourceFieldName)
         .pageStreamingResourceType(pageStreamingResourceType)
-        .parametersPageTokenPropertyName(parametersPageTokenPropertyName)
-        .requestBodyPageTokenPropertyName(requestPageTokenPropertyName)
-        .responsePageTokenPropertyName(responsePageTokenPropertyName)
+        .parametersPageTokenFieldName(parametersPageTokenFieldName)
+        .requestBodyPageTokenFieldName(requestPageTokenFieldName)
+        .responsePageTokenFieldName(responsePageTokenFieldName)
         .scopes(method.scopes())
         .supportsMediaDownload(method.supportsMediaDownload())
         .supportsMediaUpload(method.supportsMediaUpload())
         .build();
   }
 
-  private static String getPageTokenNameFromSet(@NotNull Set<String> names) {
-    for (String pageTokenName : PAGE_TOKEN_NAMES) {
-      if (names.contains(pageTokenName)) {
-        return pageTokenName;
+  private static String getPageTokenNameFromSet(Set<String> names) {
+    for (String name : PAGE_TOKEN_NAMES) {
+      if (names.contains(name)) {
+        return name;
       }
     }
     return "";
@@ -84,15 +82,15 @@ public class MethodInfoTransformer {
       return "";
     }
     schema = document.dereferenceSchema(schema);
-    for (String pageTokenName : PAGE_TOKEN_NAMES) {
-      if (schema.hasProperty(pageTokenName)) {
-        return pageTokenName;
+    for (String name : PAGE_TOKEN_NAMES) {
+      if (schema.hasProperty(name)) {
+        return name;
       }
     }
     return "";
   }
 
-  private static String getPageStreamingResourcePropertyNameFromSchema(
+  private static String getPageStreamingResourceFieldNameFromSchema(
       Document document, Schema schema) {
     if (schema == null) {
       return "";

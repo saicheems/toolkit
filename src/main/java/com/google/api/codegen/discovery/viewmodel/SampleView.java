@@ -17,7 +17,6 @@ package com.google.api.codegen.discovery.viewmodel;
 import com.google.api.codegen.SnippetSetRunner;
 import com.google.api.codegen.viewmodel.ViewModel;
 import com.google.auto.value.AutoValue;
-import java.util.List;
 
 // TODO: Notes for Sai:
 // Naming semantics:
@@ -26,9 +25,13 @@ import java.util.List;
 // - TypeName -> MyClass.MyVar
 //               ^^^^^^^
 // - VarName -> MyClass myClass = ...
-//              ^^^^^^^
+//                      ^^^^^^^
 // - PropertyName -> "myVar": { ... }
 //                   ^^^^^^^
+// - FuncName -> function();       <- use if method is not on an object
+//               ^^^^^^^^
+// - MethodName -> myObj.method(); <- use if method is on an object
+//                       ^^^^^^
 // Append with name if the return type is a String.
 
 @AutoValue
@@ -40,94 +43,69 @@ public abstract class SampleView implements ViewModel {
 
   public abstract ApiInfoView apiInfo();
 
-  public abstract String appName();
-
-  public abstract String className(); // C#
-
-  public abstract List<LineView> fieldLines();
-
   public abstract MethodInfoView methodInfo();
 
   public abstract String namespaceName(); // C#
 
-  public abstract String nextPageTokenFieldName();
+  public abstract String className(); // C#
+
+  // public abstract FieldView pageToken();
+  // public abstract String pageTokenFieldName();
+
+  // public abstract FieldView nextPageToken();
+  // public abstract String nextPageTokenFieldName();
+
+  // public abstract FieldView pageStreamingResource();
+  // public abstract String pageStreamingResourceFieldName();
+  // public abstract String pageStreamingResourceTypeName();
+  // public abstract String pageStreamingResourceVarName();
+
+  // public abstract List<FieldView> parameters();
+
+  // public abstract FieldView requestBody();
+  // public abstract String requestBodyTypeName();
+  // public abstract String requestBodyVarName();
+
+  // public abstract List<FieldView> requestBodyMembers();
+
+  // public abstract FieldView response();
+  // public abstract String responseTypeName();
+  // public abstract String responseVarName();
+
+  // public abstract FieldView service();
+  // public abstract String serviceTypeName(); // C#
+  // public abstract String serviceVarName(); // C#
+
+  // public abstract List<String> usingAliasDirectives(); // C#
+
+  // public abstract List<String> usingDirectives(); // C#
+
+  @Override
+  public abstract String templateFileName();
 
   @Override
   public abstract String outputPath();
-
-  public abstract String pageStreamingResourceFieldName();
-
-  public abstract String pageStreamingResourceTypeName();
-
-  public abstract String pageStreamingResourceVarName();
-
-  public abstract String pageTokenFieldName();
-
-  public abstract LineView requestBodyLine();
-
-  public abstract LineView requestLine();
 
   @Override
   public String resourceRoot() {
     return SnippetSetRunner.SNIPPET_RESOURCE_ROOT;
   }
 
-  public abstract LineView responseLine();
-
-  public abstract String responseVarName();
-
-  public abstract String serviceTypeName(); // C#
-
-  public abstract String serviceVarName(); // C#
-
-  @Override
-  public abstract String templateFileName();
-
-  public abstract List<LineView> usingLines(); // C#
-
   @AutoValue.Builder
   public abstract static class Builder {
 
     public abstract Builder apiInfo(ApiInfoView val);
 
-    public abstract Builder appName(String val);
-
-    public abstract SampleView build();
+    public abstract Builder methodInfo(MethodInfoView val);
 
     public abstract Builder className(String val);
 
-    public abstract Builder fieldLines(List<LineView> val);
-
-    public abstract Builder methodInfo(MethodInfoView val);
-
     public abstract Builder namespaceName(String val);
-
-    public abstract Builder nextPageTokenFieldName(String val);
-
-    public abstract Builder outputPath(String val);
-
-    public abstract Builder pageStreamingResourceFieldName(String val);
-
-    public abstract Builder pageStreamingResourceTypeName(String val);
-
-    public abstract Builder pageStreamingResourceVarName(String val);
-
-    public abstract Builder pageTokenFieldName(String val);
-
-    public abstract Builder requestBodyLine(LineView val);
-
-    public abstract Builder requestLine(LineView val);
-
-    public abstract Builder responseLine(LineView val);
-
-    public abstract Builder responseVarName(String val);
-
-    public abstract Builder serviceTypeName(String val);
-
-    public abstract Builder serviceVarName(String val);
 
     public abstract Builder templateFileName(String val);
 
-    public abstract Builder usingLines(List<LineView> val);
+    public abstract Builder outputPath(String val);
+
+    public abstract SampleView build();
   }
 }
