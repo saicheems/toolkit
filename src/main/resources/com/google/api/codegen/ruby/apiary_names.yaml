@@ -22048,7 +22048,7 @@
 "/gamesConfiguration:v1configuration/GamesNumberAffixConfiguration/one": one
 "/gamesConfiguration:v1configuration/GamesNumberAffixConfiguration/other": other
 "/gamesConfiguration:v1configuration/GamesNumberAffixConfiguration/two": two
-"/gamesConfiguration:v1configuration/GamesNumberAffixConfiguration/zero": zero
+"/gamesConfiguration:v1configuration/GamesNumberAffixConfiguration/zero": getZero
 "/gamesConfiguration:v1configuration/GamesNumberFormatConfiguration": games_number_format_configuration
 "/gamesConfiguration:v1configuration/GamesNumberFormatConfiguration/currencyCode": currency_code
 "/gamesConfiguration:v1configuration/GamesNumberFormatConfiguration/numDecimalPlaces": num_decimal_places

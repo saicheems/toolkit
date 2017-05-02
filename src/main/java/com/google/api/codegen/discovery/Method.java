@@ -14,13 +14,13 @@
  */
 package com.google.api.codegen.discovery;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 /**
  * A representation of a Discovery Document method.
@@ -34,9 +34,10 @@ public abstract class Method implements Comparable<Method> {
    * Returns a method constructed from root.
    *
    * @param root the root node to parse.
+   * @param path the full path to this node (ex: "resources.foo.methods.bar").
    * @return a method.
    */
-  public static Method from(DiscoveryNode root) {
+  public static Method from(DiscoveryNode root, String path) {
     String description = root.getString("description");
     String httpMethod = root.getString("httpMethod");
     String id = root.getString("id");
@@ -48,7 +49,7 @@ public abstract class Method implements Comparable<Method> {
     DiscoveryNode parametersNode = root.getObject("parameters");
     HashMap<String, Schema> parameters = new HashMap<>();
     for (String name : root.getObject("parameters").fieldNames()) {
-      Schema schema = Schema.from(name, parametersNode.getObject(name), true);
+      Schema schema = Schema.from(parametersNode.getObject(name), path + ".parameters." + name);
       // TODO: Remove these checks once we're sure that parameters can't be objects/arrays.
       // This is based on the assumption that these types can't be serialized as a query or path parameter.
       Preconditions.checkState(schema.type() != Schema.Type.ANY);
@@ -57,8 +58,14 @@ public abstract class Method implements Comparable<Method> {
       parameters.put(name, schema);
     }
 
-    Schema request = Schema.from(root.getObject("request"));
-    Schema response = Schema.from(root.getObject("response"));
+    Schema request = Schema.from(root.getObject("request"), path + ".request");
+    if (request.reference().isEmpty()) {
+      request = null;
+    }
+    Schema response = Schema.from(root.getObject("response"), path + ".response");
+    if (response.reference().isEmpty()) {
+      response = null;
+    }
     List<String> scopes = new ArrayList<>();
     for (DiscoveryNode scopeNode : root.getArray("scopes").elements()) {
       scopes.add(scopeNode.asText());
@@ -72,6 +79,7 @@ public abstract class Method implements Comparable<Method> {
         id,
         parameterOrder,
         parameters,
+        path,
         request,
         response,
         scopes,
@@ -85,42 +93,37 @@ public abstract class Method implements Comparable<Method> {
   }
 
   /** @return the description. */
-  @JsonProperty("description")
   public abstract String description();
 
   /** @return the HTTP method. */
-  @JsonProperty("httpMethod")
   public abstract String httpMethod();
 
   /** @return the ID. */
-  @JsonProperty("id")
   public abstract String id();
 
   /** @return the order of parameter names. */
-  @JsonProperty("parameters")
   public abstract List<String> parameterOrder();
 
   /** @return the map of parameter names to schemas. */
-  @JsonProperty("parameters")
   public abstract Map<String, Schema> parameters();
 
+  /** @return the fully qualified path to this method. */
+  public abstract String path();
+
   /** @return the request schema, or null if none. */
-  @JsonProperty("request")
+  @Nullable
   public abstract Schema request();
 
   /** @return the response schema, or null if none. */
-  @JsonProperty("response")
+  @Nullable
   public abstract Schema response();
 
   /** @return the list of scopes. */
-  @JsonProperty("scopes")
   public abstract List<String> scopes();
 
   /** @return whether or not the method supports media download. */
-  @JsonProperty("supportsMediaDownload")
   public abstract boolean supportsMediaDownload();
 
   /** @return whether or not the method supports media upload. */
-  @JsonProperty("supportsMediaUpload")
   public abstract boolean supportsMediaUpload();
 }

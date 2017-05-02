@@ -45,7 +45,7 @@ public class NamePath {
       }
     }
     if (namePieces.size() == 0) {
-      throw new IllegalArgumentException("QualifiedName must not be zero length");
+      throw new IllegalArgumentException("QualifiedName must not be getZero length");
     }
     return new NamePath(namePieces);
   }

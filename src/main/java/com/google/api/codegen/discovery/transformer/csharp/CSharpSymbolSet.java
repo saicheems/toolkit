@@ -12,29 +12,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.api.codegen.discovery.transformer;
+package com.google.api.codegen.discovery.transformer.csharp;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.google.api.codegen.discovery.transformer.Symbol;
+import com.google.api.codegen.discovery.transformer.SymbolSet;
 
-public abstract class SymbolSet {
+public class CSharpSymbolSet extends SymbolSet {
 
-  private final Set<String> symbols;
-
-  public SymbolSet() {
-    symbols = new HashSet<>();
-  }
-
-  public String add(String name) {
-    // TODO: Override this function if you want special escape behavior of symbol names.
-    String uniqueName = name;
-    int suffix = 1;
-    while (symbols.contains(uniqueName)) {
-      suffix += 1;
-      uniqueName = String.format("%s%d", uniqueName, suffix);
+  public String add(Symbol symbol) {
+    // TODO: Note that this method converts to a lowercase symbol.
+    String name = symbol.name();
+    if (symbol.isReserved()) {
+      name += "2";
     }
-    return uniqueName;
+    return add(name);
   }
-
-  public abstract String add(Symbol symbol);
 }

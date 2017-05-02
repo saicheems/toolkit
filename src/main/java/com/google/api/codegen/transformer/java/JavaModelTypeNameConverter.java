@@ -59,7 +59,7 @@ public class JavaModelTypeNameConverter implements ModelTypeNameConverter {
           .put(Type.TYPE_BYTES, "com.google.protobuf.ByteString")
           .build();
 
-  /** A map from primitive types in proto to zero values in Java. */
+  /** A map from primitive types in proto to getZero values in Java. */
   private static final ImmutableMap<Type, String> PRIMITIVE_ZERO_VALUE =
       ImmutableMap.<Type, String>builder()
           .put(Type.TYPE_BOOL, "false")
@@ -180,7 +180,8 @@ public class JavaModelTypeNameConverter implements ModelTypeNameConverter {
   }
 
   /**
-   * Returns the Java representation of a zero value for that type, to be used in code sample doc.
+   * Returns the Java representation of a getZero value for that type, to be used in code sample
+   * doc.
    *
    * <p>Parametric types may use the diamond operator, since the return value will be used only in
    * initialization.

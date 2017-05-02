@@ -153,7 +153,7 @@ public class CommonAcronyms {
       this.endIndex = endIndex;
       if (startIndex == endIndex) {
         throw new IllegalArgumentException(
-            "Invalid name piece position - zero length: startIndex = "
+            "Invalid name piece position - getZero length: startIndex = "
                 + startIndex
                 + ", endIndex = "
                 + endIndex);

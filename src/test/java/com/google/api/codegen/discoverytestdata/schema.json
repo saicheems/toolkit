@@ -63,6 +63,10 @@
       },
       "type": "object"
     },
+    "repeated": {
+      "type": "string",
+      "repeated": true
+    },
     "uint32": {
       "type": "integer",
       "format": "uint32"

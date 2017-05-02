@@ -14,7 +14,6 @@
  */
 package com.google.api.codegen.discovery.viewmodel;
 
-import com.google.api.codegen.discovery.Schema;
 import com.google.auto.value.AutoValue;
 import java.util.List;
 
@@ -31,23 +30,25 @@ public abstract class MethodInfoView {
 
   public abstract boolean isPageStreaming();
 
+  public abstract boolean isPageStreamingResourceRepeated();
+
   public abstract boolean isScopesSingular();
 
-  public abstract String pageStreamingResourceFieldName();
+  public abstract String pageStreamingResourceDiscoveryFieldName();
 
-  public abstract Schema.Type pageStreamingResourceType();
+  public abstract String parametersPageTokenDiscoveryFieldName();
 
-  public abstract String parametersPageTokenFieldName();
+  public abstract String requestBodyPageTokenDiscoveryFieldName();
 
-  public abstract String requestBodyPageTokenFieldName();
-
-  public abstract String responsePageTokenFieldName();
+  public abstract String responsePageTokenDiscoveryFieldName();
 
   public abstract List<String> scopes();
 
   public abstract boolean supportsMediaDownload();
 
   public abstract boolean supportsMediaUpload();
+
+  public abstract String verb();
 
   @AutoValue.Builder
   public abstract static class Builder {
@@ -60,22 +61,24 @@ public abstract class MethodInfoView {
 
     public abstract Builder isPageStreaming(boolean val);
 
+    public abstract Builder isPageStreamingResourceRepeated(boolean val);
+
     public abstract Builder isScopesSingular(boolean val);
 
-    public abstract Builder pageStreamingResourceFieldName(String val);
+    public abstract Builder pageStreamingResourceDiscoveryFieldName(String val);
 
-    public abstract Builder pageStreamingResourceType(Schema.Type val);
+    public abstract Builder parametersPageTokenDiscoveryFieldName(String val);
 
-    public abstract Builder parametersPageTokenFieldName(String val);
+    public abstract Builder requestBodyPageTokenDiscoveryFieldName(String val);
 
-    public abstract Builder requestBodyPageTokenFieldName(String val);
-
-    public abstract Builder responsePageTokenFieldName(String val);
+    public abstract Builder responsePageTokenDiscoveryFieldName(String val);
 
     public abstract Builder scopes(List<String> val);
 
     public abstract Builder supportsMediaDownload(boolean val);
 
     public abstract Builder supportsMediaUpload(boolean val);
+
+    public abstract Builder verb(String val);
   }
 }

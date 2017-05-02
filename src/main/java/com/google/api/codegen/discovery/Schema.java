@@ -14,7 +14,6 @@
  */
 package com.google.api.codegen.discovery;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,37 +41,35 @@ public abstract class Schema {
    * Returns a schema constructed from root, or an empty schema if root has no children.
    *
    * @param root the root node to parse.
-   */
-  public static Schema from(DiscoveryNode root) {
-    return from("", root, false);
-  }
-
-  /**
-   * Returns a schema constructed from root, or an empty schema if root has no children.
-   *
-   * @param key the name of the parameter or property this schema represents.
-   * @param root the root node to parse.
-   * @param isParameter whether or not root is a parameter description.
+   * @param path the full path to this node (ex: "methods.foo.parameters.bar").
    * @return a schema.
    */
-  public static Schema from(String key, DiscoveryNode root, boolean isParameter) {
+  public static Schema from(DiscoveryNode root, String path) {
     if (root.isEmpty()) {
       return empty();
     }
-    Schema additionalProperties = Schema.from("", root.getObject("additionalProperties"), false);
+    Schema additionalProperties =
+        Schema.from(root.getObject("additionalProperties"), path + ".additionalProperties");
+    if (additionalProperties.type() == Type.EMPTY && additionalProperties.reference().isEmpty()) {
+      additionalProperties = null;
+    }
     String defaultValue = root.getString("default");
     String description = root.getString("description");
     Format format = Format.getEnum(root.getString("format"));
     String id = root.getString("id");
     boolean isEnum = !root.getArray("enum").isEmpty();
-    Schema items = Schema.from(root.getObject("items"));
+    Schema items = Schema.from(root.getObject("items"), path + ".items");
+    if (items.type() == Type.EMPTY && items.reference().isEmpty()) {
+      items = null;
+    }
     String location = root.getString("location");
     String pattern = root.getString("pattern");
 
     Map<String, Schema> properties = new HashMap<>();
     DiscoveryNode propertiesNode = root.getObject("properties");
     for (String name : propertiesNode.fieldNames()) {
-      properties.put(name, Schema.from(propertiesNode.getObject(name)));
+      properties.put(
+          name, Schema.from(propertiesNode.getObject(name), path + ".properties." + name));
     }
 
     String reference = root.getString("$ref");
@@ -87,10 +84,9 @@ public abstract class Schema {
         format,
         id,
         isEnum,
-        isParameter,
         items,
-        key,
         location,
+        path,
         pattern,
         properties,
         reference,
@@ -107,7 +103,6 @@ public abstract class Schema {
         Format.EMPTY,
         "",
         false,
-        false,
         null,
         "",
         "",
@@ -120,75 +115,52 @@ public abstract class Schema {
   }
 
   /** @return the schema of the additionalProperties, or null if none. */
-  @JsonProperty("additionalProperties")
   @Nullable
   public abstract Schema additionalProperties();
 
   /** @return the default value. */
-  @JsonProperty("defaultValue")
   public abstract String defaultValue();
 
   /** @return the description. */
-  @JsonProperty("description")
   public abstract String description();
 
   /** @return the format. */
-  @JsonProperty("format")
   public abstract Format format();
 
   /** @return the ID. */
-  @JsonProperty("id")
   public abstract String id();
 
   /** @return whether or not the schema is an enum. */
-  @JsonProperty("isEnum")
   public abstract boolean isEnum();
 
-  /** @return whether or not this schema describes a parameter. */
-  @JsonProperty("isParameter")
-  public abstract boolean isParameter();
-
   /**
-   * @return the schema for each element in the array if this schema is an array, or empty string if
-   *     not.
+   * @return the schema for each element in the array if this schema is an array, or null if not.
    */
-  @JsonProperty("items")
   @Nullable
   public abstract Schema items();
 
-  /**
-   * @return the name of the parameter or property this schema describes, or empty string if this
-   *     schema does not describe a parameter or property.
-   */
-  @JsonProperty("key")
-  public abstract String key();
-
   /** @return the location. */
-  @JsonProperty("location")
   public abstract String location();
 
+  /** @return the fully qualified path to this schema. */
+  public abstract String path();
+
   /** @return the pattern. */
-  @JsonProperty("pattern")
   public abstract String pattern();
 
   /** @return the map of property names to schemas. */
-  @JsonProperty("properties")
   public abstract Map<String, Schema> properties();
 
   /** @return the reference. */
-  @JsonProperty("reference")
   public abstract String reference();
 
   /** @return whether or not the schema is repeated. */
-  @JsonProperty("repeated")
   public abstract boolean repeated();
 
   /** @return whether or not the schema is required. */
-  @JsonProperty("required")
   public abstract boolean required();
 
   /** @return the type. */
-  @JsonProperty("type")
   public abstract Type type();
 
   /** The set of types a schema can represent. */
@@ -233,8 +205,7 @@ public abstract class Schema {
     INT32("int32"),
     INT64("int64"),
     UINT32("uint32"),
-    UINT64("uint64"),
-    UNKNOWN("");
+    UINT64("uint64");
 
     private String text;
 
@@ -255,8 +226,8 @@ public abstract class Schema {
           return f;
         }
       }
-      // TODO(saicheems): Warn about unkno
-      return UNKNOWN;
+      // Unexpected formats are ignored.
+      return EMPTY;
     }
   }
 }

@@ -34,14 +34,13 @@ public class SchemaTest {
     ObjectMapper mapper = new ObjectMapper();
     JsonNode root = mapper.readTree(reader);
 
-    Schema schema = Schema.from(new DiscoveryNode(root));
+    Schema schema = Schema.from(new DiscoveryNode(root), "root");
 
     Truth.assertThat(schema.description()).isEqualTo("My Foo.");
     Truth.assertThat(schema.id()).isEqualTo("Foo");
     Truth.assertThat(schema.location()).isEqualTo("bar");
     Truth.assertThat(schema.pattern()).isEqualTo(".*");
     Truth.assertThat(schema.reference()).isEqualTo("Baz");
-    Truth.assertThat(schema.repeated()).isTrue();
     Truth.assertThat(schema.required()).isTrue();
     Truth.assertThat(schema.type()).isEqualTo(Schema.Type.OBJECT);
 
@@ -86,15 +85,26 @@ public class SchemaTest {
         .isEqualTo(Schema.Type.STRING);
     Truth.assertThat(properties.get("object").type()).isEqualTo(Schema.Type.OBJECT);
 
+    Truth.assertThat(properties.get("repeated").type()).isEqualTo(Schema.Type.STRING);
+    Truth.assertThat(properties.get("repeated").repeated()).isTrue();
+
     Truth.assertThat(properties.get("uint32").type()).isEqualTo(Schema.Type.INTEGER);
     Truth.assertThat(properties.get("uint32").format()).isEqualTo(Schema.Format.UINT32);
 
     Truth.assertThat(properties.get("uint64").type()).isEqualTo(Schema.Type.STRING);
     Truth.assertThat(properties.get("uint64").format()).isEqualTo(Schema.Format.UINT64);
+
+    // Test path.
+    Truth.assertThat(schema.path()).isEqualTo("root");
+    Truth.assertThat(schema.properties().get("array").path()).isEqualTo("root.properties.array");
+    Truth.assertThat(schema.properties().get("array").items().path())
+        .isEqualTo("root.properties.array.items");
+    Truth.assertThat(schema.properties().get("object").additionalProperties().path())
+        .isEqualTo("root.properties.object.additionalProperties");
   }
 
   @Test
   public void testSchemaFromEmptyNode() {
-    Truth.assertThat(Schema.from(new DiscoveryNode(null)).type()).isEqualTo(Schema.Type.EMPTY);
+    Truth.assertThat(Schema.from(new DiscoveryNode(null), "").type()).isEqualTo(Schema.Type.EMPTY);
   }
 }

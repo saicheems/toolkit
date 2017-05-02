@@ -29,42 +29,43 @@ public class MethodInfoTransformer {
   public static MethodInfoView transform(Document document, Method method) {
     MethodInfoView.Builder builder = MethodInfoView.newBuilder();
 
-    String parametersPageTokenFieldName = getPageTokenNameFromSet(method.parameters().keySet());
-    String requestPageTokenFieldName = getPageTokenNameFromSchema(document, method.request());
-    String responsePageTokenFieldName = getPageTokenNameFromSchema(document, method.response());
+    String parametersPageTokenName = getPageTokenNameFromSet(method.parameters().keySet());
+    String requestPageTokenName = getPageTokenNameFromSchema(document, method.request());
+    String responsePageTokenName = getPageTokenNameFromSchema(document, method.response());
 
     boolean isPageStreaming = false;
-    if (!responsePageTokenFieldName.isEmpty()) {
-      if (!requestPageTokenFieldName.isEmpty()) {
+    if (!responsePageTokenName.isEmpty()) {
+      if (!requestPageTokenName.isEmpty()) {
         isPageStreaming = true;
-      } else if (!parametersPageTokenFieldName.isEmpty()) {
+      } else if (!parametersPageTokenName.isEmpty()) {
         isPageStreaming = true;
       }
     }
 
     Schema response = document.dereferenceSchema(method.response());
-    String pageStreamingResourceFieldName =
-        getPageStreamingResourceFieldNameFromSchema(document, response);
-    Schema.Type pageStreamingResourceType;
-    if (pageStreamingResourceFieldName.isEmpty()) {
-      pageStreamingResourceType = Schema.Type.EMPTY;
-    } else {
-      pageStreamingResourceType = response.properties().get(pageStreamingResourceFieldName).type();
+    String pageStreamingResourceName = getPageStreamingResourceNameFromSchema(document, response);
+    boolean isPageStreamingResourceRepeated = false;
+    if (!pageStreamingResourceName.isEmpty()) {
+      Schema pageStreamingResource = response.properties().get(pageStreamingResourceName);
+      if (pageStreamingResource.type() == Schema.Type.ARRAY || pageStreamingResource.repeated()) {
+        isPageStreamingResourceRepeated = true;
+      }
     }
 
     return builder
-        .hasRequestBody(method.request().type() != Schema.Type.EMPTY)
-        .hasResponse(method.response().type() != Schema.Type.EMPTY)
+        .hasRequestBody(method.request() != null)
+        .hasResponse(method.response() != null)
         .isPageStreaming(isPageStreaming)
+        .isPageStreamingResourceRepeated(isPageStreamingResourceRepeated)
         .isScopesSingular(method.scopes().size() == 1)
-        .pageStreamingResourceFieldName(pageStreamingResourceFieldName)
-        .pageStreamingResourceType(pageStreamingResourceType)
-        .parametersPageTokenFieldName(parametersPageTokenFieldName)
-        .requestBodyPageTokenFieldName(requestPageTokenFieldName)
-        .responsePageTokenFieldName(responsePageTokenFieldName)
+        .pageStreamingResourceDiscoveryFieldName(pageStreamingResourceName)
+        .parametersPageTokenDiscoveryFieldName(parametersPageTokenName)
+        .requestBodyPageTokenDiscoveryFieldName(requestPageTokenName)
+        .responsePageTokenDiscoveryFieldName(responsePageTokenName)
         .scopes(method.scopes())
         .supportsMediaDownload(method.supportsMediaDownload())
         .supportsMediaUpload(method.supportsMediaUpload())
+        .verb(method.httpMethod())
         .build();
   }
 
@@ -90,8 +91,7 @@ public class MethodInfoTransformer {
     return "";
   }
 
-  private static String getPageStreamingResourceFieldNameFromSchema(
-      Document document, Schema schema) {
+  private static String getPageStreamingResourceNameFromSchema(Document document, Schema schema) {
     if (schema == null) {
       return "";
     }

@@ -78,7 +78,7 @@ public class DiscoveryNode {
   }
 
   /**
-   * Returns the array node at fieldName. If fieldName is not present, an empty array node is
+   * Returns the array node at getFieldName. If getFieldName is not present, an empty array node is
    * returned.
    *
    * @param fieldName key of the child node.
@@ -93,7 +93,7 @@ public class DiscoveryNode {
   }
 
   /**
-   * Returns the boolean node at fieldName. If fieldName is not present, false is returned.
+   * Returns the boolean node at getFieldName. If getFieldName is not present, false is returned.
    *
    * <p>Note that string nodes with the values "True" or "False" are also parsed by this function,
    * in addition to boolean nodes.
@@ -118,8 +118,8 @@ public class DiscoveryNode {
   }
 
   /**
-   * Returns the object node at fieldName. If fieldName is not present, an empty object node is
-   * returned.
+   * Returns the object node at getFieldName. If getFieldName is not present, an empty object node
+   * is returned.
    *
    * @param fieldName key of the child node.
    * @return an object node.
@@ -133,7 +133,8 @@ public class DiscoveryNode {
   }
 
   /**
-   * Returns the string node at fieldName. If fieldName is not present, an empty string is returned.
+   * Returns the string node at getFieldName. If getFieldName is not present, an empty string is
+   * returned.
    *
    * @param fieldName key of the child node.
    * @return a string.
@@ -147,10 +148,10 @@ public class DiscoveryNode {
   }
 
   /**
-   * Returns true if this node is an object node and if it has the key fieldName.
+   * Returns true if this node is an object node and if it has the key getFieldName.
    *
    * @param fieldName key of the child node.
-   * @return whether or not this node has the key fieldName.
+   * @return whether or not this node has the key getFieldName.
    */
   public boolean has(String fieldName) {
     Preconditions.checkArgument(jsonNode.isObject());

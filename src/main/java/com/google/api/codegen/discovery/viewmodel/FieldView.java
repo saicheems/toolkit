@@ -24,14 +24,31 @@ public abstract class FieldView {
     return new AutoValue_FieldView.Builder();
   }
 
+  // For C# request optional fields.
+  public abstract String classPropertyName();
+
+  public abstract String discoveryFieldName();
+
+  public static FieldView empty() {
+    return newBuilder()
+        .classPropertyName("")
+        .discoveryFieldName("")
+        .fieldName("")
+        .isList(false)
+        .isMap(false)
+        .typeName("")
+        .value("")
+        .varName("")
+        .build();
+  }
+
   public abstract String fieldName();
 
   public abstract boolean isList();
 
   public abstract boolean isMap();
 
-  // For C# request body fields.
-  public abstract String objectPropertyName();
+  public abstract Builder toBuilder();
 
   public abstract String typeName();
 
@@ -39,18 +56,28 @@ public abstract class FieldView {
 
   public abstract String varName();
 
+  public FieldView withTypeName(String typeName) {
+    return toBuilder().typeName(typeName).build();
+  }
+
+  public FieldView withVarName(String varName) {
+    return toBuilder().varName(varName).build();
+  }
+
   @AutoValue.Builder
   public abstract static class Builder {
 
     public abstract FieldView build();
+
+    public abstract Builder classPropertyName(String val);
+
+    public abstract Builder discoveryFieldName(String val);
 
     public abstract Builder fieldName(String val);
 
     public abstract Builder isList(boolean val);
 
     public abstract Builder isMap(boolean val);
-
-    public abstract Builder objectPropertyName(String val);
 
     public abstract Builder typeName(String val);
 

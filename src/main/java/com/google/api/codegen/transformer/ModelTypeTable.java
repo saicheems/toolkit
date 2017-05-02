@@ -159,7 +159,7 @@ public class ModelTypeTable implements ModelTypeFormatter {
 
   /**
    * If the given type is not implicitly imported, the add it to the import set, then return the
-   * zero value for that type.
+   * getZero value for that type.
    */
   public String getSnippetZeroValueAndSaveNicknameFor(TypeRef type) {
     return typeNameConverter.getSnippetZeroValue(type).getValueAndSaveTypeNicknameIn(typeTable);

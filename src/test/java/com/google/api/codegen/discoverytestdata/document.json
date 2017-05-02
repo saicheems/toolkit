@@ -48,7 +48,12 @@
   "rootUrl": "https://example.com",
   "schemas": {
     "GetBazRequest": {
-      "type": "string"
+      "type": "string",
+      "properties": {
+        "foo": {
+          "type": "string"
+        }
+      }
     },
     "Baz": {
       "type": "string"

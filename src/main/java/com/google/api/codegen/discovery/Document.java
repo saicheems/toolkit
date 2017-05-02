@@ -54,7 +54,8 @@ public abstract class Document {
     }
     String canonicalName = root.getString("canonicalName");
     String description = root.getString("description");
-    List<Method> methods = parseMethods(root);
+    Map<String, Schema> schemas = parseSchemas(root);
+    List<Method> methods = parseMethods(root, "");
     Collections.sort(methods); // Ensure methods are ordered alphabetically by their ID.
     String name = root.getString("name");
     if (canonicalName.isEmpty()) {
@@ -62,7 +63,6 @@ public abstract class Document {
     }
     String revision = root.getString("revision");
     String rootUrl = root.getString("rootUrl");
-    Map<String, Schema> schemas = parseSchemas(root);
     String servicePath = root.getString("servicePath");
     String title = root.getString("title");
     String version = root.getString("version");
@@ -105,17 +105,20 @@ public abstract class Document {
     return schema;
   }
 
-  private static List<Method> parseMethods(DiscoveryNode root) {
+  private static List<Method> parseMethods(DiscoveryNode root, String path) {
     List<Method> methods = new ArrayList<>();
     DiscoveryNode methodsNode = root.getObject("methods");
     List<String> resourceNames = methodsNode.fieldNames();
-    for (String resourceName : resourceNames) {
-      methods.add(Method.from(methodsNode.getObject(resourceName)));
+    if (!path.isEmpty()) {
+      path += ".";
+    }
+    for (String name : resourceNames) {
+      methods.add(Method.from(methodsNode.getObject(name), path + "methods." + name));
     }
     DiscoveryNode resourcesNode = root.getObject("resources");
     resourceNames = resourcesNode.fieldNames();
-    for (String resourceName : resourceNames) {
-      methods.addAll(parseMethods(resourcesNode.getObject(resourceName)));
+    for (String name : resourceNames) {
+      methods.addAll(parseMethods(resourcesNode.getObject(name), path + "resources." + name));
     }
     return methods;
   }
@@ -124,7 +127,7 @@ public abstract class Document {
     Map<String, Schema> schemas = new HashMap<>();
     DiscoveryNode schemasNode = root.getObject("schemas");
     for (String name : schemasNode.fieldNames()) {
-      schemas.put(name, Schema.from(name, schemasNode.getObject(name), false));
+      schemas.put(name, Schema.from(schemasNode.getObject(name), "schemas." + name));
     }
     return schemas;
   }

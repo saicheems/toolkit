@@ -21,10 +21,52 @@
         //    https://www.nuget.org/profiles/google-apis-packages
     @end
 
-    namespace {@class.namespaceName}
+    @join usingDirective : class.usingDirectives
+        using {@usingDirective.namespaceName};
+    @end
+    @if class.usingAliasDirectives
+
+        @join usingAliasDirective : class.usingAliasDirectives
+            using {@usingAliasDirective.alias} = {@usingAliasDirective.namespaceName};
+        @end
+    @end
+
+    namespace {@class.sampleNamespaceName}
     {
-        public class {@class.className}
+        public class {@class.sampleClassName}
         {
+            public static void Main(string[] args)
+            {
+                {@class.service.typeName} {@class.service.varName} = new {@class.service.typeName}(new BaseClientService.Initializer
+                {
+                    @if class.apiInfo.authType == "API_KEY"
+                        ApiKey = "",  // TODO: Update placeholder with desired API key.
+                    @else
+                        HttpClientInitializer = GetCredential(),
+                    @end
+                    ApplicationName: "{@class.appName}"
+                }
+                @join parameter : class.parameters
+
+                    {@parameter.typeName} {@parameter.varName} = {@parameter.value};  // TODO: Update placeholder value.
+                @end
+                @if class.methodInfo.hasRequestBody
+
+                    @switch class.methodInfo.verb
+                    @case "PATCH"
+                        // TODO: Assign values to desired properties of `{@class.requestBody.varName}`. Only assigned
+                        // properties will be changed:
+                    @case "PUT"
+                        // TODO: Assign values to desired properties of `{@class.requestBody.varName}`. All existing
+                        // properties will be replaced:
+                    @default
+                        // TODO: Assign values to desired properties of `{@class.requestBody.varName}`:
+                    @end
+                    {@class.requestBody.typeName} {@class.requestBody.varName} = {@class.requestBody.value};
+
+                @end
+                {@class.request.typeName} {@class.request.varName} = {@class.service.varName}.{@class.serviceRequestFullFuncName}();
+            }
         }
     }
 @end

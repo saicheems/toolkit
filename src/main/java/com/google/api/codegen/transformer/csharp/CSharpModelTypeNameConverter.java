@@ -54,7 +54,7 @@ public class CSharpModelTypeNameConverter implements ModelTypeNameConverter {
           .put(Type.TYPE_BYTES, "Google.Protobuf.ByteString")
           .build();
 
-  /** A map from primitive types in proto to zero values in C#. */
+  /** A map from primitive types in proto to getZero values in C#. */
   private static final ImmutableMap<Type, String> PRIMITIVE_ZERO_VALUE =
       ImmutableMap.<Type, String>builder()
           .put(Type.TYPE_BOOL, "false")

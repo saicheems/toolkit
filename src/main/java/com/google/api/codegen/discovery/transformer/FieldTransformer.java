@@ -19,15 +19,27 @@ import com.google.api.codegen.discovery.viewmodel.FieldView;
 
 public class FieldTransformer {
 
-  public static FieldView transform(Schema schema, SampleMapper sampleMapper) {
+  // Returns a field converted from schema.
+  // Only the discoveryFieldName, isList, and isMap properties are assigned.
+  public static FieldView transform(Schema schema, TypeMap typeMap, SymbolSet symbolSet) {
+    FieldView fieldView = transform(schema, typeMap);
+    return fieldView.withVarName(symbolSet.add(fieldView.discoveryFieldName()));
+  }
+
+  public static FieldView transform(Schema schema, TypeMap typeMap) {
+    // The name of the field this schema is assigned to is the last element of its path.
+    int i = schema.path().lastIndexOf('.');
+    String discoveryFieldName = schema.path().substring(i + 1);
+
     return FieldView.newBuilder()
-        .fieldName(schema.key())
-        .isList(schema.repeated() || schema.type() == Schema.Type.ARRAY)
-        .isMap(schema.additionalProperties() != null)
-        .objectPropertyName(sampleMapper.getObjectPropertyName(schema))
-        .typeName(sampleMapper.getTypeName(schema))
-        .value(sampleMapper.getZeroValue(schema))
-        .varName(schema.key())
+        .classPropertyName(typeMap.getClassPropertyName(schema))
+        .discoveryFieldName(discoveryFieldName)
+        .fieldName(typeMap.getFieldName(schema))
+        .isList(schema.type() == Schema.Type.ARRAY || schema.repeated())
+        .isMap(schema.type() == Schema.Type.OBJECT && schema.additionalProperties() != null)
+        .typeName(typeMap.add(schema))
+        .value(typeMap.getZero(schema))
+        .varName("")
         .build();
   }
 }

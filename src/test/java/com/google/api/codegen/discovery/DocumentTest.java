@@ -22,7 +22,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -52,17 +51,22 @@ public class DocumentTest {
     Truth.assertThat(document.authType()).isEqualTo(Document.AuthType.OAUTH_3L);
     Truth.assertThat(methods.get(0).description()).isEqualTo("Get a baz.");
     Truth.assertThat(methods.get(0).id()).isEqualTo("myapi.bar.baz.get");
-    Truth.assertThat(methods.get(0).parameterOrder()).isEqualTo(Arrays.asList("p1"));
+    Truth.assertThat(methods.get(0).parameterOrder()).isEqualTo(Collections.singletonList("p1"));
+    Truth.assertThat(methods.get(0).path()).isEqualTo("resources.bar.methods.baz");
+
     Map<String, Schema> parameters = methods.get(0).parameters();
     Truth.assertThat(parameters.get("p1").type()).isEqualTo(Schema.Type.BOOLEAN);
     Truth.assertThat(parameters.get("p1").required()).isTrue();
     Truth.assertThat(parameters.get("p1").location()).isEqualTo("query");
+    Truth.assertThat(parameters.get("p1").path())
+        .isEqualTo("resources.bar.methods.baz.parameters.p1");
 
     Truth.assertThat(methods.get(1).description()).isEqualTo("Insert a foo.");
     Truth.assertThat(methods.get(1).id()).isEqualTo("myapi.foo.insert");
     Truth.assertThat(methods.get(1).parameters().isEmpty()).isTrue();
-    Truth.assertThat(methods.get(1).request().type() == Schema.Type.EMPTY);
-    Truth.assertThat(methods.get(1).response().type() == Schema.Type.EMPTY);
+    Truth.assertThat(methods.get(1).request()).isNull();
+    Truth.assertThat(methods.get(1).response()).isNull();
+    Truth.assertThat(methods.get(1).path()).isEqualTo("methods.foo");
 
     Truth.assertThat(document.name()).isEqualTo("myapi");
     Truth.assertThat(document.canonicalName()).isEqualTo("My API");
@@ -72,6 +76,10 @@ public class DocumentTest {
     Map<String, Schema> schemas = document.schemas();
 
     Truth.assertThat(schemas.get("GetBazRequest").type()).isEqualTo(Schema.Type.STRING);
+    Truth.assertThat(schemas.get("GetBazRequest").path()).isEqualTo("schemas.GetBazRequest");
+    Truth.assertThat(schemas.get("GetBazRequest").properties().get("foo").path())
+        .isEqualTo("schemas.GetBazRequest.properties.foo");
+
     Truth.assertThat(schemas.get("Baz").type()).isEqualTo(Schema.Type.STRING);
 
     Truth.assertThat(document.servicePath()).isEqualTo("/api");

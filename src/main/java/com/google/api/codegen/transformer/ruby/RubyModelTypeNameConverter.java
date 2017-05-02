@@ -118,7 +118,8 @@ public class RubyModelTypeNameConverter implements ModelTypeNameConverter {
   }
 
   /**
-   * Returns the Ruby representation of a zero value for that type, to be used in code sample doc.
+   * Returns the Ruby representation of a getZero value for that type, to be used in code sample
+   * doc.
    */
   @Override
   public TypedValue getSnippetZeroValue(TypeRef type) {

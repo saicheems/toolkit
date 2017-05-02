@@ -14,24 +14,9 @@
  */
 package com.google.api.codegen.discovery.transformer;
 
-import com.google.api.codegen.discovery.Schema;
+public interface Symbol {
 
-// contains methods to map discovery properties onto a language sample
-public abstract class SampleMapper {
+  String name();
 
-  public String getNamespaceName() {
-    return "";
-  }
-
-  public String getClassName() {
-    return "";
-  }
-
-  public String getObjectPropertyName(Schema schema) {
-    return "";
-  }
-
-  public abstract String getTypeName(Schema schema);
-
-  public abstract String getZeroValue(Schema schema);
+  boolean isReserved();
 }

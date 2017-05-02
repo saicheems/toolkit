@@ -14,27 +14,16 @@
  */
 package com.google.api.codegen.discovery.transformer;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.google.api.codegen.discovery.Schema;
 
-public abstract class SymbolSet {
+public interface TypeMap {
 
-  private final Set<String> symbols;
+  // Returns the short type name of the given schema and updates the type map.
+  String add(Schema schema);
 
-  public SymbolSet() {
-    symbols = new HashSet<>();
-  }
+  String getZero(Schema schema);
 
-  public String add(String name) {
-    // TODO: Override this function if you want special escape behavior of symbol names.
-    String uniqueName = name;
-    int suffix = 1;
-    while (symbols.contains(uniqueName)) {
-      suffix += 1;
-      uniqueName = String.format("%s%d", uniqueName, suffix);
-    }
-    return uniqueName;
-  }
+  String getClassPropertyName(Schema schema);
 
-  public abstract String add(Symbol symbol);
+  String getFieldName(Schema schema);
 }

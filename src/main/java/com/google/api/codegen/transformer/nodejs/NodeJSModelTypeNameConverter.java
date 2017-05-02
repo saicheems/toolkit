@@ -48,7 +48,7 @@ public class NodeJSModelTypeNameConverter implements ModelTypeNameConverter {
           .put(Type.TYPE_BYTES, "string")
           .build();
 
-  /** A map from primitive types in proto to zero value in NodeJS */
+  /** A map from primitive types in proto to getZero value in NodeJS */
   private static final ImmutableMap<Type, String> PRIMITIVE_ZERO_VALUE =
       ImmutableMap.<Type, String>builder()
           .put(Type.TYPE_BOOL, "false")
@@ -117,7 +117,8 @@ public class NodeJSModelTypeNameConverter implements ModelTypeNameConverter {
   }
 
   /**
-   * Returns the NodeJS representation of a zero value for that type, to be used in code sample doc.
+   * Returns the NodeJS representation of a getZero value for that type, to be used in code sample
+   * doc.
    */
   @Override
   public TypedValue getSnippetZeroValue(TypeRef type) {
