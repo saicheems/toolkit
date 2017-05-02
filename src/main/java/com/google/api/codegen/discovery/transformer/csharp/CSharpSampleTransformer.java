@@ -65,18 +65,18 @@ public class CSharpSampleTransformer implements SampleTransformer {
       typeMap.addUsingDirective("Newtonsoft.Json");
     }
 
-    String safeCanonicalName = CSharpSymbol.from(document.canonicalName()).toUpperCamel().name();
-    builder.sampleNamespaceName(safeCanonicalName + "Sample");
-    builder.sampleClassName(safeCanonicalName + "Example");
+    CSharpNamer namer = new CSharpNamer(document);
+    builder.sampleNamespaceName(namer.getSampleNamespaceName());
+    builder.sampleClassName(namer.getSampleClassName());
 
     symbolSet.add(CSharpSymbol.from("args")); // public static void Main(string[] args)
 
     // MyService service = new MyService( ...
     FieldView service =
-        FieldView.empty().withVarName(symbolSet.add("service")).withTypeName(typeMap.addService());
+        FieldView.empty().withVarName(namer.getServiceVarName()).withTypeName(typeMap.addService());
     builder.service(service);
     //     ApplicationName = "Google-MyServiceSample/0.1",
-    builder.appName(String.format("Google-%sSample/0.1", safeCanonicalName));
+    builder.appName(namer.getAppName());
     // ... );
 
     List<FieldView> parameters = new ArrayList<>();
@@ -93,10 +93,9 @@ public class CSharpSampleTransformer implements SampleTransformer {
 
     builder.request(
         FieldView.empty()
-            .withVarName(symbolSet.add("request"))
+            .withVarName(namer.getRequesVarName())
             .withTypeName(typeMap.addRequest(method)));
 
-    CSharpNamer namer = new CSharpNamer(document.canonicalName());
     builder.serviceRequestFullFuncName(namer.getServiceRequestFuncFullName(method.path()));
 
     List<UsingDirectiveView> usingDirectives = new ArrayList<>();

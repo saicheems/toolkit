@@ -37,13 +37,15 @@ public abstract class Path {
     if (segments.length > 1) {
       penultimateSegment = segments[segments.length - 2];
     }
+    boolean isTopLevelParameter = penultimateSegment.equals("parameters");
     return new AutoValue_Path(
         segments[0],
         penultimateSegment,
         segments[segments.length - 1],
         segments.length,
         methodIdSegments.build(),
-        ImmutableList.copyOf(segments));
+        ImmutableList.copyOf(segments),
+        isTopLevelParameter);
   }
 
   public abstract String firstSegment();
@@ -57,4 +59,6 @@ public abstract class Path {
   public abstract List<String> methodIdSegments();
 
   public abstract List<String> segments();
+
+  public abstract boolean isTopLevelParameter();
 }

@@ -14,54 +14,104 @@
  */
 package com.google.api.codegen.discovery.transformer.csharp;
 
+import com.google.api.codegen.discovery.Document;
+import com.google.api.codegen.discovery.Method;
+import com.google.api.codegen.discovery.Schema;
 import com.google.api.codegen.discovery.transformer.Path;
+import com.google.common.collect.ImmutableTable;
 import java.util.List;
 
 public class CSharpNamer {
 
   // TODO: Move anything related to names here, the getZero value stuff can stay in the type map.
 
-  private final String canonicalName;
+  private final Document document;
+  private static final ImmutableTable<Schema.Type, Schema.Format, String> typeNames =
+      new ImmutableTable.Builder<Schema.Type, Schema.Format, String>()
+          .put(Schema.Type.ANY, Schema.Format.EMPTY, "object")
+          .put(Schema.Type.BOOLEAN, Schema.Format.EMPTY, "bool")
+          .put(Schema.Type.INTEGER, Schema.Format.INT32, "int")
+          .put(Schema.Type.INTEGER, Schema.Format.UINT32, "uint")
+          .put(Schema.Type.NUMBER, Schema.Format.FLOAT, "float")
+          .put(Schema.Type.NUMBER, Schema.Format.DOUBLE, "double")
+          .put(Schema.Type.STRING, Schema.Format.EMPTY, "string")
+          .put(Schema.Type.STRING, Schema.Format.BYTE, "byte")
+          .put(Schema.Type.STRING, Schema.Format.DATE, "string")
+          .put(Schema.Type.STRING, Schema.Format.DATETIME, "string")
+          .put(Schema.Type.STRING, Schema.Format.INT64, "long")
+          .put(Schema.Type.STRING, Schema.Format.UINT64, "ulong")
+          .build();
 
-  public CSharpNamer(String canonicalName) {
-    this.canonicalName = canonicalName;
+  public CSharpNamer(Document document) {
+    this.document = document;
   }
 
-  public String getServiceTypeFullNameWithoutNamespace() {
-    CSharpSymbol symbol = CSharpSymbol.from(canonicalName);
-    String serviceClassName = symbol.toUpperCamel().name();
-    if (symbol.isReserved()) {
-      serviceClassName = serviceClassName + serviceClassName;
-    }
-    return serviceClassName + "Service";
+  public String getSampleNamespaceName() {
+    return CSharpSymbol.from(document.canonicalName()).toUpperCamel().name() + "Sample";
   }
 
-  public String getObjectTypeFullNameWithoutNamespace(String id, String schemaPath) {
-    // root level schemas aren't escaped if they conflict with a reserved identifier (it's basically impossible though, they're all uppercase)
+  public String getSampleClassName() {
+    return CSharpSymbol.from(document.canonicalName()).toUpperCamel().name() + "Example";
+  }
 
-    // if id is present, the name is uppercase escaped id
-    // top level array schemas are suffixed with "Items"
-    // nested schemas with no id, or which conflict with their parent schema are their property name in uppercase suffixed with "Data"
-    // nested schemas that conflict with their parent are again suffixed with "Schema"
-    // nested map objects without a name are suffixed with "DataElement"
+  public String getServiceVarName() {
+    return CSharpSymbol.from(document.canonicalName()).toLowerCamel().name() + "Service";
+  }
 
-    // do nested objects ever have ids? or will they always be references?
+  public String getAppName() {
+    return String.format(
+        "Google-%sSample/0.1", CSharpSymbol.from(document.canonicalName()).toUpperCamel().name());
+  }
 
-    // If there's no ID, we use the key of the schema as the ID.
-    // {
-    //   "properties": { "mySchema": { ... } }
-    //                   ^^^^^^^^^^
-    // }
-    if (!id.isEmpty()) {
-      return CSharpSymbol.from(id).toUpperCamel().name();
+  public String getRequesVarName() {
+    return "request";
+  }
+
+  public String getServiceNamespaceName() {
+    String canonicalName = document.canonicalName();
+    String versionNoDots = document.version().replaceAll("\\.", "_");
+
+    String namespaceName = "Google.Apis";
+    namespaceName += "." + CSharpSymbol.from(canonicalName).toUpperCamel().name();
+    namespaceName += "." + versionNoDots;
+    return namespaceName;
+  }
+
+  public String getServiceTypeName() {
+    return getSafeClassName(document.canonicalName()) + "Service";
+  }
+
+  public String getTypeName(Schema schema) {
+    if (!schema.reference().isEmpty()) {
+      schema = document.dereferenceSchema(schema);
     }
-    Path path = Path.from(schemaPath);
+    switch (schema.type()) {
+      case ARRAY:
+        return "List<" + getTypeName(schema.items()) + ">";
+      case OBJECT:
+        if (schema.additionalProperties() != null) {
+          return "Map<String, " + getTypeName(schema.additionalProperties()) + ">";
+        }
+        return getObjectTypeName(schema);
+    }
+    if (schema.type() == Schema.Type.STRING && Path.from(schema.path()).isTopLevelParameter()) {
+      // TODO: Actually a special enum.
+      String typeName = getSafeClassName(Path.from(schema.path()).lastSegment());
+      return getRequestTypeName(schema.path()) + "." + typeName + "Enum";
+    }
+    String typeName = typeNames.get(schema.type(), schema.format());
+    // TODO: Validate that getTypeName is not null? It shouldn't be possible...
+    if (schema.repeated()) {
+      typeName = "List<" + typeName + ">";
+    }
+    return typeName;
+  }
 
-    // We're making the potentially erroneous assumption that sub-schemas do not have IDs.
-    // TODO: Note that there is a test for a sub-schema with in an ID in the C# generator, so there is a defined behavior for this case. However, no Discovery doc currently contains a sub-schema with an ID. I don't really see how it's possible, so I'm ignoring the case. In the exceedingly rare case that this becomes an issue, this function will have to take a Document as an argument to grab the actual Schema object for each segment.
-
-    // TODO: Note that we're also making the assumption that the ID of the root schema is the same as its "id" field. It's currently true for all Discovery docs, so I believe it's a safe assumption. In the exceedingly rare case that this assumption is broken, the solution is the same as above.
-
+  private String getObjectTypeName(Schema schema) {
+    if (!schema.id().isEmpty()) {
+      return CSharpSymbol.from(schema.id()).toUpperCamel().name();
+    }
+    Path path = Path.from(schema.path());
     List<String> segments = path.segments();
     // Start at the second segment, which is the first schema key.
     int i = segments.indexOf("schemas") + 1;
@@ -107,23 +157,22 @@ public class CSharpNamer {
     return typeName;
   }
 
-  public String getRequestTypeFullNameWithoutNamespace(String methodPath) {
-    Path path = Path.from(methodPath);
+  public String getRequestTypeName(Method method) {
+    return getRequestTypeName(method.path());
+  }
+
+  private String getRequestTypeName(String path) {
     String typeName = "";
-    for (int i = 0; i < path.methodIdSegments().size(); i++) {
-      typeName += getSafeClassName(path.methodIdSegments().get(i));
-      if (i == path.methodIdSegments().size() - 1) {
+    List<String> methodIdSegments = Path.from(path).methodIdSegments();
+    for (int i = 0; i < methodIdSegments.size(); i++) {
+      typeName += getSafeClassName(methodIdSegments.get(i));
+      if (i == methodIdSegments.size() - 1) {
         typeName += "Request";
       } else {
         typeName += "Resource.";
       }
     }
     return typeName;
-  }
-
-  public String getTopLevelEnumParameterTypeFullNameWithoutNamespace(String schemaPath) {
-    String typeName = getSafeClassName(Path.from(schemaPath).lastSegment());
-    return getRequestTypeFullNameWithoutNamespace(schemaPath) + "." + typeName + "Enum";
   }
 
   public String getServiceRequestFuncFullName(String methodPath) {
@@ -142,7 +191,7 @@ public class CSharpNamer {
     String typeName = "";
     CSharpSymbol symbol = CSharpSymbol.from(name);
     if (symbol.isReserved()) {
-      typeName += CSharpSymbol.from(canonicalName).toUpperCamel().name();
+      typeName += CSharpSymbol.from(document.canonicalName()).toUpperCamel().name();
     }
     return typeName + symbol.toUpperCamel().name();
   }

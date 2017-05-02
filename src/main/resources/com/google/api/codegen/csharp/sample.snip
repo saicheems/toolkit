@@ -46,8 +46,15 @@
                     @end
                     ApplicationName: "{@class.appName}"
                 }
-                @join parameter : class.parameters
+                @join parameter : class.parameters if class.parameters
 
+                    @if parameter.description
+                        @join line : util.getDocLines(parameter.description, 100)
+                            // {@line}
+                        @end
+
+
+                    @end
                     {@parameter.typeName} {@parameter.varName} = {@parameter.value};  // TODO: Update placeholder value.
                 @end
                 @if class.methodInfo.hasRequestBody
@@ -65,8 +72,25 @@
                     {@class.requestBody.typeName} {@class.requestBody.varName} = {@class.requestBody.value};
 
                 @end
-                {@class.request.typeName} {@class.request.varName} = {@class.service.varName}.{@class.serviceRequestFullFuncName}();
+                @if class.methodInfo.supportsMediaUpload
+                    // TODO: Add desired media content for upload. See
+                    // https://developers.google.com/api-client-library/dotnet/guide/media_upload
+
+                @end
+                {@class.request.typeName} {@class.request.varName} = {@class.service.varName}.{@class.serviceRequestFullFuncName}({@argList(class.parameters)});
+
+                @if class.methodInfo.supportsMediaDownload
+                    // TODO: Download media content if desired. See
+                    // https://developers.google.com/api-client-library/dotnet/guide/media_download
+
+                @end
             }
         }
     }
+@end
+
+@private argList(parameters)
+  @join parameter : parameters on ", "
+    {@parameter}.varName
+  @end
 @end

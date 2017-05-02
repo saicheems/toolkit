@@ -26,23 +26,18 @@ import java.util.Map;
 
 public class CSharpTypeMap implements TypeMap {
 
-  private final Document document;
   private final CSharpNamer namer;
   private final HashMap<String, String> namespaceNames;
 
   private static final String SYSTEM_COLLECTIONS_GENERIC = "System.Collections.Generic";
 
   CSharpTypeMap(Document document) {
-    this.document = document;
-    this.namer = new CSharpNamer(document.canonicalName());
+    this.namer = new CSharpNamer(document);
     namespaceNames = new HashMap<>();
   }
 
   @Override
   public String add(Schema schema) {
-    if (!schema.reference().isEmpty()) {
-      schema = document.dereferenceSchema(schema);
-    }
     Schema copy = schema;
     // Loops over the schema to collect namespaceNames.
     while (true) {
@@ -58,7 +53,7 @@ public class CSharpTypeMap implements TypeMap {
             copy = copy.additionalProperties();
             continue;
           }
-          namespaceNames.put(serviceNamespaceName() + ".Data", "Data");
+          namespaceNames.put(namer.getServiceNamespaceName() + ".Data", "Data");
           break;
       }
       if (schema.repeated()) {
@@ -68,55 +63,27 @@ public class CSharpTypeMap implements TypeMap {
     }
     if (schema.type() == Schema.Type.STRING && isTopLevelParameter(schema.path())) {
       // TODO: Actually a special enum.
-      namespaceNames.put(serviceNamespaceName(), "");
+      namespaceNames.put(namer.getServiceNamespaceName(), "");
     }
-    return getTypeName(schema);
+    return namer.getTypeName(schema);
   }
 
   String addService() {
-    namespaceNames.put(serviceNamespaceName(), "");
-    return namer.getServiceTypeFullNameWithoutNamespace();
+    namespaceNames.put(namer.getServiceNamespaceName(), "");
+    return namer.getServiceTypeName();
   }
 
   // Type name of the request, note this is different than the request body.
   String addRequest(Method method) {
-    namespaceNames.put(serviceNamespaceName(), "");
-    return namer.getRequestTypeFullNameWithoutNamespace(method.path());
+    namespaceNames.put(namer.getServiceNamespaceName(), "");
+    return namer.getRequestTypeName(method);
   }
 
   void addUsingDirective(String namespaceName) {
     namespaceNames.put(namespaceName, "");
   }
 
-  private String getTypeName(Schema schema) {
-    if (!schema.reference().isEmpty()) {
-      schema = document.dereferenceSchema(schema);
-    }
-    switch (schema.type()) {
-      case ARRAY:
-        return "List<" + add(schema.items()) + ">";
-      case OBJECT:
-        if (schema.additionalProperties() != null) {
-          return "Map<String, " + getTypeName(schema.additionalProperties()) + ">";
-        }
-        return namer.getObjectTypeFullNameWithoutNamespace(schema.id(), schema.path());
-    }
-    if (schema.type() == Schema.Type.STRING && isTopLevelParameter(schema.path())) {
-      // TODO: Actually a special enum.
-      return namer.getTopLevelEnumParameterTypeFullNameWithoutNamespace(schema.path());
-    }
-    String typeName = types.get(schema.type(), schema.format());
-    // TODO: Validate that getTypeName is not null? It shouldn't be possible...
-    if (schema.repeated()) {
-      typeName = "List<" + typeName + ">";
-    }
-    return typeName;
-  }
-
   public String getZero(Schema schema) {
-    if (!schema.reference().isEmpty()) {
-      schema = document.dereferenceSchema(schema);
-    }
     switch (schema.type()) {
       default:
         if (!schema.repeated()) {
@@ -125,19 +92,14 @@ public class CSharpTypeMap implements TypeMap {
         // Fall through if the schema is repeated.
       case ARRAY:
       case OBJECT:
-        return String.format("new %s()", getTypeName(schema));
+        return String.format("new %s()", namer.getTypeName(schema));
     }
     if (schema.type() == Schema.Type.STRING && isTopLevelParameter(schema.path())) {
       // TODO: Actually a special enum.
-      String typeName = namer.getTopLevelEnumParameterTypeFullNameWithoutNamespace(schema.path());
-      return String.format("(%s) 0", typeName);
+      return String.format("(%s) 0", namer.getTypeName(schema));
     }
     // TODO: Validate that the table returns a non-null value? It shouldn't be possible...
     return zeros.get(schema.type(), schema.format());
-  }
-
-  private boolean isTopLevelParameter(String path) {
-    return Path.from(path).penultimateSegment().equals("parameters");
   }
 
   public String getClassPropertyName(Schema schema) {
@@ -152,32 +114,6 @@ public class CSharpTypeMap implements TypeMap {
   Map<String, String> namespaceNames() {
     return new HashMap<>(namespaceNames);
   }
-
-  private String serviceNamespaceName() {
-    String canonicalName = document.canonicalName();
-    String versionNoDots = document.version().replaceAll("\\.", "_");
-
-    String namespaceName = "Google.Apis";
-    namespaceName += "." + CSharpSymbol.from(canonicalName).toUpperCamel().name();
-    namespaceName += "." + versionNoDots;
-    return namespaceName;
-  }
-
-  private static final ImmutableTable<Schema.Type, Schema.Format, String> types =
-      new ImmutableTable.Builder<Schema.Type, Schema.Format, String>()
-          .put(Schema.Type.ANY, Schema.Format.EMPTY, "object")
-          .put(Schema.Type.BOOLEAN, Schema.Format.EMPTY, "bool")
-          .put(Schema.Type.INTEGER, Schema.Format.INT32, "int")
-          .put(Schema.Type.INTEGER, Schema.Format.UINT32, "uint")
-          .put(Schema.Type.NUMBER, Schema.Format.FLOAT, "float")
-          .put(Schema.Type.NUMBER, Schema.Format.DOUBLE, "double")
-          .put(Schema.Type.STRING, Schema.Format.EMPTY, "string")
-          .put(Schema.Type.STRING, Schema.Format.BYTE, "byte")
-          .put(Schema.Type.STRING, Schema.Format.DATE, "string")
-          .put(Schema.Type.STRING, Schema.Format.DATETIME, "string")
-          .put(Schema.Type.STRING, Schema.Format.INT64, "long")
-          .put(Schema.Type.STRING, Schema.Format.UINT64, "ulong")
-          .build();
 
   private static final ImmutableTable<Schema.Type, Schema.Format, String> zeros =
       new ImmutableTable.Builder<Schema.Type, Schema.Format, String>()
