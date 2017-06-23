@@ -14,13 +14,9 @@
  */
 package com.google.api.codegen.discovery2.transformer;
 
-import com.google.api.codegen.discovery.Method;
-import com.google.api.codegen.viewmodel.ViewModel;
+public interface Symbol {
 
-/*
- * Transforms a Method into a ViewModel.
- */
-public interface SampleTransformer {
+  String name();
 
-  ViewModel transform(Method method);
+  boolean isReserved();
 }

@@ -1,3 +1,4 @@
+
 /* Copyright 2017 Google Inc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.api.codegen.discovery2.transformer;
+package com.google.api.codegen.discovery2.viewmodel;
 
-import com.google.api.codegen.discovery.Method;
-import com.google.api.codegen.viewmodel.ViewModel;
+import com.google.auto.value.AutoValue;
 
-/*
- * Transforms a Method into a ViewModel.
- */
-public interface SampleTransformer {
+@AutoValue
+public abstract class CSharpUsingDirectiveView {
 
-  ViewModel transform(Method method);
+  public static CSharpUsingDirectiveView from(String namespace, String alias) {
+    return new AutoValue_CSharpUsingDirectiveView(namespace, alias);
+  }
+
+  public abstract String namespaceName();
+
+  public abstract String alias();
 }

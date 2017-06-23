@@ -14,13 +14,16 @@
  */
 package com.google.api.codegen.discovery2.transformer;
 
-import com.google.api.codegen.discovery.Method;
-import com.google.api.codegen.viewmodel.ViewModel;
+import com.google.api.codegen.discovery.Schema;
 
-/*
- * Transforms a Method into a ViewModel.
- */
-public interface SampleTransformer {
+public interface TypeMap {
 
-  ViewModel transform(Method method);
+  // Returns the short type name of the given schema and updates the type map.
+  String add(Schema schema);
+
+  String getZero(Schema schema);
+
+  String getClassPropertyName(Schema schema);
+
+  String getFieldName(Schema schema);
 }

@@ -85,9 +85,8 @@ public class ViewModelProvider implements DiscoveryProvider {
     ViewModel surfaceDoc = null;
     if (sampleTransformer != null) {
       for (com.google.api.codegen.discovery.Method method2 : document.methods()) {
-        System.out.println(method.getName() + ": " + method2.id());
         if (method.getName().equals(method2.id())) {
-          surfaceDoc = sampleTransformer.transform(document, method2);
+          surfaceDoc = sampleTransformer.transform(method2);
         }
       }
     } else {

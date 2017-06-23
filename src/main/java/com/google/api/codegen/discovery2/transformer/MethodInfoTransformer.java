@@ -14,7 +14,6 @@
  */
 package com.google.api.codegen.discovery2.transformer;
 
-import com.google.api.codegen.discovery.Document;
 import com.google.api.codegen.discovery.Method;
 import com.google.api.codegen.discovery.Schema;
 import com.google.api.codegen.discovery2.viewmodel.MethodInfoView;
@@ -26,12 +25,12 @@ public class MethodInfoTransformer {
   private static final ImmutableList<String> PAGE_TOKEN_NAMES =
       ImmutableList.of("pageToken", "nextPageToken");
 
-  public static MethodInfoView transform(Document document, Method method) {
+  public static MethodInfoView transform(Method method) {
     MethodInfoView.Builder builder = MethodInfoView.newBuilder();
 
     String parametersPageTokenName = getPageTokenNameFromSet(method.parameters().keySet());
-    String requestPageTokenName = getPageTokenNameFromSchema(document, method.request());
-    String responsePageTokenName = getPageTokenNameFromSchema(document, method.response());
+    String requestPageTokenName = getPageTokenNameFromSchema(method.request());
+    String responsePageTokenName = getPageTokenNameFromSchema(method.response());
 
     boolean isPageStreaming = false;
     if (!responsePageTokenName.isEmpty()) {
@@ -42,10 +41,11 @@ public class MethodInfoTransformer {
       }
     }
 
-    Schema response = document.dereferenceSchema(method.response());
-    String pageStreamingResourceName = getPageStreamingResourceNameFromSchema(document, response);
+    Schema response = method.response();
+    String pageStreamingResourceName = getPageStreamingResourceNameFromSchema(response);
     boolean isPageStreamingResourceRepeated = false;
-    if (!pageStreamingResourceName.isEmpty()) {
+    if (response != null && !pageStreamingResourceName.isEmpty()) {
+      response = response.dereference();
       Schema pageStreamingResource = response.properties().get(pageStreamingResourceName);
       if (pageStreamingResource.type() == Schema.Type.ARRAY || pageStreamingResource.repeated()) {
         isPageStreamingResourceRepeated = true;
@@ -78,11 +78,11 @@ public class MethodInfoTransformer {
     return "";
   }
 
-  private static String getPageTokenNameFromSchema(Document document, Schema schema) {
+  private static String getPageTokenNameFromSchema(Schema schema) {
     if (schema == null) {
       return "";
     }
-    schema = document.dereferenceSchema(schema);
+    schema = schema.dereference();
     for (String name : PAGE_TOKEN_NAMES) {
       if (schema.hasProperty(name)) {
         return name;
@@ -91,11 +91,11 @@ public class MethodInfoTransformer {
     return "";
   }
 
-  private static String getPageStreamingResourceNameFromSchema(Document document, Schema schema) {
+  private static String getPageStreamingResourceNameFromSchema(Schema schema) {
     if (schema == null) {
       return "";
     }
-    schema = document.dereferenceSchema(schema);
+    schema = schema.dereference();
     // Look for the first repeated resource.
     for (String name : schema.properties().keySet()) {
       if (schema.properties().get(name).repeated()) {

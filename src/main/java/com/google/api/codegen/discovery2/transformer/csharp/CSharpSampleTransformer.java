@@ -21,22 +21,41 @@ import com.google.api.codegen.discovery2.transformer.MethodInfoTransformer;
 import com.google.api.codegen.discovery2.transformer.SampleTransformer;
 import com.google.api.codegen.discovery2.viewmodel.SampleView;
 import com.google.api.codegen.viewmodel.ViewModel;
+import com.google.common.base.Preconditions;
+
+import javax.validation.constraints.NotNull;
 
 public class CSharpSampleTransformer implements SampleTransformer {
 
   @Override
-  public ViewModel transform(Document document, Method method) {
-    return createSampleView(document, method);
+  public ViewModel transform(Method method) {
+    return createSampleView(method);
   }
 
-  private static SampleView createSampleView(Document document, Method method) {
+  private static SampleView createSampleView(Method method) {
+    Document document = (Document) method.parent();
+    Preconditions.checkState(document != null);
     SampleView.Builder builder = SampleView.newBuilder();
 
+    CSharpTypeMap typeMap = new CSharpTypeMap(document);
+    SymbolSet symbolSet = new CSharpSymbolSet();
+
     builder.apiInfo(ApiInfoTransformer.transform(document));
-    builder.methodInfo(MethodInfoTransformer.transform(document, method));
+    builder.methodInfo(MethodInfoTransformer.transform(method));
 
     builder.templateFileName("csharp/discovery_sample.snip");
     builder.outputPath(method.id() + ".frag.cs");
+
+    typeMap.addUsingDirective("Google.Apis.Services"); // BaseClientService
+    switch (document.authType()) {
+      case ADC:
+        typeMap.addUsingDirective("Google.Apis.Auth.OAuth2"); // GoogleCredential
+        typeMap.addUsingDirective("System.Threading.Tasks.Task"); // Task
+        break;
+      case OAUTH_3L:
+        typeMap.addUsingDirective("Google.Apis.Auth.OAuth2"); // UserCredential
+        break;
+    }
 
     return builder.build();
   }
