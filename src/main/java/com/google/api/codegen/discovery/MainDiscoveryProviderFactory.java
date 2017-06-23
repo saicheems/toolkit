@@ -85,6 +85,7 @@ public class MainDiscoveryProviderFactory implements DiscoveryProviderFactory {
           .build();
 
   public static DiscoveryProvider defaultCreate(
+      Document document,
       Service service,
       ApiaryConfig apiaryConfig,
       List<JsonNode> sampleConfigOverrides,
@@ -120,6 +121,7 @@ public class MainDiscoveryProviderFactory implements DiscoveryProviderFactory {
     }
 
     return ViewModelProvider.newBuilder()
+        .setDocument(document)
         .setMethods(service.getApis(0).getMethodsList())
         .setApiaryConfig(apiaryConfig)
         .setSnippetSetRunner(new CommonSnippetSetRunner(new CommonRenderingUtil()))
@@ -138,11 +140,12 @@ public class MainDiscoveryProviderFactory implements DiscoveryProviderFactory {
 
   @Override
   public DiscoveryProvider create(
+      Document document,
       Service service,
       ApiaryConfig apiaryConfig,
       List<JsonNode> sampleConfigOverrides,
       File rubyNamesFile,
       String id) {
-    return defaultCreate(service, apiaryConfig, sampleConfigOverrides, rubyNamesFile, id);
+    return defaultCreate(document, service, apiaryConfig, sampleConfigOverrides, rubyNamesFile, id);
   }
 }

@@ -23,6 +23,7 @@ import java.util.List;
 /** A factory for DiscoveryProviders which perform code generation. */
 public interface DiscoveryProviderFactory {
   DiscoveryProvider create(
+      Document document,
       Service service,
       ApiaryConfig apiaryConfig,
       List<JsonNode> sampleConfigOverrides,

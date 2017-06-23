@@ -40,6 +40,7 @@ import java.util.TreeMap;
  */
 public class ViewModelProvider implements DiscoveryProvider {
 
+  private final Document document;
   private final List<Method> methods;
   private final ApiaryConfig apiaryConfig;
   private final CommonSnippetSetRunner snippetSetRunner;
@@ -49,6 +50,7 @@ public class ViewModelProvider implements DiscoveryProvider {
   private final String outputRoot;
 
   private ViewModelProvider(
+      Document document,
       List<Method> methods,
       ApiaryConfig apiaryConfig,
       CommonSnippetSetRunner snippetSetRunner,
@@ -56,6 +58,7 @@ public class ViewModelProvider implements DiscoveryProvider {
       List<JsonNode> sampleConfigOverrides,
       TypeNameGenerator typeNameGenerator,
       String outputRoot) {
+    this.document = document;
     this.methods = methods;
     this.apiaryConfig = apiaryConfig;
     this.snippetSetRunner = snippetSetRunner;
@@ -154,6 +157,7 @@ public class ViewModelProvider implements DiscoveryProvider {
   }
 
   public static class Builder {
+    private Document document;
     private List<Method> methods;
     private ApiaryConfig apiaryConfig;
     private CommonSnippetSetRunner snippetSetRunner;
@@ -163,6 +167,11 @@ public class ViewModelProvider implements DiscoveryProvider {
     private String outputRoot;
 
     private Builder() {}
+
+    public Builder setDocument(Document document) {
+      this.document = document;
+      return this;
+    }
 
     public Builder setMethods(List<Method> methods) {
       this.methods = methods;
@@ -202,6 +211,7 @@ public class ViewModelProvider implements DiscoveryProvider {
 
     public ViewModelProvider build() {
       return new ViewModelProvider(
+          document,
           methods,
           apiaryConfig,
           snippetSetRunner,
