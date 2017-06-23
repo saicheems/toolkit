@@ -35,6 +35,8 @@ import com.google.api.codegen.discovery.transformer.nodejs.NodeJSSampleMethodToV
 import com.google.api.codegen.discovery.transformer.php.PhpSampleMethodToViewTransformer;
 import com.google.api.codegen.discovery.transformer.py.PythonSampleMethodToViewTransformer;
 import com.google.api.codegen.discovery.transformer.ruby.RubySampleMethodToViewTransformer;
+import com.google.api.codegen.discovery2.transformer.SampleTransformer;
+import com.google.api.codegen.discovery2.transformer.csharp.CSharpSampleTransformer;
 import com.google.api.codegen.rendering.CommonSnippetSetRunner;
 import com.google.api.codegen.util.CommonRenderingUtil;
 import com.google.common.collect.ImmutableMap;
@@ -120,12 +122,18 @@ public class MainDiscoveryProviderFactory implements DiscoveryProviderFactory {
       throw new NotImplementedException("MainDiscoveryProviderFactory: invalid id \"" + id + "\"");
     }
 
+    SampleTransformer sampleTransformer = null;
+    if (id.equals(CSHARP)) {
+      sampleTransformer = new CSharpSampleTransformer();
+    }
+
     return ViewModelProvider.newBuilder()
         .setDocument(document)
         .setMethods(service.getApis(0).getMethodsList())
         .setApiaryConfig(apiaryConfig)
         .setSnippetSetRunner(new CommonSnippetSetRunner(new CommonRenderingUtil()))
         .setMethodToViewTransformer(sampleMethodToViewTransformer)
+        .setSampleTransformer(sampleTransformer)
         .setOverrides(overrides)
         .setTypeNameGenerator(typeNameGenerator)
         .setOutputRoot(

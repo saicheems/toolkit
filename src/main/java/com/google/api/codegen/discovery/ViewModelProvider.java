@@ -23,6 +23,7 @@ import com.google.api.codegen.discovery.config.ApiaryConfigToSampleConfigConvert
 import com.google.api.codegen.discovery.config.SampleConfig;
 import com.google.api.codegen.discovery.config.TypeNameGenerator;
 import com.google.api.codegen.discovery.transformer.SampleMethodToViewTransformer;
+import com.google.api.codegen.discovery2.transformer.SampleTransformer;
 import com.google.api.codegen.rendering.CommonSnippetSetRunner;
 import com.google.api.codegen.viewmodel.ViewModel;
 import com.google.api.tools.framework.snippet.Doc;
@@ -45,6 +46,7 @@ public class ViewModelProvider implements DiscoveryProvider {
   private final ApiaryConfig apiaryConfig;
   private final CommonSnippetSetRunner snippetSetRunner;
   private final SampleMethodToViewTransformer methodToViewTransformer;
+  private final SampleTransformer sampleTransformer;
   private final List<JsonNode> sampleConfigOverrides;
   private final TypeNameGenerator typeNameGenerator;
   private final String outputRoot;
@@ -55,6 +57,7 @@ public class ViewModelProvider implements DiscoveryProvider {
       ApiaryConfig apiaryConfig,
       CommonSnippetSetRunner snippetSetRunner,
       SampleMethodToViewTransformer methodToViewTransformer,
+      SampleTransformer sampleTransformer,
       List<JsonNode> sampleConfigOverrides,
       TypeNameGenerator typeNameGenerator,
       String outputRoot) {
@@ -63,6 +66,7 @@ public class ViewModelProvider implements DiscoveryProvider {
     this.apiaryConfig = apiaryConfig;
     this.snippetSetRunner = snippetSetRunner;
     this.methodToViewTransformer = methodToViewTransformer;
+    this.sampleTransformer = sampleTransformer;
     this.sampleConfigOverrides = sampleConfigOverrides;
     this.typeNameGenerator = typeNameGenerator;
     this.outputRoot = outputRoot;
@@ -77,7 +81,18 @@ public class ViewModelProvider implements DiscoveryProvider {
     SampleConfig sampleConfig =
         new ApiaryConfigToSampleConfigConverter(methods, apiaryConfig, typeNameGenerator).convert();
     sampleConfig = override(sampleConfig, sampleConfigOverrides);
-    ViewModel surfaceDoc = methodToViewTransformer.transform(method, sampleConfig);
+
+    ViewModel surfaceDoc = null;
+    if (sampleTransformer != null) {
+      for (com.google.api.codegen.discovery.Method method2 : document.methods()) {
+        System.out.println(method.getName() + ": " + method2.id());
+        if (method.getName().equals(method2.id())) {
+          surfaceDoc = sampleTransformer.transform(document, method2);
+        }
+      }
+    } else {
+      surfaceDoc = methodToViewTransformer.transform(method, sampleConfig);
+    }
     Doc doc = snippetSetRunner.generate(surfaceDoc);
     Map<String, Doc> docs = new TreeMap<>();
     if (doc == null) {
@@ -162,6 +177,7 @@ public class ViewModelProvider implements DiscoveryProvider {
     private ApiaryConfig apiaryConfig;
     private CommonSnippetSetRunner snippetSetRunner;
     private SampleMethodToViewTransformer methodToViewTransformer;
+    private SampleTransformer sampleTransformer;
     private List<JsonNode> sampleConfigOverrides;
     private TypeNameGenerator typeNameGenerator;
     private String outputRoot;
@@ -194,6 +210,11 @@ public class ViewModelProvider implements DiscoveryProvider {
       return this;
     }
 
+    public Builder setSampleTransformer(SampleTransformer sampleTransformer) {
+      this.sampleTransformer = sampleTransformer;
+      return this;
+    }
+
     public Builder setOverrides(List<JsonNode> overrides) {
       this.sampleConfigOverrides = overrides;
       return this;
@@ -216,6 +237,7 @@ public class ViewModelProvider implements DiscoveryProvider {
           apiaryConfig,
           snippetSetRunner,
           methodToViewTransformer,
+          sampleTransformer,
           sampleConfigOverrides,
           typeNameGenerator,
           outputRoot);
