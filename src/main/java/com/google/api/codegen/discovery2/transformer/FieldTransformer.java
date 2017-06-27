@@ -80,10 +80,9 @@ public class FieldTransformer {
       typeName = typeMap.add(schema);
       if (override == null && schema.repeated()) {
         // "item" is added to the symbol table in the recursive call to `transform`.
-        String itemVarName = "item";
         fields.add(
-            FieldTransformer.transform(
-                schema.withRepeated(false), symbolSet, typeMap, null, itemVarName));
+            transform(schema.withRepeated(false), symbolSet, typeMap, null, "item")
+                .withDescription(""));
       }
     }
 
@@ -98,19 +97,27 @@ public class FieldTransformer {
           // Fall-through if the schema is repeated.
         case ARRAY:
           for (JsonNode node : override) {
-            Schema items =
-                schema.repeated() ? schema.withRepeated(false) : schema.items().dereference();
-            fields.add(transform(items, symbolSet, typeMap, node));
+            Schema items = schema.repeated() ? schema.withRepeated(false) : schema.items();
+            fields.add(
+                transform(items.dereference(), symbolSet, typeMap, node, "item")
+                    .withDescription(""));
           }
           break;
         case OBJECT:
-          // TODO: Maps!
           Iterator<Map.Entry<String, JsonNode>> objectFields = override.fields();
+
           while (objectFields.hasNext()) {
-            Map.Entry<String, JsonNode> field = objectFields.next();
-            fields.add(
-                transform(
-                    schema.properties().get(field.getKey()), symbolSet, typeMap, field.getValue()));
+            Map.Entry<String, JsonNode> entry = objectFields.next();
+            if (schema.additionalProperties() != null) {
+              // It's a map!
+              fields.add(
+                  transform(schema.additionalProperties(), symbolSet, typeMap, entry.getValue())
+                      .withDescription("")
+                      .withKeyValue(entry.getKey()));
+            } else {
+              Schema propertySchema = schema.properties().get(entry.getKey());
+              fields.add(transform(propertySchema, symbolSet, typeMap, entry.getValue()));
+            }
           }
           break;
         case BOOLEAN:
@@ -129,6 +136,8 @@ public class FieldTransformer {
         .fields(fields)
         .isArray(schema.type() == Schema.Type.ARRAY || schema.repeated())
         .isMap(schema.type() == Schema.Type.OBJECT && schema.additionalProperties() != null)
+        .keyValue("")
+        .required(schema.required())
         .typeName(typeName)
         .value(value)
         .varName(varName)

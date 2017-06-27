@@ -49,6 +49,13 @@ public class DiscoveryFragmentGeneratorTool {
             .build());
     options.addOption(
         Option.builder()
+            .longOpt("override_file")
+            .desc("An override file.")
+            .hasArg()
+            .argName("OVERRIDE2")
+            .build());
+    options.addOption(
+        Option.builder()
             .longOpt("gapic_yaml")
             .desc("The GAPIC YAML configuration file or files.")
             .hasArg()
@@ -87,6 +94,7 @@ public class DiscoveryFragmentGeneratorTool {
         cl.getOptionValue("discovery_doc"),
         cl.getOptionValues("gapic_yaml"),
         cl.getOptionValue("overrides", ""),
+        cl.getOptionValue("override_file", ""),
         cl.getOptionValue("output", ""),
         cl.getOptionValue("auth_instructions", ""),
         cl.getOptionValue("ruby_names_file", ""));
@@ -96,6 +104,7 @@ public class DiscoveryFragmentGeneratorTool {
       String discoveryDoc,
       String[] generatorConfigs,
       String overrideFiles,
+      String overrideFilename,
       String outputDirectory,
       String authInstructions,
       String rubyNamesFile)
@@ -106,6 +115,7 @@ public class DiscoveryFragmentGeneratorTool {
     options.set(
         DiscoveryFragmentGeneratorApi.GENERATOR_CONFIG_FILES, Arrays.asList(generatorConfigs));
     options.set(DiscoveryFragmentGeneratorApi.OVERRIDE_FILES, overrideFiles);
+    options.set(DiscoveryFragmentGeneratorApi.OVERRIDE_FILE, overrideFilename);
     options.set(DiscoveryFragmentGeneratorApi.OUTPUT_FILE, outputDirectory);
     options.set(DiscoveryFragmentGeneratorApi.AUTH_INSTRUCTIONS_URL, authInstructions);
     options.set(DiscoveryFragmentGeneratorApi.RUBY_NAMES_FILE, rubyNamesFile);

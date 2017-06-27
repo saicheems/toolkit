@@ -79,9 +79,6 @@ public abstract class SampleView implements ViewModel {
 
   public abstract FieldView request();
 
-  // Put a "method" method in FieldView?
-  public abstract String serviceRequestFuncName();
-
   @Nullable
   public abstract FieldView response();
 
@@ -122,8 +119,6 @@ public abstract class SampleView implements ViewModel {
     public abstract Builder requestBody(FieldView val);
 
     public abstract Builder request(FieldView val);
-
-    public abstract Builder serviceRequestFuncName(String val);
 
     public abstract Builder response(FieldView val);
 

@@ -15,7 +15,6 @@
 package com.google.api.codegen.discovery2.transformer.csharp;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.codegen.discovery.Document;
 import com.google.api.codegen.discovery.Method;
 import com.google.api.codegen.discovery.Schema;
@@ -29,19 +28,23 @@ import com.google.api.codegen.discovery2.viewmodel.MethodInfoView;
 import com.google.api.codegen.discovery2.viewmodel.SampleView;
 import com.google.api.codegen.discovery2.viewmodel.UsingDirectiveView;
 import com.google.api.codegen.viewmodel.ViewModel;
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class CSharpSampleTransformer implements SampleTransformer {
 
   @Override
-  public ViewModel transform(Method method, String authInstructionsUrl) {
-    return createSampleView(method, authInstructionsUrl);
+  public ViewModel transform(Method method, String authInstructionsUrl, JsonNode override) {
+    return createSampleView(method, authInstructionsUrl, override);
   }
 
-  private static SampleView createSampleView(Method method, String authInstructionsUrl) {
+  private static SampleView createSampleView(
+      Method method, String authInstructionsUrl, JsonNode override) {
     Document document = (Document) method.parent();
     Preconditions.checkState(document != null);
     SampleView.Builder builder = SampleView.newBuilder();
@@ -83,39 +86,57 @@ public class CSharpSampleTransformer implements SampleTransformer {
     // ... );
 
     List<FieldView> parameters = new ArrayList<>();
+    JsonNode parametersOverride = override != null ? override.get("parameters") : null;
     for (String name : method.parameterOrder()) {
-      JsonNode override = null;
+      JsonNode parameterOverride = parametersOverride != null ? parametersOverride.get(name) : null;
       Schema parameterSchema = method.parameters().get(name);
-      parameters.add(FieldTransformer.transform(parameterSchema, symbolSet, typeMap, override));
+      parameters.add(
+          FieldTransformer.transform(parameterSchema, symbolSet, typeMap, parameterOverride));
     }
     builder.parameters(parameters);
 
     Schema requestBodySchema = method.request();
+    FieldView requestBody = null;
     if (requestBodySchema != null) {
-      JsonNode override = null;
-      if (method.id().equals("logging.entries.write")) {
-        String json = "{\"entries\": [{\"logName\": \"woah!\"}]}";
-        try {
-          override = new ObjectMapper().readTree(json);
-        } catch (Exception e) {
-          throw new IllegalStateException(e);
-        }
-      }
-      builder.requestBody(
+      JsonNode requestBodyOverride = override != null ? override.get("requestBody") : null;
+      requestBody =
           FieldTransformer.transform(
               requestBodySchema.dereference(),
               symbolSet,
               typeMap,
-              override,
-              namer.getRequestBodyVarName()));
+              requestBodyOverride,
+              namer.getRequestBodyVarName());
     }
+    builder.requestBody(requestBody);
 
+    List<FieldView> optionalParameters = new ArrayList<>();
+    for (Map.Entry<String, Schema> parameter : new TreeMap<>(method.parameters()).entrySet()) {
+      JsonNode parameterOverride =
+          parametersOverride != null ? parametersOverride.get(parameter.getKey()) : null;
+      if (parameter.getValue().required() || parameterOverride == null) {
+        continue;
+      }
+      optionalParameters.add(
+          FieldTransformer.transform(parameter.getValue(), symbolSet, typeMap, parameterOverride));
+    }
+    List<String> argList = new ArrayList<>();
+    if (requestBody != null) {
+      argList.add(requestBody.varName());
+    }
+    for (FieldView parameter : parameters) {
+      argList.add(parameter.fieldName());
+    }
     builder.request(
         FieldView.empty()
+            .withFields(optionalParameters)
+            .withTypeName(typeMap.addRequest(method))
             .withVarName(namer.getRequestVarName())
-            .withTypeName(typeMap.addRequest(method)));
-
-    builder.serviceRequestFuncName(namer.getServiceRequestFuncName(method.path()));
+            .withValue(
+                String.format(
+                    "%s.%s(%s)",
+                    service.varName(),
+                    namer.getServiceRequestFuncName(method.id()),
+                    Joiner.on(",").join(argList))));
 
     Schema responseSchema = method.response();
     if (responseSchema != null) {

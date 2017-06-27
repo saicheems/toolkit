@@ -51,6 +51,7 @@ public abstract class DiscoveryGeneratorTestBase extends ConfigBaselineTestCase 
   private final String discoveryDocFileName;
   private final String[] gapicConfigFileNames;
   private final JsonNode overridesJson;
+  private final JsonNode override;
   protected ConfigProto config;
   protected DiscoveryImporter discoveryImporter;
   protected Document document;
@@ -64,7 +65,9 @@ public abstract class DiscoveryGeneratorTestBase extends ConfigBaselineTestCase 
     // Look for a overrides json based on the filename of the discovery doc.
     // For example, for "logging.v1.json" we look for "logging.v1.json.overrides"
     JsonNode tree = null;
+    JsonNode tree2 = null;
     String overridesFilename = discoveryDocFileName + ".overrides";
+    String overrideFilename = discoveryDocFileName + ".override";
     try {
       URL url = getTestDataLocator().findTestData(overridesFilename);
       if (url != null) {
@@ -75,7 +78,18 @@ public abstract class DiscoveryGeneratorTestBase extends ConfigBaselineTestCase 
     } catch (IOException e) {
       throw new IllegalArgumentException("failed to parse overrides file: " + overridesFilename);
     }
+    try {
+      URL url = getTestDataLocator().findTestData(overrideFilename);
+      if (url != null) {
+        tree2 =
+            new ObjectMapper().readTree(new StringReader(getTestDataLocator().readTestData(url)));
+      }
+    } catch (FileNotFoundException e) {
+    } catch (IOException e) {
+      throw new IllegalArgumentException("failed to parse override file: " + overrideFilename);
+    }
     this.overridesJson = tree;
+    this.override = tree2;
   }
 
   protected void setupDiscovery() {
@@ -117,6 +131,7 @@ public abstract class DiscoveryGeneratorTestBase extends ConfigBaselineTestCase 
             discoveryImporter.getService(),
             discoveryImporter.getConfig(),
             overrides,
+            override,
             null,
             id);
 

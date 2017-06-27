@@ -14,6 +14,7 @@
  */
 package com.google.api.codegen.discovery2.transformer;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.api.codegen.discovery.Method;
 import com.google.api.codegen.viewmodel.ViewModel;
 
@@ -22,5 +23,5 @@ import com.google.api.codegen.viewmodel.ViewModel;
  */
 public interface SampleTransformer {
 
-  ViewModel transform(Method method, String authInstructionsUrl);
+  ViewModel transform(Method method, String authInstructionsUrl, JsonNode override);
 }

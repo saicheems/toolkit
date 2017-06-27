@@ -63,18 +63,18 @@
         });
         @join parameter : class.parameters if class.parameters
 
-            {@field(parameter, "")}
+            {@field(parameter, "", TRUE)}
         @end
         @if class.methodInfo.hasRequestBody
 
-            {@field(class.requestBody, class.methodInfo.verb)}
+            {@field(class.requestBody, class.methodInfo.verb, FALSE)}
         @end
         @if class.methodInfo.supportsMediaUpload
             // TODO: Add desired media content for upload. See
             // https://developers.google.com/api-client-library/dotnet/guide/media_upload
         @end
 
-        {@class.request.typeName} {@class.request.varName} = {@class.service.varName}.{@class.serviceRequestFuncName}({@argList(class)});
+        {@field(class.request, "", FALSE)}
         @if class.methodInfo.supportsMediaDownload
 
             // TODO: Download media content if desired. See
@@ -165,13 +165,14 @@
 @end
 
 # If `httpVerb` is specified, the field is assumed to be the request body, which renders differently.
-@private field(class, httpVerb)
+@private field(class, httpVerb, printTodo)
     @if class.fields
         @join subField : class.fields
-            {@field(subField, "")}
-
+            {@field(subField, "", TRUE)}
 
         @end
+
+
     @end
     # Do not print documentation for the request body.
     @if httpVerb == ""
@@ -199,9 +200,12 @@
                 // TODO: Assign values to desired properties of `{@class.varName}`:
             @end
 
-            {@class.typeName} {@class.varName} = {@class.value};
-        @else
+
+        @end
+        @if printTodo
             {@class.typeName} {@class.varName} = {@class.value};  // TODO: Update placeholder value.
+        @else
+            {@class.typeName} {@class.varName} = {@class.value};
         @end
     @end
 
@@ -209,7 +213,11 @@
         @if class.isArray
             {@class.varName}.add({@subField.varName})
         @else
-            {@class.varName}.{@subField.classPropertyName} = {@subField.varName};
+            @if class.isMap
+                {@class.varName}.add({@subField.keyValue}, {@subField.value})
+            @else
+                {@class.varName}.{@subField.classPropertyName} = {@subField.varName};
+            @end
         @end
     @end
 @end

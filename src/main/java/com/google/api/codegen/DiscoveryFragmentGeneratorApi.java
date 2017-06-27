@@ -71,6 +71,9 @@ public class DiscoveryFragmentGeneratorApi {
           "A comma delimited list of paths to sample config override files.",
           "");
 
+  public static final Option<String> OVERRIDE_FILE =
+      ToolOptions.createOption(String.class, "override_file", "An override file.", "");
+
   public static final Option<List<String>> GENERATOR_CONFIG_FILES =
       ToolOptions.createOption(
           new TypeLiteral<List<String>>() {},
@@ -127,6 +130,18 @@ public class DiscoveryFragmentGeneratorApi {
         // this scenario makes parts of the automation around samplegen simpler.
       }
     }
+    String overrideFilename = options.get(OVERRIDE_FILE);
+    JsonNode override = null;
+    if (!overrideFilename.isEmpty()) {
+      try {
+        reader = Files.newBufferedReader(Paths.get(overrideFilename), Charset.forName("UTF8"));
+        ObjectMapper mapper = new ObjectMapper();
+        override = mapper.readTree(reader);
+      } catch (FileNotFoundException e) {
+        // Do nothing if the overrides file doesn't exist. Avoiding crashes for
+        // this scenario makes parts of the automation around samplegen simpler.
+      }
+    }
 
     GeneratorProto generator = configProto.getGenerator();
 
@@ -139,13 +154,14 @@ public class DiscoveryFragmentGeneratorApi {
 
     File rubyNamesFile = new File(options.get(RUBY_NAMES_FILE));
 
+    reader = Files.newBufferedReader(discoveryDocPath, Charset.forName("UTF8"));
     JsonNode documentNode = new ObjectMapper().readTree(reader);
     Document document = Document.from(new DiscoveryNode(documentNode));
 
     DiscoveryProviderFactory providerFactory = createProviderFactory(factory);
     DiscoveryProvider provider =
         providerFactory.create(
-            document, discovery.getService(), apiaryConfig, overrides, rubyNamesFile, id);
+            document, discovery.getService(), apiaryConfig, overrides, override, rubyNamesFile, id);
 
     for (Api api : discovery.getService().getApisList()) {
       for (Method method : api.getMethodsList()) {

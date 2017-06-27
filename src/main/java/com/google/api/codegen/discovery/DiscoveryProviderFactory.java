@@ -27,6 +27,7 @@ public interface DiscoveryProviderFactory {
       Service service,
       ApiaryConfig apiaryConfig,
       List<JsonNode> sampleConfigOverrides,
+      JsonNode override2,
       File rubyNamesFile,
       String id);
 }

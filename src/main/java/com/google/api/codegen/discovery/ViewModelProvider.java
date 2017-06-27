@@ -48,6 +48,7 @@ public class ViewModelProvider implements DiscoveryProvider {
   private final SampleMethodToViewTransformer methodToViewTransformer;
   private final SampleTransformer sampleTransformer;
   private final List<JsonNode> sampleConfigOverrides;
+  private final JsonNode override2;
   private final TypeNameGenerator typeNameGenerator;
   private final String outputRoot;
 
@@ -59,6 +60,7 @@ public class ViewModelProvider implements DiscoveryProvider {
       SampleMethodToViewTransformer methodToViewTransformer,
       SampleTransformer sampleTransformer,
       List<JsonNode> sampleConfigOverrides,
+      JsonNode override2,
       TypeNameGenerator typeNameGenerator,
       String outputRoot) {
     this.document = document;
@@ -68,6 +70,7 @@ public class ViewModelProvider implements DiscoveryProvider {
     this.methodToViewTransformer = methodToViewTransformer;
     this.sampleTransformer = sampleTransformer;
     this.sampleConfigOverrides = sampleConfigOverrides;
+    this.override2 = override2;
     this.typeNameGenerator = typeNameGenerator;
     this.outputRoot = outputRoot;
   }
@@ -75,21 +78,24 @@ public class ViewModelProvider implements DiscoveryProvider {
   @Override
   public Map<String, Doc> generate(Method method) {
     // Before the transformer step, we generate the SampleConfig and apply overrides if available.
-    // TODO(saicheems): Once all MVVM refactoring is done, change
+    // TODO(saicheems): Once all the refactoring is done, change
     // DiscoveryProvider to generate a single SampleConfig and provide one
     // method at a time.
     SampleConfig sampleConfig =
         new ApiaryConfigToSampleConfigConverter(methods, apiaryConfig, typeNameGenerator).convert();
-    sampleConfig = override(sampleConfig, sampleConfigOverrides);
 
     ViewModel surfaceDoc = null;
     if (sampleTransformer != null) {
       for (com.google.api.codegen.discovery.Method method2 : document.methods()) {
         if (method.getName().equals(method2.id())) {
-          surfaceDoc = sampleTransformer.transform(method2, sampleConfig.authInstructionsUrl());
+          JsonNode methodOverride = override2 != null ? override2.get(method2.id()) : null;
+          surfaceDoc =
+              sampleTransformer.transform(
+                  method2, sampleConfig.authInstructionsUrl(), methodOverride);
         }
       }
     } else {
+      sampleConfig = override(sampleConfig, sampleConfigOverrides);
       surfaceDoc = methodToViewTransformer.transform(method, sampleConfig);
     }
     Doc doc = snippetSetRunner.generate(surfaceDoc);
@@ -178,6 +184,7 @@ public class ViewModelProvider implements DiscoveryProvider {
     private SampleMethodToViewTransformer methodToViewTransformer;
     private SampleTransformer sampleTransformer;
     private List<JsonNode> sampleConfigOverrides;
+    private JsonNode override2;
     private TypeNameGenerator typeNameGenerator;
     private String outputRoot;
 
@@ -219,6 +226,11 @@ public class ViewModelProvider implements DiscoveryProvider {
       return this;
     }
 
+    public Builder setOverride2(JsonNode override2) {
+      this.override2 = override2;
+      return this;
+    }
+
     public Builder setTypeNameGenerator(TypeNameGenerator typeNameGenerator) {
       this.typeNameGenerator = typeNameGenerator;
       return this;
@@ -238,6 +250,7 @@ public class ViewModelProvider implements DiscoveryProvider {
           methodToViewTransformer,
           sampleTransformer,
           sampleConfigOverrides,
+          override2,
           typeNameGenerator,
           outputRoot);
     }

@@ -41,6 +41,8 @@ public abstract class FieldView {
         .fields(new ArrayList<FieldView>())
         .isArray(false)
         .isMap(false)
+        .keyValue("")
+        .required(false)
         .typeName("")
         .value("")
         .varName("")
@@ -55,6 +57,10 @@ public abstract class FieldView {
 
   public abstract boolean isMap();
 
+  public abstract String keyValue();
+
+  public abstract boolean required();
+
   public abstract Builder toBuilder();
 
   public abstract String typeName();
@@ -62,6 +68,18 @@ public abstract class FieldView {
   public abstract String value();
 
   public abstract String varName();
+
+  public FieldView withDescription(String description) {
+    return toBuilder().description(description).build();
+  }
+
+  public FieldView withFields(List<FieldView> fields) {
+    return toBuilder().fields(fields).build();
+  }
+
+  public FieldView withKeyValue(String keyValue) {
+    return toBuilder().keyValue(keyValue).build();
+  }
 
   public FieldView withTypeName(String typeName) {
     return toBuilder().typeName(typeName).build();
@@ -94,22 +112,14 @@ public abstract class FieldView {
 
     public abstract Builder isMap(boolean val);
 
+    public abstract Builder keyValue(String val);
+
+    public abstract Builder required(boolean val);
+
     public abstract Builder typeName(String val);
 
     public abstract Builder value(String val);
 
     public abstract Builder varName(String val);
   }
-
-  // typedVariable (type, name, value)
-  // - C#, Java
-
-  // untypedVariable (name, value)
-  // - Go, JavaScript, PHP, Ruby
-
-  // dictionaryItem (key, value)
-  // - Python
-
-  // objectProperty (name, value)
-  // JavaScript, Node.js
 }

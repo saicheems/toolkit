@@ -204,18 +204,11 @@ public class CSharpNamer {
       return getRequestTypeName(methodId) + "." + typeName + "Enum";
     }
     String typeName = typeNames.get(schema.type(), schema.format());
-    // TODO: Validate that getTypeName is not null? It shouldn't be possible...
-    //if (schema.repeated()) {
-    //  typeName = "List<" + typeName + ">";
-    //}
     return typeName;
   }
 
   public static boolean isSpecialEnum(Schema schema) {
     String segments[] = schema.path().split("\\.");
-    if (schema.isEnum() && segments[segments.length - 2].equals("parameters")) {
-      return true;
-    }
-    return false;
+    return schema.isEnum() && segments[segments.length - 2].equals("parameters");
   }
 }
