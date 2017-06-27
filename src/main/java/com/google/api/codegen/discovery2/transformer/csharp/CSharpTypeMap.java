@@ -60,7 +60,7 @@ public class CSharpTypeMap implements TypeMap {
       }
       break;
     }
-    if (schema.type() == Schema.Type.STRING && isTopLevelParameter(schema.path())) {
+    if (CSharpNamer.isSpecialEnum(schema)) {
       // TODO: Actually a special enum.
       namespaceNames.put(namer.getServiceNamespaceName(), "");
     }
@@ -82,18 +82,33 @@ public class CSharpTypeMap implements TypeMap {
     namespaceNames.put(namespaceName, "");
   }
 
-  public String getZero(Schema schema) {
+  public String getValue(Schema schema, String override) {
+    if (!override.isEmpty()) {
+      switch (schema.type()) {
+        case BOOLEAN:
+          return Boolean.valueOf(override).toString();
+        case INTEGER:
+          return Integer.valueOf(override).toString();
+        case NUMBER:
+          return Double.valueOf(override).toString();
+        case STRING:
+          String format = "\"%s\"";
+          switch (schema.format()) {
+            case INT64:
+            case UINT64:
+              return String.format(format, Long.valueOf(override).toString());
+              // Return a regular string for "BYTES", "DATE", and "DATETIME".
+          }
+          return String.format(format, override);
+      }
+    }
+    // TODO: Explain that for repeated types we don't output a "new List<...>();" because it's easier to work with the primitive type and insert the list later.
     switch (schema.type()) {
-      default:
-        if (!schema.repeated()) {
-          break;
-        }
-        // Fall through if the schema is repeated.
       case ARRAY:
       case OBJECT:
         return String.format("new %s()", namer.getTypeName(schema));
     }
-    if (schema.type() == Schema.Type.STRING && isTopLevelParameter(schema.path())) {
+    if (CSharpNamer.isSpecialEnum(schema)) {
       // TODO: Actually a special enum.
       return String.format("(%s) 0", namer.getTypeName(schema));
     }
@@ -102,8 +117,9 @@ public class CSharpTypeMap implements TypeMap {
   }
 
   public String getClassPropertyName(Schema schema) {
-    // TODO: This isn't even close to matching what the client generator does, but it's good enough for now.
-    return CSharpSymbol.from(Path.from(schema.path()).lastSegment()).toUpperCamel().name();
+    String segments[] = schema.path().split("\\.");
+    // TODO: This isn't even close to matching what the client generator does, but it's good enough.
+    return CSharpSymbol.from(segments[segments.length - 1]).toUpperCamel().name();
   }
 
   public String getFieldName(Schema schema) {

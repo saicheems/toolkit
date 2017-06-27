@@ -17,14 +17,15 @@ package com.google.api.codegen.discovery2.transformer.csharp;
 import com.google.api.codegen.discovery.Document;
 import com.google.api.codegen.discovery.Method;
 import com.google.api.codegen.discovery.Schema;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableTable;
+import java.util.Arrays;
 import java.util.List;
 
 public class CSharpNamer {
 
   // TODO: Move anything related to names here, the getZero value stuff can stay in the type map.
 
-  private final Document document;
   private static final ImmutableTable<Schema.Type, Schema.Format, String> typeNames =
       new ImmutableTable.Builder<Schema.Type, Schema.Format, String>()
           .put(Schema.Type.ANY, Schema.Format.EMPTY, "object")
@@ -40,21 +41,10 @@ public class CSharpNamer {
           .put(Schema.Type.STRING, Schema.Format.INT64, "long")
           .put(Schema.Type.STRING, Schema.Format.UINT64, "ulong")
           .build();
+  private final Document document;
 
   public CSharpNamer(Document document) {
     this.document = document;
-  }
-
-  public String getSampleNamespaceName() {
-    return CSharpSymbol.from(document.canonicalName()).toUpperCamel().name() + "Sample";
-  }
-
-  public String getSampleClassName() {
-    return CSharpSymbol.from(document.canonicalName()).toUpperCamel().name() + "Example";
-  }
-
-  public String getServiceVarName() {
-    return CSharpSymbol.from(document.canonicalName()).toLowerCamel().name() + "Service";
   }
 
   public String getAppName() {
@@ -62,8 +52,105 @@ public class CSharpNamer {
         "Google-%sSample/0.1", CSharpSymbol.from(document.canonicalName()).toUpperCamel().name());
   }
 
-  public String getRequesVarName() {
+  private String getObjectTypeName(Schema schema) {
+    // If the object has an ID, we don't have to do anything special to derive its name.
+    if (!Strings.isNullOrEmpty(schema.id())) {
+      return CSharpSymbol.from(schema.id()).toUpperCamel().name();
+    }
+    List<String> segments = Arrays.asList(schema.path().split("\\."));
+    // Start at the second segment, which is the first schema key.
+    // Note that the reason we assume that "schemas" is part of path (as opposed to if this
+    // schema were a part of the "parameters" schemas) is because anonymous objects cannot be
+    // parameters. Therefore all objects must be children of the "schemas" object.
+    int i = segments.indexOf("schemas") + 1;
+
+    StringBuilder typeName = new StringBuilder();
+    String parentName = "";
+
+    boolean topLevel = true;
+
+    while (i < segments.size()) {
+      StringBuilder childName =
+          new StringBuilder(CSharpSymbol.from(segments.get(i)).toUpperCamel().name());
+      if (i + 1 < segments.size() && segments.get(i + 1).equals("items")) {
+        if (topLevel) {
+          childName.append("Items");
+        }
+        while (i + 1 < segments.size() && segments.get(i + 1).equals("items")) {
+          i++;
+        }
+      }
+      if (!topLevel) { // ex: "schemas.foo.items".
+        // Subclasses have the "Data" suffix.
+        childName.append("Data");
+      }
+      if (i + 1 < segments.size() && segments.get(i + 1).equals("properties")) {
+        i++;
+      }
+      if (i + 1 < segments.size() && segments.get(i + 1).equals("additionalProperties")) {
+        childName.append("Element");
+        i++;
+      }
+      if (childName.toString().equals(parentName)) {
+        childName.append("Schema");
+      }
+      if (!topLevel) {
+        typeName.append(".");
+      }
+      topLevel = false;
+
+      typeName.append(childName);
+      parentName = childName.toString();
+      i++;
+    }
+    return typeName.toString();
+  }
+
+  public String getRequestTypeName(Method method) {
+    return getRequestTypeName(method.id());
+  }
+
+  private String getRequestTypeName(String methodId) {
+    StringBuilder typeName = new StringBuilder();
+    List<String> methodIdSegments = Arrays.asList(methodId.split("\\."));
+    for (int i = 1; i < methodIdSegments.size(); i++) {
+      typeName.append(getSafeClassName(methodIdSegments.get(i)));
+      if (i == methodIdSegments.size() - 1) {
+        typeName.append("Request");
+      } else {
+        typeName.append("Resource.");
+      }
+    }
+    return typeName.toString();
+  }
+
+  public String getRequestVarName() {
     return "request";
+  }
+
+  public String getRequestBodyVarName() {
+    return "requestBody";
+  }
+
+  public String getResponseVarName() {
+    return "response";
+  }
+
+  private String getSafeClassName(String name) {
+    String typeName = "";
+    CSharpSymbol symbol = CSharpSymbol.from(name);
+    if (symbol.isReserved()) {
+      typeName += CSharpSymbol.from(document.canonicalName()).toUpperCamel().name();
+    }
+    return typeName + symbol.toUpperCamel().name();
+  }
+
+  public String getSampleClassName() {
+    return CSharpSymbol.from(document.canonicalName()).toUpperCamel().name() + "Example";
+  }
+
+  public String getSampleNamespaceName() {
+    return CSharpSymbol.from(document.canonicalName()).toUpperCamel().name() + "Sample";
   }
 
   public String getServiceNamespaceName() {
@@ -76,8 +163,24 @@ public class CSharpNamer {
     return namespaceName;
   }
 
+  public String getServiceRequestFuncName(String methodId) {
+    StringBuilder typeName = new StringBuilder();
+    List<String> methodIdSegments = Arrays.asList(methodId.split("\\."));
+    for (int i = 1; i < methodIdSegments.size(); i += 2) {
+      typeName.append(getSafeClassName(methodIdSegments.get(i)));
+      if (i < methodIdSegments.size() - 1) {
+        typeName.append(".");
+      }
+    }
+    return typeName.toString();
+  }
+
   public String getServiceTypeName() {
     return getSafeClassName(document.canonicalName()) + "Service";
+  }
+
+  public String getServiceVarName() {
+    return CSharpSymbol.from(document.canonicalName()).toLowerCamel().name() + "Service";
   }
 
   public String getTypeName(Schema schema) {
@@ -89,107 +192,30 @@ public class CSharpNamer {
         if (schema.additionalProperties() != null) {
           return "Map<String, " + getTypeName(schema.additionalProperties()) + ">";
         }
-        return getObjectTypeName(schema);
+        // All objects are under the alias "Data".
+        return "Data." + getObjectTypeName(schema);
     }
-    if (schema.type() == Schema.Type.STRING && schema.parent() instanceof Method) {
-      // TODO: Actually a special enum.
-      String typeName = getSafeClassName();
-      return getRequestTypeName(schema.path()) + "." + typeName + "Enum";
+    if (isSpecialEnum(schema)) {
+      // The parent of `schema` must be a `Method`, because only members of the "parameters" field
+      // can be special enums.
+      String methodId = schema.parent().id();
+      String segments[] = schema.path().split("\\.");
+      String typeName = getSafeClassName(segments[segments.length - 1]);
+      return getRequestTypeName(methodId) + "." + typeName + "Enum";
     }
     String typeName = typeNames.get(schema.type(), schema.format());
     // TODO: Validate that getTypeName is not null? It shouldn't be possible...
-    if (schema.repeated()) {
-      typeName = "List<" + typeName + ">";
-    }
+    //if (schema.repeated()) {
+    //  typeName = "List<" + typeName + ">";
+    //}
     return typeName;
   }
 
-  private String getObjectTypeName(Schema schema) {
-    if (!schema.id().isEmpty()) {
-      return CSharpSymbol.from(schema.id()).toUpperCamel().name();
+  public static boolean isSpecialEnum(Schema schema) {
+    String segments[] = schema.path().split("\\.");
+    if (schema.isEnum() && segments[segments.length - 2].equals("parameters")) {
+      return true;
     }
-    Path path = Path.from(schema.path());
-    List<String> segments = path.segments();
-    // Start at the second segment, which is the first schema key.
-    int i = segments.indexOf("schemas") + 1;
-
-    String typeName = "";
-    String parentName = "";
-
-    boolean topLevel = true;
-
-    while (i < segments.size()) {
-      String childName = CSharpSymbol.from(segments.get(i)).toUpperCamel().name();
-      if (i + 1 < segments.size() && segments.get(i + 1).equals("items")) {
-        if (topLevel) {
-          childName += "Items";
-        }
-        while (i + 1 < segments.size() && segments.get(i + 1).equals("items")) {
-          i++;
-        }
-      }
-      if (!topLevel) { // ex: "schemas.foo.items.
-        // Subclasses have the "Data" suffix.
-        childName += "Data";
-      }
-      if (i + 1 < segments.size() && segments.get(i + 1).equals("properties")) {
-        i++;
-      }
-      if (i + 1 < segments.size() && segments.get(i + 1).equals("additionalProperties")) {
-        childName += "Element";
-        i++;
-      }
-      if (childName.equals(parentName)) {
-        childName += "Schema";
-      }
-      if (!topLevel) {
-        typeName += ".";
-      }
-      topLevel = false;
-
-      typeName += childName;
-      parentName = childName;
-      i++;
-    }
-    return typeName;
-  }
-
-  public String getRequestTypeName(Method method) {
-    return getRequestTypeName(method.path());
-  }
-
-  private String getRequestTypeName(String path) {
-    String typeName = "";
-    List<String> methodIdSegments = Path.from(path).methodIdSegments();
-    for (int i = 0; i < methodIdSegments.size(); i++) {
-      typeName += getSafeClassName(methodIdSegments.get(i));
-      if (i == methodIdSegments.size() - 1) {
-        typeName += "Request";
-      } else {
-        typeName += "Resource.";
-      }
-    }
-    return typeName;
-  }
-
-  public String getServiceRequestFuncFullName(String methodPath) {
-    Path path = Path.from(methodPath);
-    String typeName = "";
-    for (int i = 0; i < path.methodIdSegments().size(); i++) {
-      typeName += getSafeClassName(path.methodIdSegments().get(i));
-      if (i < path.methodIdSegments().size() - 1) {
-        typeName += ".";
-      }
-    }
-    return typeName;
-  }
-
-  private String getSafeClassName(String name) {
-    String typeName = "";
-    CSharpSymbol symbol = CSharpSymbol.from(name);
-    if (symbol.isReserved()) {
-      typeName += CSharpSymbol.from(document.canonicalName()).toUpperCamel().name();
-    }
-    return typeName + symbol.toUpperCamel().name();
+    return false;
   }
 }

@@ -16,6 +16,7 @@ package com.google.api.codegen.discovery;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.api.codegen.discovery.config.AuthType;
 import com.google.auto.value.AutoValue;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +59,7 @@ public abstract class Document implements Node {
     String description = root.getString("description");
     String id = root.getString("id");
     Map<String, Schema> schemas = parseSchemas(root);
-    List<Method> methods = parseMethods(root);
+    List<Method> methods = parseMethods(root, "");
     Collections.sort(methods); // Ensure methods are ordered alphabetically by their ID.
     String name = root.getString("name");
     if (canonicalName.isEmpty()) {
@@ -73,11 +74,9 @@ public abstract class Document implements Node {
 
     Document thisDocument =
         new AutoValue_Document(
-            "", // authInstructionsUrl (only intended to be overridden).
             authType,
             canonicalName,
             description,
-            "", // discoveryDocUrl (only intended to be overridden).
             id,
             methods,
             name,
@@ -99,17 +98,20 @@ public abstract class Document implements Node {
     return thisDocument;
   }
 
-  private static List<Method> parseMethods(DiscoveryNode root) {
+  private static List<Method> parseMethods(DiscoveryNode root, String path) {
     List<Method> methods = new ArrayList<>();
     DiscoveryNode methodsNode = root.getObject("methods");
     List<String> resourceNames = methodsNode.getFieldNames();
+    if (!path.isEmpty()) {
+      path += ".";
+    }
     for (String name : resourceNames) {
-      methods.add(Method.from(methodsNode.getObject(name), null));
+      methods.add(Method.from(methodsNode.getObject(name), null, path + "methods." + name));
     }
     DiscoveryNode resourcesNode = root.getObject("resources");
     resourceNames = resourcesNode.getFieldNames();
     for (String name : resourceNames) {
-      methods.addAll(parseMethods(resourcesNode.getObject(name)));
+      methods.addAll(parseMethods(resourcesNode.getObject(name), path + "resources." + name));
     }
     return methods;
   }
@@ -118,7 +120,7 @@ public abstract class Document implements Node {
     Map<String, Schema> schemas = new HashMap<>();
     DiscoveryNode schemasNode = root.getObject("schemas");
     for (String name : schemasNode.getFieldNames()) {
-      schemas.put(name, Schema.from(schemasNode.getObject(name), null));
+      schemas.put(name, Schema.from(schemasNode.getObject(name), null, "schemas." + name));
     }
     return schemas;
   }
@@ -135,10 +137,6 @@ public abstract class Document implements Node {
     this.parent = parent;
   }
 
-  /** @return the auth instructions URL. */
-  @JsonProperty("authInstructionsUrl")
-  public abstract String authInstructionsUrl();
-
   /** @return the auth type. */
   @JsonProperty("authType")
   public abstract AuthType authType();
@@ -150,10 +148,6 @@ public abstract class Document implements Node {
   /** @return the description. */
   @JsonProperty("description")
   public abstract String description();
-
-  /** @return the discovery document URL. */
-  @JsonProperty("discoveryDocUrl")
-  public abstract String discoveryDocUrl();
 
   /** @return the ID of the Discovery document for the API. */
   @Override

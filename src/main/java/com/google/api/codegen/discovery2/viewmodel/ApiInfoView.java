@@ -28,7 +28,7 @@ public abstract class ApiInfoView {
 
   public abstract Document.AuthType authType();
 
-  public abstract String discoveryDocUrl();
+  //public abstract String discoveryDocUrl();
 
   public abstract String name();
 
@@ -45,7 +45,7 @@ public abstract class ApiInfoView {
 
     public abstract ApiInfoView build();
 
-    public abstract Builder discoveryDocUrl(String val);
+    //public abstract Builder discoveryDocUrl(String val);
 
     public abstract Builder name(String val);
 

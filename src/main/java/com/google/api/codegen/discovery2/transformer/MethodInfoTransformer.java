@@ -17,6 +17,7 @@ package com.google.api.codegen.discovery2.transformer;
 import com.google.api.codegen.discovery.Method;
 import com.google.api.codegen.discovery.Schema;
 import com.google.api.codegen.discovery2.viewmodel.MethodInfoView;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import java.util.Set;
 
@@ -47,16 +48,12 @@ public class MethodInfoTransformer {
     if (response != null && !pageStreamingResourceName.isEmpty()) {
       response = response.dereference();
       Schema pageStreamingResource = response.properties().get(pageStreamingResourceName);
-      if (pageStreamingResource.type() == Schema.Type.ARRAY || pageStreamingResource.repeated()) {
-        isPageStreamingResourceRepeated = true;
-      }
     }
 
     return builder
         .hasRequestBody(method.request() != null)
         .hasResponse(method.response() != null)
         .isPageStreaming(isPageStreaming)
-        .isPageStreamingResourceRepeated(isPageStreamingResourceRepeated)
         .isScopesSingular(method.scopes().size() == 1)
         .pageStreamingResourceDiscoveryFieldName(pageStreamingResourceName)
         .parametersPageTokenDiscoveryFieldName(parametersPageTokenName)
@@ -96,9 +93,14 @@ public class MethodInfoTransformer {
       return "";
     }
     schema = schema.dereference();
-    // Look for the first repeated resource.
     for (String name : schema.properties().keySet()) {
-      if (schema.properties().get(name).repeated()) {
+      // Check that it's impossible for a member of an object to be defined as repeated, there should only be array types.
+      Preconditions.checkState(!schema.properties().get(name).repeated());
+    }
+    // Look for the first array or map resource.
+    for (String name : schema.properties().keySet()) {
+      Schema resource = schema.properties().get(name);
+      if (resource.type() == Schema.Type.ARRAY || resource.additionalProperties() != null) {
         return name;
       }
     }

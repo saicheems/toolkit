@@ -14,25 +14,34 @@
  */
 package com.google.api.codegen.discovery2.transformer.csharp;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.codegen.discovery.Document;
 import com.google.api.codegen.discovery.Method;
+import com.google.api.codegen.discovery.Schema;
 import com.google.api.codegen.discovery2.transformer.ApiInfoTransformer;
+import com.google.api.codegen.discovery2.transformer.FieldTransformer;
 import com.google.api.codegen.discovery2.transformer.MethodInfoTransformer;
 import com.google.api.codegen.discovery2.transformer.SampleTransformer;
+import com.google.api.codegen.discovery2.transformer.SymbolSet;
+import com.google.api.codegen.discovery2.viewmodel.FieldView;
+import com.google.api.codegen.discovery2.viewmodel.MethodInfoView;
 import com.google.api.codegen.discovery2.viewmodel.SampleView;
+import com.google.api.codegen.discovery2.viewmodel.UsingDirectiveView;
 import com.google.api.codegen.viewmodel.ViewModel;
 import com.google.common.base.Preconditions;
-
-import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
 
 public class CSharpSampleTransformer implements SampleTransformer {
 
   @Override
-  public ViewModel transform(Method method) {
-    return createSampleView(method);
+  public ViewModel transform(Method method, String authInstructionsUrl) {
+    return createSampleView(method, authInstructionsUrl);
   }
 
-  private static SampleView createSampleView(Method method) {
+  private static SampleView createSampleView(Method method, String authInstructionsUrl) {
     Document document = (Document) method.parent();
     Preconditions.checkState(document != null);
     SampleView.Builder builder = SampleView.newBuilder();
@@ -40,22 +49,151 @@ public class CSharpSampleTransformer implements SampleTransformer {
     CSharpTypeMap typeMap = new CSharpTypeMap(document);
     SymbolSet symbolSet = new CSharpSymbolSet();
 
-    builder.apiInfo(ApiInfoTransformer.transform(document));
-    builder.methodInfo(MethodInfoTransformer.transform(method));
-
-    builder.templateFileName("csharp/discovery_sample.snip");
-    builder.outputPath(method.id() + ".frag.cs");
+    builder.apiInfo(ApiInfoTransformer.transform(document, authInstructionsUrl));
+    MethodInfoView methodInfo = MethodInfoTransformer.transform(method);
+    builder.methodInfo(methodInfo);
 
     typeMap.addUsingDirective("Google.Apis.Services"); // BaseClientService
     switch (document.authType()) {
       case ADC:
         typeMap.addUsingDirective("Google.Apis.Auth.OAuth2"); // GoogleCredential
-        typeMap.addUsingDirective("System.Threading.Tasks.Task"); // Task
+        typeMap.addUsingDirective("System.Threading.Tasks"); // Task
         break;
       case OAUTH_3L:
         typeMap.addUsingDirective("Google.Apis.Auth.OAuth2"); // UserCredential
         break;
     }
+    if (method.response() != null) {
+      typeMap.addUsingDirective("System"); // Console
+      typeMap.addUsingDirective("Newtonsoft.Json");
+    }
+
+    CSharpNamer namer = new CSharpNamer(document);
+    builder.sampleNamespaceName(namer.getSampleNamespaceName());
+    builder.sampleClassName(namer.getSampleClassName());
+
+    symbolSet.add("args"); // public static void Main(string[] args)
+
+    // MyService service = new MyService( ...
+    FieldView service =
+        FieldView.empty().withVarName(namer.getServiceVarName()).withTypeName(typeMap.addService());
+    builder.service(service);
+    //     ApplicationName = "Google-MyServiceSample/0.1",
+    builder.appName(namer.getAppName());
+    // ... );
+
+    List<FieldView> parameters = new ArrayList<>();
+    for (String name : method.parameterOrder()) {
+      JsonNode override = null;
+      Schema parameterSchema = method.parameters().get(name);
+      parameters.add(FieldTransformer.transform(parameterSchema, symbolSet, typeMap, override));
+    }
+    builder.parameters(parameters);
+
+    Schema requestBodySchema = method.request();
+    if (requestBodySchema != null) {
+      JsonNode override = null;
+      if (method.id().equals("logging.entries.write")) {
+        String json = "{\"entries\": [{\"logName\": \"woah!\"}]}";
+        try {
+          override = new ObjectMapper().readTree(json);
+        } catch (Exception e) {
+          throw new IllegalStateException(e);
+        }
+      }
+      builder.requestBody(
+          FieldTransformer.transform(
+              requestBodySchema.dereference(),
+              symbolSet,
+              typeMap,
+              override,
+              namer.getRequestBodyVarName()));
+    }
+
+    builder.request(
+        FieldView.empty()
+            .withVarName(namer.getRequestVarName())
+            .withTypeName(typeMap.addRequest(method)));
+
+    builder.serviceRequestFuncName(namer.getServiceRequestFuncName(method.path()));
+
+    Schema responseSchema = method.response();
+    if (responseSchema != null) {
+      builder.response(
+          FieldView.empty()
+              .withVarName(namer.getResponseVarName())
+              .withTypeName(typeMap.add(responseSchema.dereference())));
+    }
+
+    if (methodInfo.isPageStreaming()) {
+      Schema pageStreamingResourceSchema =
+          responseSchema
+              .dereference()
+              .properties()
+              .get(methodInfo.pageStreamingResourceDiscoveryFieldName());
+      FieldView pageStreamingResource =
+          FieldTransformer.transform(pageStreamingResourceSchema, null, typeMap, null);
+      String discoveryFieldName = pageStreamingResource.discoveryFieldName();
+      String varName;
+      switch (pageStreamingResourceSchema.type()) {
+        case ARRAY:
+          Schema itemsSchema = pageStreamingResourceSchema.items().dereference();
+          if (itemsSchema.type() == Schema.Type.OBJECT && !itemsSchema.id().isEmpty()) {
+            varName = symbolSet.add(itemsSchema.id());
+          } else {
+            varName = symbolSet.add("item");
+          }
+          break;
+        case OBJECT:
+          if (pageStreamingResourceSchema.additionalProperties() != null) {
+            varName = symbolSet.add("item");
+            break;
+          }
+          // Fall-through if the schema is not a map.
+        default:
+          varName = symbolSet.add(discoveryFieldName);
+      }
+      builder.pageStreamingResource(pageStreamingResource.withVarName(varName));
+
+      Schema pageTokenSchema;
+      if (!methodInfo.parametersPageTokenDiscoveryFieldName().isEmpty()) {
+        pageTokenSchema =
+            method.parameters().get(methodInfo.parametersPageTokenDiscoveryFieldName());
+      } else {
+        pageTokenSchema =
+            method
+                .request()
+                .dereference()
+                .properties()
+                .get(methodInfo.requestBodyPageTokenDiscoveryFieldName());
+      }
+      builder.pageToken(FieldTransformer.transform(pageTokenSchema, null, typeMap, null));
+
+      Schema nextPageTokenSchema =
+          method
+              .response()
+              .dereference()
+              .properties()
+              .get(methodInfo.responsePageTokenDiscoveryFieldName());
+      builder.nextPageToken(FieldTransformer.transform(nextPageTokenSchema, null, typeMap, null));
+    }
+
+    List<UsingDirectiveView> usingDirectives = new ArrayList<>();
+    List<UsingDirectiveView> usingAliasDirectives = new ArrayList<>();
+    for (String namespaceName : new TreeSet<>(typeMap.namespaceNames().keySet())) {
+      String alias = typeMap.namespaceNames().get(namespaceName);
+      UsingDirectiveView usingDirectiveView = UsingDirectiveView.from(namespaceName, alias);
+      if (alias.isEmpty()) {
+        usingDirectives.add(usingDirectiveView);
+      } else {
+        usingAliasDirectives.add(usingDirectiveView);
+      }
+    }
+    builder.usingDirectives(usingDirectives);
+    builder.usingAliasDirectives(usingAliasDirectives);
+
+    builder.templateFileName("csharp/discovery_sample.snip");
+    builder.outputPath(method.id() + ".frag.cs");
 
     return builder.build();
   }

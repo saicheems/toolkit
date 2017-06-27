@@ -507,7 +507,6 @@ namespace AdExchangeBuyerSample
 using Google.Apis.AdExchangeBuyer.v1_4;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace AdExchangeBuyerSample
 {
@@ -787,7 +786,6 @@ namespace AdExchangeBuyerSample
 using Google.Apis.AdExchangeBuyer.v1_4;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace AdExchangeBuyerSample
 {
@@ -1172,7 +1170,6 @@ namespace AdExchangeBuyerSample
 using Google.Apis.AdExchangeBuyer.v1_4;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 using Data = Google.Apis.AdExchangeBuyer.v1_4.Data;
 
@@ -1283,7 +1280,6 @@ namespace AdExchangeBuyerSample
 using Google.Apis.AdExchangeBuyer.v1_4;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace AdExchangeBuyerSample
 {
@@ -1943,7 +1939,6 @@ namespace AdExchangeBuyerSample
 using Google.Apis.AdExchangeBuyer.v1_4;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace AdExchangeBuyerSample
 {

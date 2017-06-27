@@ -14,18 +14,31 @@
  */
 package com.google.api.codegen.discovery2.transformer;
 
-import com.google.api.codegen.discovery.Document;
-import com.google.api.codegen.discovery2.viewmodel.ApiInfoView;
+import java.util.HashSet;
+import java.util.Set;
 
-public class ApiInfoTransformer {
+public abstract class SymbolSet {
 
-  public static ApiInfoView transform(Document document, String authInstructionsUrl) {
-    return ApiInfoView.newBuilder()
-        .authInstructionsUrl(authInstructionsUrl)
-        .authType(document.authType())
-        .name(document.name())
-        .title(document.title())
-        .version(document.version())
-        .build();
+  private final Set<String> symbols;
+
+  public SymbolSet() {
+    symbols = new HashSet<>();
+  }
+
+  public abstract String add(String name);
+
+  public String add(Symbol symbol) {
+    // TODO: Override this function if you want special escape behavior of symbol names.
+    int suffix = 1;
+    if (symbol.isReserved()) {
+      suffix++;
+    }
+    String uniqueName;
+    do {
+      uniqueName = symbol.name() + (suffix > 1 ? suffix : "");
+      suffix++;
+    } while (symbols.contains(uniqueName));
+    symbols.add(uniqueName);
+    return uniqueName;
   }
 }

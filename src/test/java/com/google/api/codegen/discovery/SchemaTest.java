@@ -34,7 +34,7 @@ public class SchemaTest {
     ObjectMapper mapper = new ObjectMapper();
     JsonNode root = mapper.readTree(reader);
 
-    Schema schema = Schema.from(new DiscoveryNode(root), null);
+    Schema schema = Schema.from(new DiscoveryNode(root), null, "root");
 
     Truth.assertThat(schema.description()).isEqualTo("My Foo.");
     Truth.assertThat(schema.id()).isEqualTo("Foo");
@@ -95,6 +95,13 @@ public class SchemaTest {
     Truth.assertThat(properties.get("uint64").format()).isEqualTo(Schema.Format.UINT64);
 
     // Test path.
+    Truth.assertThat(schema.path()).isEqualTo("root");
+    Truth.assertThat(schema.properties().get("array").path()).isEqualTo("root.properties.array");
+    Truth.assertThat(schema.properties().get("array").items().path())
+        .isEqualTo("root.properties.array.items");
+    Truth.assertThat(schema.properties().get("object").additionalProperties().path())
+        .isEqualTo("root.properties.object.additionalProperties");
+
     Truth.assertThat(schema.id()).isEqualTo("Foo");
     Truth.assertThat(schema.properties().get("array").parent()).isEqualTo(schema);
     Truth.assertThat(schema.properties().get("array").items().parent())
@@ -106,7 +113,7 @@ public class SchemaTest {
 
   @Test
   public void testSchemaFromEmptyNode() {
-    Truth.assertThat(Schema.from(new DiscoveryNode(null), null).type())
+    Truth.assertThat(Schema.from(new DiscoveryNode(null), null, "").type())
         .isEqualTo(Schema.Type.EMPTY);
   }
 }

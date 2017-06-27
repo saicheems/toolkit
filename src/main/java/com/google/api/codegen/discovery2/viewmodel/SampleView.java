@@ -17,6 +17,7 @@ package com.google.api.codegen.discovery2.viewmodel;
 import com.google.api.codegen.SnippetSetRunner;
 import com.google.api.codegen.viewmodel.ViewModel;
 import com.google.auto.value.AutoValue;
+import java.util.List;
 import javax.annotation.Nullable;
 
 // TODO: Notes for Sai:
@@ -59,25 +60,39 @@ public abstract class SampleView implements ViewModel {
 
   public abstract MethodInfoView methodInfo();
 
-  @Nullable
   public abstract String appName();
 
-  //public abstract List<CSharpUsingDirectiveView> CSharpUsingDirectives();
-  //public abstract List<CSharpUsingDirectiveView> CSharpUsingAliasDirectives();
-  //public abstract String CSharpClassName(); // C#
-  //public abstract String CSharpNamespaceName(); // C#
-  //public abstract FieldView service();
-  //public abstract List<FieldView> parameters();
-  //@Nullable
-  //public abstract FieldView requestBody();
-  //public abstract FieldView request();
+  public abstract List<UsingDirectiveView> usingDirectives(); // C#
+
+  public abstract List<UsingDirectiveView> usingAliasDirectives(); // C#
+
+  public abstract String sampleClassName(); // C#
+
+  public abstract String sampleNamespaceName(); // C#
+
+  public abstract FieldView service();
+
+  public abstract List<FieldView> parameters();
+
+  @Nullable
+  public abstract FieldView requestBody();
+
+  public abstract FieldView request();
 
   // Put a "method" method in FieldView?
-  //public abstract String serviceRequestFullFuncName();
-  //public abstract FieldView response();
-  //public abstract FieldView pageToken();
-  //public abstract FieldView nextPageToken();
-  //public abstract FieldView pageStreamingResource();
+  public abstract String serviceRequestFuncName();
+
+  @Nullable
+  public abstract FieldView response();
+
+  @Nullable
+  public abstract FieldView pageStreamingResource();
+
+  @Nullable
+  public abstract FieldView pageToken();
+
+  @Nullable
+  public abstract FieldView nextPageToken();
 
   @AutoValue.Builder
   public abstract static class Builder {
@@ -91,6 +106,32 @@ public abstract class SampleView implements ViewModel {
     public abstract Builder methodInfo(MethodInfoView val);
 
     public abstract Builder appName(String val);
+
+    public abstract Builder usingDirectives(List<UsingDirectiveView> val);
+
+    public abstract Builder usingAliasDirectives(List<UsingDirectiveView> val);
+
+    public abstract Builder sampleClassName(String val);
+
+    public abstract Builder sampleNamespaceName(String val);
+
+    public abstract Builder service(FieldView val);
+
+    public abstract Builder parameters(List<FieldView> val);
+
+    public abstract Builder requestBody(FieldView val);
+
+    public abstract Builder request(FieldView val);
+
+    public abstract Builder serviceRequestFuncName(String val);
+
+    public abstract Builder response(FieldView val);
+
+    public abstract Builder pageStreamingResource(FieldView val);
+
+    public abstract Builder pageToken(FieldView val);
+
+    public abstract Builder nextPageToken(FieldView val);
 
     public abstract SampleView build();
   }

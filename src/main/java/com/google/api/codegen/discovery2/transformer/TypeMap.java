@@ -21,9 +21,9 @@ public interface TypeMap {
   // Returns the short type name of the given schema and updates the type map.
   String add(Schema schema);
 
-  String getZero(Schema schema);
-
   String getClassPropertyName(Schema schema);
 
   String getFieldName(Schema schema);
+
+  String getValue(Schema schema, String override);
 }

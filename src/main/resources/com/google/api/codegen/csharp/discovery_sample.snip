@@ -30,4 +30,199 @@
             using {@usingAliasDirective.alias} = {@usingAliasDirective.namespaceName};
         @end
     @end
+
+    namespace {@class.sampleNamespaceName}
+    {
+        public class {@class.sampleClassName}
+        {
+            {@mainFunc(class)}
+            @switch class.apiInfo.authType
+            @case "ADC"
+
+                {@getCredentialFunc_ADC()}
+            @case "OAUTH_3L"
+
+                {@getCredentialFunc_OAuth3L(class)}
+            @default
+            @end
+        }
+    }
+@end
+
+@private mainFunc(class)
+    public static void Main(string[] args)
+    {
+        {@class.service.typeName} {@class.service.varName} = new {@class.service.typeName}(new BaseClientService.Initializer
+        {
+            @if class.apiInfo.authType == "API_KEY"
+                ApiKey = "",  // TODO: Update placeholder with desired API key.
+            @else
+                HttpClientInitializer = GetCredential(),
+            @end
+            ApplicationName = "{@class.appName}",
+        });
+        @join parameter : class.parameters if class.parameters
+
+            {@field(parameter, "")}
+        @end
+        @if class.methodInfo.hasRequestBody
+
+            {@field(class.requestBody, class.methodInfo.verb)}
+        @end
+        @if class.methodInfo.supportsMediaUpload
+            // TODO: Add desired media content for upload. See
+            // https://developers.google.com/api-client-library/dotnet/guide/media_upload
+        @end
+
+        {@class.request.typeName} {@class.request.varName} = {@class.service.varName}.{@class.serviceRequestFuncName}({@argList(class)});
+        @if class.methodInfo.supportsMediaDownload
+
+            // TODO: Download media content if desired. See
+            // https://developers.google.com/api-client-library/dotnet/guide/media_download
+        @end
+
+        @if class.methodInfo.isPageStreaming
+            {@class.response.typeName} {@class.response.varName};
+            do
+            {
+                // To execute asynchronously in an async method, replace `{@class.request.varName}.Execute()` as shown:
+                {@class.response.varName} = {@class.request.varName}.Execute();
+                // {@class.response.varName} = await {@class.request.varName}.ExecuteAsync();
+
+                if ({@class.response.varName}.{@class.pageStreamingResource.classPropertyName} == null)
+                {
+                    continue;
+                }
+                @if class.pageStreamingResource.isMap
+                    foreach (KeyValuePair<string, {@class.pageStreamingResource.typeName}> {@class.pageStreamingResource.varName} in response.{@class.pageStreamingResource.classPropertyName})
+                    {
+                        // TODO: Change code below to process each `{@class.pageStreamingResource.varName}` element:
+                        Console.WriteLine("[" + {@class.pageStreamingResource.varName}.Key + "] = " + JsonConvert.SerializeObject({@class.pageStreamingResource.varName}.Value));
+                    }
+                @else
+                    @if class.pageStreamingResource.isArray
+                        foreach ({@class.pageStreamingResource.typeName} {@class.pageStreamingResource.varName} in response.{@class.pageStreamingResource.classPropertyName})
+                        {
+                            // TODO: Change code below to process each `{@class.pageStreamingResource.varName}` resource:
+                            Console.WriteLine(JsonConvert.SerializeObject({@class.pageStreamingResource.varName}));
+                        }
+                    @else
+                        // TODO: Change code below to process each `response.{@class.pageStreamingResource.classPropertyName}` resource:
+                        Console.WriteLine(JsonConvert.SerializeObject(response.{@class.pageStreamingResource.classPropertyName}));
+                    @end
+                @end
+                @if class.methodInfo.parametersPageTokenDiscoveryFieldName
+                    {@class.request.varName}.{@class.pageToken.classPropertyName} = {@class.response.varName}.{@class.nextPageToken.classPropertyName};
+                @else
+                    {@class.requestBody.varName}.{@class.pageToken.classPropertyName} = {@class.response.varName}.{@class.nextPageToken.classPropertyName};
+                @end
+            } while ({@class.response.varName}.{@class.nextPageToken.classPropertyName} != null);
+        @else
+            @if class.methodInfo.hasResponse
+                // To execute asynchronously in an async method, replace `{@class.request.varName}.Execute()` as shown:
+                {@class.response.typeName} {@class.response.varName} = {@class.request.varName}.Execute();
+                // {@class.response.typeName} {@class.response.varName} = await {@class.request.varName}.ExecuteAsync();
+
+                // TODO: Change code below to process the `response` object:
+                Console.WriteLine(JsonConvert.SerializeObject({@class.response.varName}));
+            @else
+                // To execute asynchronously in an async method, replace `{@class.request.varName}.Execute()` as shown:
+                {@class.request.varName}.Execute();
+                // await {@class.request.varName}.ExecuteAsync();
+            @end
+        @end
+    }
+@end
+
+@private getCredentialFunc_ADC()
+    public static GoogleCredential GetCredential()
+    {
+        GoogleCredential credential = Task.Run(() => GoogleCredential.GetApplicationDefaultAsync()).Result;
+        if (credential.IsCreateScopedRequired)
+        {
+            credential = credential.CreateScoped("https://www.googleapis.com/auth/cloud-platform");
+        }
+       return credential;
+    }
+@end
+
+@private getCredentialFunc_OAuth3L(class)
+    public static UserCredential GetCredential()
+    {
+        // TODO: Change placeholder below to generate authentication credentials. See:
+        // {@class.apiInfo.authInstructionsUrl}
+        //
+        @if class.methodInfo.isScopesSingular
+            // Authorize using the following scope:
+        @else
+            // Authorize using one of the following scopes:
+        @end
+        @join scope : class.methodInfo.scopes
+            //     "{@scope}"
+        @end
+        return null;
+    }
+@end
+
+# If `httpVerb` is specified, the field is assumed to be the request body, which renders differently.
+@private field(class, httpVerb)
+    @if class.fields
+        @join subField : class.fields
+            {@field(subField, "")}
+
+
+        @end
+    @end
+    # Do not print documentation for the request body.
+    @if httpVerb == ""
+        @if class.description
+            @join line : util.getDocLines(class.description, 100)
+                // {@line}
+            @end
+
+
+        @end
+    @end
+    @if class.isArray
+        List<{@class.typeName}> {@class.varName} = new List<{@class.typeName}>();  // TODO: Update placeholder value.
+    @else
+        # If `class` is the request body...
+        @if httpVerb
+            @switch httpVerb
+            @case "PATCH"
+                // TODO: Assign values to desired properties of `{@class.varName}`. Only assigned
+                // properties will be changed:
+            @case "PUT"
+                // TODO: Assign values to desired properties of `{@class.varName}`. All existing
+                // properties will be replaced:
+            @default
+                // TODO: Assign values to desired properties of `{@class.varName}`:
+            @end
+
+            {@class.typeName} {@class.varName} = {@class.value};
+        @else
+            {@class.typeName} {@class.varName} = {@class.value};  // TODO: Update placeholder value.
+        @end
+    @end
+
+    @join subField : class.fields if class.fields
+        @if class.isArray
+            {@class.varName}.add({@subField.varName})
+        @else
+            {@class.varName}.{@subField.classPropertyName} = {@subField.varName};
+        @end
+    @end
+@end
+
+@private argList(class)
+  @if class.methodInfo.hasRequestBody
+      @if class.parameters
+          {@class.requestBody.varName},{@" "}
+      @else
+          {@class.requestBody.varName}
+      @end
+  @end
+  @join parameter : class.parameters on ", "
+    {@parameter.varName}
+  @end
 @end

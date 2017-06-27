@@ -103,9 +103,6 @@ public class DiscoveryFragmentGeneratorApi {
 
     DiscoveryImporter discovery = DiscoveryImporter.parse(reader);
 
-    JsonNode documentNode = new ObjectMapper().readTree(reader);
-    Document document = Document.from(new DiscoveryNode(documentNode));
-
     // Read the YAML config and convert it to proto.
     List<String> configFileNames = options.get(GENERATOR_CONFIG_FILES);
     if (configFileNames.size() == 0) {
@@ -141,6 +138,9 @@ public class DiscoveryFragmentGeneratorApi {
     apiaryConfig.setAuthInstructionsUrl(parseAuthInstructionsUrl(authInstructions, id));
 
     File rubyNamesFile = new File(options.get(RUBY_NAMES_FILE));
+
+    JsonNode documentNode = new ObjectMapper().readTree(reader);
+    Document document = Document.from(new DiscoveryNode(documentNode));
 
     DiscoveryProviderFactory providerFactory = createProviderFactory(factory);
     DiscoveryProvider provider =

@@ -54,6 +54,7 @@ public class DocumentTest {
     Truth.assertThat(methods.get(0).parameterOrder()).isEqualTo(Collections.singletonList("p1"));
     Truth.assertThat(methods.get(0).parent() instanceof Document);
     Truth.assertThat(methods.get(0).parent()).isEqualTo(document);
+    Truth.assertThat(methods.get(0).path()).isEqualTo("resources.bar.methods.baz");
 
     // Test de-referencing.
     Truth.assertThat(methods.get(0).request().dereference())
@@ -70,6 +71,8 @@ public class DocumentTest {
     Truth.assertThat(parameters.get("p1").location()).isEqualTo("query");
     Truth.assertThat(parameters.get("p1").parent() instanceof Method);
     Truth.assertThat(parameters.get("p1").parent()).isEqualTo(methods.get(0));
+    Truth.assertThat(parameters.get("p1").path())
+        .isEqualTo("resources.bar.methods.baz.parameters.p1");
 
     Truth.assertThat(methods.get(1).description()).isEqualTo("Insert a foo.");
     Truth.assertThat(methods.get(1).id()).isEqualTo("myapi.foo.insert");
@@ -77,6 +80,7 @@ public class DocumentTest {
     Truth.assertThat(methods.get(1).request()).isNull();
     Truth.assertThat(methods.get(1).response()).isNull();
     Truth.assertThat(methods.get(1).id()).isEqualTo("myapi.foo.insert");
+    Truth.assertThat(methods.get(1).path()).isEqualTo("methods.foo");
 
     Truth.assertThat(document.name()).isEqualTo("myapi");
     Truth.assertThat(document.canonicalName()).isEqualTo("My API");
@@ -90,6 +94,9 @@ public class DocumentTest {
         .isEqualTo(schemas.get("GetBazRequest"));
     Truth.assertThat(schemas.get("GetBazRequest").parent() instanceof Document);
     Truth.assertThat(schemas.get("GetBazRequest").parent()).isEqualTo(document);
+    Truth.assertThat(schemas.get("GetBazRequest").path()).isEqualTo("schemas.GetBazRequest");
+    Truth.assertThat(schemas.get("GetBazRequest").properties().get("foo").path())
+        .isEqualTo("schemas.GetBazRequest.properties.foo");
 
     Truth.assertThat(schemas.get("Baz").type()).isEqualTo(Schema.Type.STRING);
 

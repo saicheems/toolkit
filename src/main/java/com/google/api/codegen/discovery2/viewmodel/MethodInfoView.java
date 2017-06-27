@@ -30,8 +30,6 @@ public abstract class MethodInfoView {
 
   public abstract boolean isPageStreaming();
 
-  public abstract boolean isPageStreamingResourceRepeated();
-
   public abstract boolean isScopesSingular();
 
   public abstract String pageStreamingResourceDiscoveryFieldName();
@@ -60,8 +58,6 @@ public abstract class MethodInfoView {
     public abstract Builder hasResponse(boolean val);
 
     public abstract Builder isPageStreaming(boolean val);
-
-    public abstract Builder isPageStreamingResourceRepeated(boolean val);
 
     public abstract Builder isScopesSingular(boolean val);
 

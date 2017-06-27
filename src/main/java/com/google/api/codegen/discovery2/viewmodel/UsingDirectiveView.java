@@ -12,20 +12,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.api.codegen.discovery2.transformer;
+package com.google.api.codegen.discovery2.viewmodel;
 
-import com.google.api.codegen.discovery.Document;
-import com.google.api.codegen.discovery2.viewmodel.ApiInfoView;
+import com.google.auto.value.AutoValue;
 
-public class ApiInfoTransformer {
+@AutoValue
+public abstract class UsingDirectiveView {
 
-  public static ApiInfoView transform(Document document, String authInstructionsUrl) {
-    return ApiInfoView.newBuilder()
-        .authInstructionsUrl(authInstructionsUrl)
-        .authType(document.authType())
-        .name(document.name())
-        .title(document.title())
-        .version(document.version())
-        .build();
+  public static UsingDirectiveView from(String namespace, String alias) {
+    return new AutoValue_UsingDirectiveView(namespace, alias);
   }
+
+  public abstract String namespaceName();
+
+  public abstract String alias();
 }

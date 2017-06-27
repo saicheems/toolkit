@@ -22,5 +22,5 @@ import com.google.api.codegen.viewmodel.ViewModel;
  */
 public interface SampleTransformer {
 
-  ViewModel transform(Method method);
+  ViewModel transform(Method method, String authInstructionsUrl);
 }
