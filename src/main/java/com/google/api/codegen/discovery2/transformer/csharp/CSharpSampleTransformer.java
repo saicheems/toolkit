@@ -66,7 +66,9 @@ public class CSharpSampleTransformer implements SampleTransformer {
         typeMap.addUsingDirective("Google.Apis.Auth.OAuth2"); // UserCredential
         break;
     }
-    if (method.response() != null) {
+    // `methodInfo.hasResponse()` also checks whether or not the response ID is "Empty", in which
+    // case we don't generate the field.
+    if (methodInfo.hasResponse()) {
       typeMap.addUsingDirective("System"); // Console
       typeMap.addUsingDirective("Newtonsoft.Json");
     }
@@ -97,7 +99,7 @@ public class CSharpSampleTransformer implements SampleTransformer {
 
     Schema requestBodySchema = method.request();
     FieldView requestBody = null;
-    if (requestBodySchema != null) {
+    if (methodInfo.hasRequestBody()) {
       JsonNode requestBodyOverride = override != null ? override.get("requestBody") : null;
       requestBody =
           FieldTransformer.transform(
@@ -124,7 +126,7 @@ public class CSharpSampleTransformer implements SampleTransformer {
       argList.add(requestBody.varName());
     }
     for (FieldView parameter : parameters) {
-      argList.add(parameter.fieldName());
+      argList.add(parameter.varName());
     }
     builder.request(
         FieldView.empty()
@@ -135,11 +137,11 @@ public class CSharpSampleTransformer implements SampleTransformer {
                 String.format(
                     "%s.%s(%s)",
                     service.varName(),
-                    namer.getServiceRequestFuncName(method.id()),
-                    Joiner.on(",").join(argList))));
+                    namer.getServiceRequestFuncName(method.path()),
+                    Joiner.on(", ").join(argList))));
 
     Schema responseSchema = method.response();
-    if (responseSchema != null) {
+    if (methodInfo.hasResponse()) {
       builder.response(
           FieldView.empty()
               .withVarName(namer.getResponseVarName())
@@ -155,24 +157,25 @@ public class CSharpSampleTransformer implements SampleTransformer {
       FieldView pageStreamingResource =
           FieldTransformer.transform(pageStreamingResourceSchema, null, typeMap, null);
       String discoveryFieldName = pageStreamingResource.discoveryFieldName();
+
       String varName;
-      switch (pageStreamingResourceSchema.type()) {
-        case ARRAY:
-          Schema itemsSchema = pageStreamingResourceSchema.items().dereference();
-          if (itemsSchema.type() == Schema.Type.OBJECT && !itemsSchema.id().isEmpty()) {
-            varName = symbolSet.add(itemsSchema.id());
-          } else {
-            varName = symbolSet.add("item");
-          }
-          break;
-        case OBJECT:
-          if (pageStreamingResourceSchema.additionalProperties() != null) {
-            varName = symbolSet.add("item");
+      if (pageStreamingResourceSchema.additionalProperties() != null) {
+        varName = symbolSet.add("item");
+      } else if (pageStreamingResourceSchema.items() != null) {
+        Schema itemsSchema = pageStreamingResourceSchema.items().dereference();
+        switch (itemsSchema.type()) {
+          case OBJECT:
+          case ARRAY:
+            // Derive `varName` from the last segment of the type name so names are generated in-line
+            // with the C# types. For example, "jobsData" instead of "jobs" for objects inside arrays.
+            String typeNameSegments[] = pageStreamingResource.typeName().split("\\.");
+            varName = symbolSet.add(typeNameSegments[typeNameSegments.length - 1]);
             break;
-          }
-          // Fall-through if the schema is not a map.
-        default:
-          varName = symbolSet.add(discoveryFieldName);
+          default:
+            varName = symbolSet.add("item");
+        }
+      } else {
+        varName = symbolSet.add(discoveryFieldName);
       }
       builder.pageStreamingResource(pageStreamingResource.withVarName(varName));
 

@@ -44,15 +44,13 @@ public class MethodInfoTransformer {
 
     Schema response = method.response();
     String pageStreamingResourceName = getPageStreamingResourceNameFromSchema(response);
-    boolean isPageStreamingResourceRepeated = false;
-    if (response != null && !pageStreamingResourceName.isEmpty()) {
-      response = response.dereference();
-      Schema pageStreamingResource = response.properties().get(pageStreamingResourceName);
+    if (response != null && response.dereference().id().equals("Empty")) {
+      response = null;
     }
 
     return builder
         .hasRequestBody(method.request() != null)
-        .hasResponse(method.response() != null)
+        .hasResponse(response != null)
         .isPageStreaming(isPageStreaming)
         .isScopesSingular(method.scopes().size() == 1)
         .pageStreamingResourceDiscoveryFieldName(pageStreamingResourceName)
@@ -96,6 +94,18 @@ public class MethodInfoTransformer {
     for (String name : schema.properties().keySet()) {
       // Check that it's impossible for a member of an object to be defined as repeated, there should only be array types.
       Preconditions.checkState(!schema.properties().get(name).repeated());
+    }
+    // Priority order:
+    // 1. First array of objects
+    // 2. First array or map
+    // 3. First string
+
+    // Look for the first array of objects.
+    for (String name : schema.properties().keySet()) {
+      Schema resource = schema.properties().get(name);
+      if (resource.type() == Schema.Type.ARRAY && resource.items().type() == Schema.Type.OBJECT) {
+        return name;
+      }
     }
     // Look for the first array or map resource.
     for (String name : schema.properties().keySet()) {

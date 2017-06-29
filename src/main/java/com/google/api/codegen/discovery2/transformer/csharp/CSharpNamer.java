@@ -107,13 +107,17 @@ public class CSharpNamer {
   }
 
   public String getRequestTypeName(Method method) {
-    return getRequestTypeName(method.id());
+    return getRequestTypeName(method.path());
   }
 
-  private String getRequestTypeName(String methodId) {
+  private String getRequestTypeName(String methodPath) {
+    // Note that we use path because the generator descends the resource hierarchy to build type
+    // names, and not the method ID. See "storagetransfer.getGoogleServiceAccount" in
+    // "storagetransfer:v1". If the method ID is used, "GetGoogleServiceAccountRequest" is
+    // generated instead of "V1.GetGoogleServiceAccountRequest".
     StringBuilder typeName = new StringBuilder();
-    List<String> methodIdSegments = Arrays.asList(methodId.split("\\."));
-    for (int i = 1; i < methodIdSegments.size(); i++) {
+    List<String> methodIdSegments = Arrays.asList(methodPath.split("\\."));
+    for (int i = 1; i < methodIdSegments.size(); i += 2) {
       typeName.append(getSafeClassName(methodIdSegments.get(i)));
       if (i == methodIdSegments.size() - 1) {
         typeName.append("Request");
@@ -163,9 +167,9 @@ public class CSharpNamer {
     return namespaceName;
   }
 
-  public String getServiceRequestFuncName(String methodId) {
+  public String getServiceRequestFuncName(String methodPath) {
     StringBuilder typeName = new StringBuilder();
-    List<String> methodIdSegments = Arrays.asList(methodId.split("\\."));
+    List<String> methodIdSegments = Arrays.asList(methodPath.split("\\."));
     for (int i = 1; i < methodIdSegments.size(); i += 2) {
       typeName.append(getSafeClassName(methodIdSegments.get(i)));
       if (i < methodIdSegments.size() - 1) {
@@ -198,7 +202,7 @@ public class CSharpNamer {
     if (isSpecialEnum(schema)) {
       // The parent of `schema` must be a `Method`, because only members of the "parameters" field
       // can be special enums.
-      String methodId = schema.parent().id();
+      String methodId = ((Method) schema.parent()).path();
       String segments[] = schema.path().split("\\.");
       String typeName = getSafeClassName(segments[segments.length - 1]);
       return getRequestTypeName(methodId) + "." + typeName + "Enum";

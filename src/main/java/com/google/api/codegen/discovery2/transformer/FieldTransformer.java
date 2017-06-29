@@ -59,7 +59,7 @@ public class FieldTransformer {
         && !schema.isEnum()) {
       String format = "my-%s";
       if (schema.location().equals("path")) {
-        value = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, varName);
+        value = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, discoveryFieldName);
         value = String.format(format, value.replaceAll("_", "-"));
       }
       String defaultString = DefaultString.getNonTrivialPlaceholder(schema.pattern(), format);

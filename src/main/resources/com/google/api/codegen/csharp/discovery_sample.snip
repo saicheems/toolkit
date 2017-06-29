@@ -70,6 +70,7 @@
             {@field(class.requestBody, class.methodInfo.verb, FALSE)}
         @end
         @if class.methodInfo.supportsMediaUpload
+
             // TODO: Add desired media content for upload. See
             // https://developers.google.com/api-client-library/dotnet/guide/media_upload
         @end
@@ -109,6 +110,7 @@
                     @else
                         // TODO: Change code below to process each `response.{@class.pageStreamingResource.classPropertyName}` resource:
                         Console.WriteLine(JsonConvert.SerializeObject(response.{@class.pageStreamingResource.classPropertyName}));
+
                     @end
                 @end
                 @if class.methodInfo.parametersPageTokenDiscoveryFieldName

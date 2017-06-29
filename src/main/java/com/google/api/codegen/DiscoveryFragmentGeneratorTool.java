@@ -52,7 +52,7 @@ public class DiscoveryFragmentGeneratorTool {
             .longOpt("override_file")
             .desc("An override file.")
             .hasArg()
-            .argName("OVERRIDE2")
+            .argName("OVERRIDE")
             .build());
     options.addOption(
         Option.builder()

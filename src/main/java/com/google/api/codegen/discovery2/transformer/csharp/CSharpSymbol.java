@@ -36,6 +36,11 @@ public abstract class CSharpSymbol implements Symbol {
   public CSharpSymbol toLowerCamel() {
     String name = toUpperCamel().name(); // "foo-bar" -> "FooBar"
     name = name.substring(0, 1).toLowerCase() + name.substring(1);
+
+    // Specially handle the prefix "sql" so it's not generated as "sQL".
+    if (name.toLowerCase().startsWith("sql")) {
+      name = "sql" + name.substring(3);
+    }
     return from(name);
   }
 

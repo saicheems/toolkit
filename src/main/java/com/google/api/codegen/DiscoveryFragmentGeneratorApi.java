@@ -121,6 +121,7 @@ public class DiscoveryFragmentGeneratorApi {
     String[] filenames = options.get(OVERRIDE_FILES).split(",");
     List<JsonNode> overrides = new ArrayList<>();
     for (String filename : filenames) {
+      if (filename.isEmpty()) continue;
       try {
         reader = Files.newBufferedReader(Paths.get(filename), Charset.forName("UTF8"));
         ObjectMapper mapper = new ObjectMapper();
