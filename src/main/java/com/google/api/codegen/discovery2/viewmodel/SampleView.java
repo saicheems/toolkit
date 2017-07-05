@@ -62,12 +62,15 @@ public abstract class SampleView implements ViewModel {
 
   public abstract String appName();
 
+  @Nullable
   public abstract List<UsingDirectiveView> usingDirectives(); // C#
 
+  @Nullable
   public abstract List<UsingDirectiveView> usingAliasDirectives(); // C#
 
-  public abstract String sampleClassName(); // C#
+  public abstract String sampleClassName(); // C#, Java
 
+  @Nullable
   public abstract String sampleNamespaceName(); // C#
 
   public abstract FieldView service();

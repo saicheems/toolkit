@@ -17,7 +17,6 @@
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Logging.v2beta1;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace LoggingSample
@@ -351,7 +350,6 @@ namespace LoggingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Logging.v2beta1;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace LoggingSample
@@ -484,7 +482,6 @@ namespace LoggingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Logging.v2beta1;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace LoggingSample
@@ -682,7 +679,6 @@ namespace LoggingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Logging.v2beta1;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace LoggingSample
@@ -1004,7 +1000,6 @@ namespace LoggingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Logging.v2beta1;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace LoggingSample

@@ -164,7 +164,10 @@ namespace CloudMonitoringSample
             // The project id. The value can be the numeric project ID or string-based project name.
             string project = "my-project";  // TODO: Update placeholder value.
 
-            MetricDescriptorsResource.ListRequest request = cloudMonitoringService.MetricDescriptors.List(project);
+            // TODO: Assign values to desired properties of `requestBody`:
+            Data.ListMetricDescriptorsRequest requestBody = new Data.ListMetricDescriptorsRequest();
+
+            MetricDescriptorsResource.ListRequest request = cloudMonitoringService.MetricDescriptors.List(requestBody, project);
 
             Data.ListMetricDescriptorsResponse response;
             do
@@ -244,7 +247,10 @@ namespace CloudMonitoringSample
             // End of the time interval (inclusive), which is expressed as an RFC 3339 timestamp.
             string youngest = "";  // TODO: Update placeholder value.
 
-            TimeseriesResource.ListRequest request = cloudMonitoringService.Timeseries.List(project, metric, youngest);
+            // TODO: Assign values to desired properties of `requestBody`:
+            Data.ListTimeseriesRequest requestBody = new Data.ListTimeseriesRequest();
+
+            TimeseriesResource.ListRequest request = cloudMonitoringService.Timeseries.List(requestBody, project, metric, youngest);
 
             Data.ListTimeseriesResponse response;
             do
@@ -387,7 +393,10 @@ namespace CloudMonitoringSample
             // End of the time interval (inclusive), which is expressed as an RFC 3339 timestamp.
             string youngest = "";  // TODO: Update placeholder value.
 
-            TimeseriesDescriptorsResource.ListRequest request = cloudMonitoringService.TimeseriesDescriptors.List(project, metric, youngest);
+            // TODO: Assign values to desired properties of `requestBody`:
+            Data.ListTimeseriesDescriptorsRequest requestBody = new Data.ListTimeseriesDescriptorsRequest();
+
+            TimeseriesDescriptorsResource.ListRequest request = cloudMonitoringService.TimeseriesDescriptors.List(requestBody, project, metric, youngest);
 
             Data.ListTimeseriesDescriptorsResponse response;
             do

@@ -30,7 +30,7 @@ public class CSharpTypeMap implements TypeMap {
 
   private static final String SYSTEM_COLLECTIONS_GENERIC = "System.Collections.Generic";
 
-  CSharpTypeMap(Document document) {
+  public CSharpTypeMap(Document document) {
     this.namer = new CSharpNamer(document);
     namespaceNames = new HashMap<>();
   }
@@ -102,8 +102,12 @@ public class CSharpTypeMap implements TypeMap {
           return String.format(format, override);
       }
     }
-    // TODO: Explain that for repeated types we don't output a "new List<...>();" because it's easier to work with the primitive type and insert the list later.
     switch (schema.type()) {
+      default:
+        if (!schema.repeated()) {
+          break;
+        }
+        // Fall-through if the schema is repeated.
       case ARRAY:
       case OBJECT:
         return String.format("new %s()", namer.getTypeName(schema));
@@ -113,7 +117,7 @@ public class CSharpTypeMap implements TypeMap {
       return String.format("(%s) 0", namer.getTypeName(schema));
     }
     // TODO: Validate that the table returns a non-null value? It shouldn't be possible...
-    return zeros.get(schema.type(), schema.format());
+    return ZEROS.get(schema.type(), schema.format());
   }
 
   public String getClassPropertyName(Schema schema) {
@@ -130,7 +134,7 @@ public class CSharpTypeMap implements TypeMap {
     return new HashMap<>(namespaceNames);
   }
 
-  private static final ImmutableTable<Schema.Type, Schema.Format, String> zeros =
+  private static final ImmutableTable<Schema.Type, Schema.Format, String> ZEROS =
       new ImmutableTable.Builder<Schema.Type, Schema.Format, String>()
           .put(Schema.Type.ANY, Schema.Format.EMPTY, "new object()")
           .put(Schema.Type.BOOLEAN, Schema.Format.EMPTY, "false")

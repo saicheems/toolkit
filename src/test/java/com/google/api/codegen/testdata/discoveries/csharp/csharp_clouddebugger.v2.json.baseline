@@ -204,7 +204,6 @@ namespace CloudDebuggerSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.CloudDebugger.v2;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace CloudDebuggerSample

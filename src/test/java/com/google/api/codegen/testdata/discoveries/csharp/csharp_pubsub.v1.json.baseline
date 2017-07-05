@@ -209,7 +209,6 @@ namespace PubsubSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Pubsub.v1;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 using Data = Google.Apis.Pubsub.v1.Data;
@@ -338,7 +337,6 @@ namespace PubsubSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Pubsub.v1;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace PubsubSample
@@ -589,7 +587,6 @@ namespace PubsubSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Pubsub.v1;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 using Data = Google.Apis.Pubsub.v1.Data;
@@ -649,7 +646,6 @@ namespace PubsubSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Pubsub.v1;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 using Data = Google.Apis.Pubsub.v1.Data;
@@ -972,7 +968,6 @@ namespace PubsubSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Pubsub.v1;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace PubsubSample

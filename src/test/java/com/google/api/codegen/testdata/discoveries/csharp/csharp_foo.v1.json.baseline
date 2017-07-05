@@ -21,9 +21,13 @@ namespace FooSample
     {
         public static void Main(string[] args)
         {
-            FooService fooService = new FooService(new BaseClientService.Initializer());
+            FooService fooService = new FooService(new BaseClientService.Initializer
+            {
+                ApiKey = "",  // TODO: Update placeholder with desired API key.
+                ApplicationName = "Google-FooSample/0.1",
+            });
 
-            BazResource.GetRequest request = fooService.Baz.Get();
+            BarResource.GetRequest request = fooService.Bar.Get();
 
             // To execute asynchronously in an async method, replace `request.Execute()` as shown:
             Data.Baz response = request.Execute();

@@ -1111,7 +1111,6 @@ namespace DfareportingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Dfareporting.v2_6;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace DfareportingSample
 {
@@ -2512,7 +2511,6 @@ namespace DfareportingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Dfareporting.v2_6;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace DfareportingSample
 {
@@ -3083,7 +3081,6 @@ namespace DfareportingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Dfareporting.v2_6;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace DfareportingSample
 {
@@ -3445,7 +3442,6 @@ namespace DfareportingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Dfareporting.v2_6;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace DfareportingSample
 {
@@ -4743,7 +4739,6 @@ namespace DfareportingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Dfareporting.v2_6;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace DfareportingSample
 {
@@ -4909,7 +4904,6 @@ namespace DfareportingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Dfareporting.v2_6;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace DfareportingSample
 {
@@ -5365,7 +5359,6 @@ namespace DfareportingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Dfareporting.v2_6;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace DfareportingSample
 {
@@ -6409,7 +6402,6 @@ namespace DfareportingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Dfareporting.v2_6;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace DfareportingSample
 {
@@ -7740,7 +7732,6 @@ namespace DfareportingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Dfareporting.v2_6;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace DfareportingSample
 {
@@ -9349,7 +9340,6 @@ namespace DfareportingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Dfareporting.v2_6;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace DfareportingSample
 {
@@ -11376,7 +11366,6 @@ namespace DfareportingSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Dfareporting.v2_6;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 
 namespace DfareportingSample
 {

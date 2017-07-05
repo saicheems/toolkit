@@ -17,7 +17,6 @@
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Storage.v1;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace StorageSample
@@ -398,7 +397,6 @@ namespace StorageSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Storage.v1;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace StorageSample
@@ -775,7 +773,6 @@ namespace StorageSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Storage.v1;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 using Data = Google.Apis.Storage.v1.Data;
@@ -831,7 +828,6 @@ namespace StorageSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Storage.v1;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace StorageSample
@@ -1212,7 +1208,6 @@ namespace StorageSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Storage.v1;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace StorageSample
@@ -1766,7 +1761,6 @@ namespace StorageSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Storage.v1;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace StorageSample
@@ -1921,6 +1915,9 @@ namespace StorageSample
 
             ObjectsResource.InsertRequest request = storageService.Objects.Insert(requestBody, bucket);
 
+            // TODO: Download media content if desired. See
+            // https://developers.google.com/api-client-library/dotnet/guide/media_download
+
             // To execute asynchronously in an async method, replace `request.Execute()` as shown:
             Data.Object response = request.Execute();
             // Data.Object response = await request.ExecuteAsync();
@@ -1988,14 +1985,14 @@ namespace StorageSample
                 response = request.Execute();
                 // response = await request.ExecuteAsync();
 
-                if (response.Items == null)
+                if (response.Prefixes == null)
                 {
                     continue;
                 }
-                foreach (Data.Object object2 in response.Items)
+                foreach (string item in response.Prefixes)
                 {
-                    // TODO: Change code below to process each `object2` resource:
-                    Console.WriteLine(JsonConvert.SerializeObject(object2));
+                    // TODO: Change code below to process each `item` resource:
+                    Console.WriteLine(JsonConvert.SerializeObject(item));
                 }
                 request.PageToken = response.NextPageToken;
             } while (response.NextPageToken != null);

@@ -146,7 +146,6 @@ namespace PredictionSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Prediction.v1_6;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace PredictionSample

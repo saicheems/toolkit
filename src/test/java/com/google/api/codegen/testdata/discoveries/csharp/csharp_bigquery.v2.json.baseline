@@ -17,7 +17,6 @@
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Bigquery.v2;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace BigquerySample
@@ -565,14 +564,14 @@ namespace BigquerySample
                 response = request.Execute();
                 // response = await request.ExecuteAsync();
 
-                if (response.Errors == null)
+                if (response.Rows == null)
                 {
                     continue;
                 }
-                foreach (Data.ErrorProto errorProto in response.Errors)
+                foreach (Data.TableRow tableRow in response.Rows)
                 {
-                    // TODO: Change code below to process each `errorProto` resource:
-                    Console.WriteLine(JsonConvert.SerializeObject(errorProto));
+                    // TODO: Change code below to process each `tableRow` resource:
+                    Console.WriteLine(JsonConvert.SerializeObject(tableRow));
                 }
                 request.PageToken = response.PageToken;
             } while (response.PageToken != null);
@@ -1024,7 +1023,6 @@ namespace BigquerySample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Bigquery.v2;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace BigquerySample

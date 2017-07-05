@@ -37,6 +37,7 @@ import com.google.api.codegen.discovery.transformer.py.PythonSampleMethodToViewT
 import com.google.api.codegen.discovery.transformer.ruby.RubySampleMethodToViewTransformer;
 import com.google.api.codegen.discovery2.transformer.SampleTransformer;
 import com.google.api.codegen.discovery2.transformer.csharp.CSharpSampleTransformer;
+import com.google.api.codegen.discovery2.transformer.java.JavaSampleTransformer;
 import com.google.api.codegen.rendering.CommonSnippetSetRunner;
 import com.google.api.codegen.util.CommonRenderingUtil;
 import com.google.common.collect.ImmutableMap;
@@ -126,6 +127,9 @@ public class MainDiscoveryProviderFactory implements DiscoveryProviderFactory {
     SampleTransformer sampleTransformer = null;
     if (id.equals(CSHARP)) {
       sampleTransformer = new CSharpSampleTransformer();
+    }
+    if (id.equals(JAVA)) {
+      sampleTransformer = new JavaSampleTransformer();
     }
 
     return ViewModelProvider.newBuilder()

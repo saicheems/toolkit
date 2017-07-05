@@ -28,8 +28,11 @@ namespace TranslateSample
                 ApplicationName = "Google-TranslateSample/0.1",
             });
 
+            string item = "";  // TODO: Update placeholder value.
+
             // The text to detect
             List<string> q = new List<string>();  // TODO: Update placeholder value.
+            q.add(item)
 
             DetectionsResource.ListRequest request = translateService.Detections.List(q);
 
@@ -110,8 +113,11 @@ namespace TranslateSample
                 ApplicationName = "Google-TranslateSample/0.1",
             });
 
+            string item = "";  // TODO: Update placeholder value.
+
             // The text to translate
             List<string> q = new List<string>();  // TODO: Update placeholder value.
+            q.add(item)
 
             // The target language into which the text should be translated
             string target = "";  // TODO: Update placeholder value.

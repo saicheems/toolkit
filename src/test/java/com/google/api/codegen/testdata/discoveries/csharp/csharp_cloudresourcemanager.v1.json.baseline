@@ -464,7 +464,6 @@ namespace CloudResourceManagerSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.CloudResourceManager.v1;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace CloudResourceManagerSample
@@ -908,7 +907,6 @@ namespace CloudResourceManagerSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.CloudResourceManager.v1;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 using Data = Google.Apis.CloudResourceManager.v1.Data;

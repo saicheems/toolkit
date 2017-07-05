@@ -186,29 +186,25 @@
 
         @end
     @end
-    @if class.isArray
-        List<{@class.typeName}> {@class.varName} = new List<{@class.typeName}>();  // TODO: Update placeholder value.
+    # If `class` is the request body...
+    @if httpVerb
+        @switch httpVerb
+        @case "PATCH"
+            // TODO: Assign values to desired properties of `{@class.varName}`. Only assigned
+            // properties will be changed:
+        @case "PUT"
+            // TODO: Assign values to desired properties of `{@class.varName}`. All existing
+            // properties will be replaced:
+        @default
+            // TODO: Assign values to desired properties of `{@class.varName}`:
+        @end
+
+
+    @end
+    @if printTodo
+        {@class.typeName} {@class.varName} = {@class.value};  // TODO: Update placeholder value.
     @else
-        # If `class` is the request body...
-        @if httpVerb
-            @switch httpVerb
-            @case "PATCH"
-                // TODO: Assign values to desired properties of `{@class.varName}`. Only assigned
-                // properties will be changed:
-            @case "PUT"
-                // TODO: Assign values to desired properties of `{@class.varName}`. All existing
-                // properties will be replaced:
-            @default
-                // TODO: Assign values to desired properties of `{@class.varName}`:
-            @end
-
-
-        @end
-        @if printTodo
-            {@class.typeName} {@class.varName} = {@class.value};  // TODO: Update placeholder value.
-        @else
-            {@class.typeName} {@class.varName} = {@class.value};
-        @end
+        {@class.typeName} {@class.varName} = {@class.value};
     @end
 
     @join subField : class.fields if class.fields

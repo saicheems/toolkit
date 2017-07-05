@@ -17,7 +17,6 @@
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.CloudUserAccounts.beta;
 using Google.Apis.Services;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace CloudUserAccountsSample

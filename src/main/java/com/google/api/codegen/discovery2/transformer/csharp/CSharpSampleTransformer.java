@@ -81,7 +81,9 @@ public class CSharpSampleTransformer implements SampleTransformer {
 
     // MyService service = new MyService( ...
     FieldView service =
-        FieldView.empty().withVarName(namer.getServiceVarName()).withTypeName(typeMap.addService());
+        FieldView.empty()
+            .withVarName(symbolSet.add(namer.getServiceVarName()))
+            .withTypeName(typeMap.addService());
     builder.service(service);
     //     ApplicationName = "Google-MyServiceSample/0.1",
     builder.appName(namer.getAppName());

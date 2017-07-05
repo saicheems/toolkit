@@ -388,7 +388,6 @@ namespace StoragetransferSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Storagetransfer.v1;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace StoragetransferSample
@@ -442,7 +441,6 @@ namespace StoragetransferSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Storagetransfer.v1;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace StoragetransferSample
@@ -628,7 +626,6 @@ namespace StoragetransferSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Storagetransfer.v1;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 using Data = Google.Apis.Storagetransfer.v1.Data;
@@ -687,7 +684,6 @@ namespace StoragetransferSample
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Storagetransfer.v1;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 using Data = Google.Apis.Storagetransfer.v1.Data;

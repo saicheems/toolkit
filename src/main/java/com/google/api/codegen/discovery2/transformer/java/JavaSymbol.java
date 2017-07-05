@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.api.codegen.discovery2.transformer.csharp;
+package com.google.api.codegen.discovery2.transformer.java;
 
 import com.google.api.codegen.discovery2.transformer.NameUtil;
 import com.google.api.codegen.discovery2.transformer.Symbol;
@@ -21,24 +21,17 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 
 @AutoValue
-public abstract class CSharpSymbol implements Symbol {
+public abstract class JavaSymbol implements Symbol {
 
-  public static CSharpSymbol from(String name) {
-    // TODO: Note, this class only approximates how the actual C# generator works. For example "cl ass" is reserved here, but the C# generator will generate the class name "Class".
-    // TODO: This implementation of reserved should be correct, for example:
-    // "cl ass" ->  ("class", true) | ("Class", false)
-    // "cl-ass" -> ("clAss", false) | ("ClAss", false)
-    // "Class" ->   ("class", true) | ("Class", false)
-    // "class" ->   ("class", true) | ("Class", false)
-    return new AutoValue_CSharpSymbol(name, RESERVED.contains(name));
+  public static JavaSymbol from(String name) {
+    return new AutoValue_JavaSymbol(name, RESERVED.contains(name));
   }
 
-  // TODO: Document that this class returns a lowerCamel string by default.
-  public CSharpSymbol toLowerCamel() {
+  public JavaSymbol toLowerCamel() {
     return from(NameUtil.lowerCamel(name()));
   }
 
-  public CSharpSymbol toUpperCamel() {
+  public JavaSymbol toUpperCamel() {
     return from(NameUtil.upperCamel(name()));
   }
 
@@ -46,87 +39,68 @@ public abstract class CSharpSymbol implements Symbol {
 
   public abstract boolean isReserved();
 
+  // All lowercase because in Java the code generator checks the lowercase version of a name to
+  // decide if it is reserved.
   private static final Set<String> RESERVED =
       ImmutableSet.<String>builder()
           .add(
               "abstract",
-              "as",
-              "base",
-              "bool",
+              "assert",
+              "boolean",
               "break",
               "byte",
               "case",
               "catch",
               "char",
-              "checked",
               "class",
               "const",
               "continue",
-              "decimal",
               "default",
-              "delegate",
               "do",
               "double",
               "else",
               "enum",
-              "event",
-              "explicit",
-              "extern",
-              "false",
+              "extends",
+              "final",
               "finally",
-              "fixed",
               "float",
               "for",
-              "foreach",
               "goto",
               "if",
-              "implicit",
-              "in",
+              "implements",
+              "import",
+              "instanceof",
               "int",
               "interface",
-              "internal",
-              "is",
-              "lock",
               "long",
-              "namespace",
+              "native",
               "new",
-              "null",
-              "object",
-              "operator",
-              "out",
-              "override",
-              "params",
+              "package",
               "private",
               "protected",
               "public",
-              "readonly",
-              "ref",
               "return",
-              "sbyte",
-              "sealed",
               "short",
-              "sizeof",
-              "stackalloc",
               "static",
-              "string",
-              "struct",
+              "strictfp",
+              "super",
               "switch",
+              "synchronized",
               "this",
               "throw",
-              "true",
+              "throws",
+              "transient",
               "try",
-              "typeof",
-              "uint",
-              "ulong",
-              "unchecked",
-              "unsafe",
-              "ushort",
-              "using",
-              "virtual",
               "void",
               "volatile",
               "while",
-              "async",
-              "await")
+              "entry",
+              "float",
+              "integer",
+              "object",
+              "string",
+              "true",
+              "false",
+              "null")
           .build();
 }

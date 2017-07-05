@@ -26,7 +26,7 @@ public class CSharpNamer {
 
   // TODO: Move anything related to names here, the getZero value stuff can stay in the type map.
 
-  private static final ImmutableTable<Schema.Type, Schema.Format, String> typeNames =
+  private static final ImmutableTable<Schema.Type, Schema.Format, String> TYPE_NAMES =
       new ImmutableTable.Builder<Schema.Type, Schema.Format, String>()
           .put(Schema.Type.ANY, Schema.Format.EMPTY, "object")
           .put(Schema.Type.BOOLEAN, Schema.Format.EMPTY, "bool")
@@ -35,27 +35,32 @@ public class CSharpNamer {
           .put(Schema.Type.NUMBER, Schema.Format.FLOAT, "float")
           .put(Schema.Type.NUMBER, Schema.Format.DOUBLE, "double")
           .put(Schema.Type.STRING, Schema.Format.EMPTY, "string")
-          .put(Schema.Type.STRING, Schema.Format.BYTE, "byte")
+          .put(Schema.Type.STRING, Schema.Format.BYTE, "string")
           .put(Schema.Type.STRING, Schema.Format.DATE, "string")
           .put(Schema.Type.STRING, Schema.Format.DATETIME, "string")
           .put(Schema.Type.STRING, Schema.Format.INT64, "long")
           .put(Schema.Type.STRING, Schema.Format.UINT64, "ulong")
           .build();
+
   private final Document document;
+  private final String serviceClassName;
 
   public CSharpNamer(Document document) {
     this.document = document;
+    this.serviceClassName = CSharpSymbol.from(document.canonicalName()).toUpperCamel().name();
   }
 
   public String getAppName() {
-    return String.format(
-        "Google-%sSample/0.1", CSharpSymbol.from(document.canonicalName()).toUpperCamel().name());
+    return String.format("Google-%sSample/0.1", serviceClassName);
   }
 
   private String getObjectTypeName(Schema schema) {
+    StringBuilder typeNameBuilder = new StringBuilder("Data.");
     // If the object has an ID, we don't have to do anything special to derive its name.
     if (!Strings.isNullOrEmpty(schema.id())) {
-      return CSharpSymbol.from(schema.id()).toUpperCamel().name();
+      return typeNameBuilder
+          .append(CSharpSymbol.from(schema.id()).toUpperCamel().name())
+          .toString();
     }
     List<String> segments = Arrays.asList(schema.path().split("\\."));
     // Start at the second segment, which is the first schema key.
@@ -64,17 +69,15 @@ public class CSharpNamer {
     // parameters. Therefore all objects must be children of the "schemas" object.
     int i = segments.indexOf("schemas") + 1;
 
-    StringBuilder typeName = new StringBuilder();
-    String parentName = "";
+    String parentTypeName = "";
 
     boolean topLevel = true;
 
     while (i < segments.size()) {
-      StringBuilder childName =
-          new StringBuilder(CSharpSymbol.from(segments.get(i)).toUpperCamel().name());
+      String childTypeName = CSharpSymbol.from(segments.get(i)).toUpperCamel().name();
       if (i + 1 < segments.size() && segments.get(i + 1).equals("items")) {
         if (topLevel) {
-          childName.append("Items");
+          childTypeName += "Items";
         }
         while (i + 1 < segments.size() && segments.get(i + 1).equals("items")) {
           i++;
@@ -82,28 +85,27 @@ public class CSharpNamer {
       }
       if (!topLevel) { // ex: "schemas.foo.items".
         // Subclasses have the "Data" suffix.
-        childName.append("Data");
+        childTypeName += "Data";
       }
       if (i + 1 < segments.size() && segments.get(i + 1).equals("properties")) {
         i++;
       }
       if (i + 1 < segments.size() && segments.get(i + 1).equals("additionalProperties")) {
-        childName.append("Element");
+        childTypeName += "Element";
         i++;
       }
-      if (childName.toString().equals(parentName)) {
-        childName.append("Schema");
+      if (childTypeName.equals(parentTypeName)) {
+        childTypeName += "Schema";
       }
       if (!topLevel) {
-        typeName.append(".");
+        typeNameBuilder.append(".");
       }
       topLevel = false;
-
-      typeName.append(childName);
-      parentName = childName.toString();
+      typeNameBuilder.append(childTypeName);
+      parentTypeName = childTypeName;
       i++;
     }
-    return typeName.toString();
+    return typeNameBuilder.toString();
   }
 
   public String getRequestTypeName(Method method) {
@@ -115,17 +117,17 @@ public class CSharpNamer {
     // names, and not the method ID. See "storagetransfer.getGoogleServiceAccount" in
     // "storagetransfer:v1". If the method ID is used, "GetGoogleServiceAccountRequest" is
     // generated instead of "V1.GetGoogleServiceAccountRequest".
-    StringBuilder typeName = new StringBuilder();
+    StringBuilder typeNameBuilder = new StringBuilder();
     List<String> methodIdSegments = Arrays.asList(methodPath.split("\\."));
     for (int i = 1; i < methodIdSegments.size(); i += 2) {
-      typeName.append(getSafeClassName(methodIdSegments.get(i)));
-      if (i == methodIdSegments.size() - 1) {
-        typeName.append("Request");
-      } else {
-        typeName.append("Resource.");
+      typeNameBuilder.append(".");
+
+      typeNameBuilder.append(getSafeClassName(methodIdSegments.get(i)));
+      if (i < methodIdSegments.size() - 1) {
+        typeNameBuilder.append("Resource");
       }
     }
-    return typeName.toString();
+    return typeNameBuilder.append("Request").substring(1);
   }
 
   public String getRequestVarName() {
@@ -140,64 +142,54 @@ public class CSharpNamer {
     return "response";
   }
 
-  private String getSafeClassName(String name) {
-    String typeName = "";
-    CSharpSymbol symbol = CSharpSymbol.from(name);
-    if (symbol.isReserved()) {
-      typeName += CSharpSymbol.from(document.canonicalName()).toUpperCamel().name();
-    }
-    return typeName + symbol.toUpperCamel().name();
-  }
-
   public String getSampleClassName() {
-    return CSharpSymbol.from(document.canonicalName()).toUpperCamel().name() + "Example";
+    return serviceClassName + "Example";
   }
 
   public String getSampleNamespaceName() {
-    return CSharpSymbol.from(document.canonicalName()).toUpperCamel().name() + "Sample";
+    return serviceClassName + "Sample";
   }
 
   public String getServiceNamespaceName() {
-    String canonicalName = document.canonicalName();
     String versionNoDots = document.version().replaceAll("\\.", "_");
-
-    String namespaceName = "Google.Apis";
-    namespaceName += "." + CSharpSymbol.from(canonicalName).toUpperCamel().name();
-    namespaceName += "." + versionNoDots;
-    return namespaceName;
+    return "Google.Apis." + getSafeClassName(serviceClassName) + "." + versionNoDots;
   }
 
   public String getServiceRequestFuncName(String methodPath) {
-    StringBuilder typeName = new StringBuilder();
+    StringBuilder typeNameBuilder = new StringBuilder();
     List<String> methodIdSegments = Arrays.asList(methodPath.split("\\."));
     for (int i = 1; i < methodIdSegments.size(); i += 2) {
-      typeName.append(getSafeClassName(methodIdSegments.get(i)));
+      typeNameBuilder.append(getSafeClassName(methodIdSegments.get(i)));
       if (i < methodIdSegments.size() - 1) {
-        typeName.append(".");
+        typeNameBuilder.append(".");
       }
     }
-    return typeName.toString();
+    return typeNameBuilder.toString();
   }
 
   public String getServiceTypeName() {
-    return getSafeClassName(document.canonicalName()) + "Service";
+    return getSafeClassName(serviceClassName) + "Service";
   }
 
   public String getServiceVarName() {
-    return CSharpSymbol.from(document.canonicalName()).toLowerCamel().name() + "Service";
+    return CSharpSymbol.from(serviceClassName).toLowerCamel().name() + "Service";
   }
 
   public String getTypeName(Schema schema) {
     schema = schema.dereference();
     switch (schema.type()) {
+      default:
+        if (!schema.repeated()) {
+          break;
+        }
+        return "List<" + getTypeName(schema.withRepeated(false)) + ">";
       case ARRAY:
         return "List<" + getTypeName(schema.items()) + ">";
       case OBJECT:
         if (schema.additionalProperties() != null) {
           return "Map<String, " + getTypeName(schema.additionalProperties()) + ">";
         }
-        // All objects are under the alias "Data".
-        return "Data." + getObjectTypeName(schema);
+        return getObjectTypeName(schema);
     }
     if (isSpecialEnum(schema)) {
       // The parent of `schema` must be a `Method`, because only members of the "parameters" field
@@ -207,12 +199,20 @@ public class CSharpNamer {
       String typeName = getSafeClassName(segments[segments.length - 1]);
       return getRequestTypeName(methodId) + "." + typeName + "Enum";
     }
-    String typeName = typeNames.get(schema.type(), schema.format());
-    return typeName;
+    return TYPE_NAMES.get(schema.type(), schema.format());
   }
 
   public static boolean isSpecialEnum(Schema schema) {
     String segments[] = schema.path().split("\\.");
     return schema.isEnum() && segments[segments.length - 2].equals("parameters");
+  }
+
+  private String getSafeClassName(String name) {
+    String typeName = "";
+    CSharpSymbol symbol = CSharpSymbol.from(name);
+    if (symbol.isReserved()) {
+      typeName += serviceClassName;
+    }
+    return typeName + symbol.toUpperCamel().name();
   }
 }
