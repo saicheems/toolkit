@@ -18,11 +18,13 @@ import com.google.api.codegen.discovery.Document;
 import com.google.api.codegen.discovery.Method;
 import com.google.api.codegen.discovery.Schema;
 import com.google.api.codegen.discovery2.transformer.Symbol;
+import com.google.auto.value.AutoValue;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableTable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class JavaNamer {
@@ -62,24 +64,27 @@ public class JavaNamer {
     packageName =
         "com.google.api.services."
             + document.name()
-            + (document.versionModule() ? document.version() : "");
-    this.serviceClassName = JavaSymbol.from(document.canonicalName()).toUpperCamel().name();
+            + (document.versionModule() ? "." + document.version() : "");
+    this.serviceClassName = JavaSymbol.from(document.canonicalName(), true).toUpperCamel().name();
+  }
+
+  public String getCreateServiceFuncName() {
+    return "create" + serviceClassName + "Service";
   }
 
   public String getAppName() {
-    return String.format(
-        "Google-%sSample/0.1", JavaSymbol.from(document.canonicalName()).toUpperCamel().name());
+    return String.format("Google-%sSample/0.1", serviceClassName);
   }
 
   private String getObjectTypeName(Schema schema) {
+    StringBuilder typeNameBuilder = new StringBuilder(packageName + ".model.");
     if (!Strings.isNullOrEmpty(schema.id())) {
-      return getSafeClassName(schema.id());
+      return typeNameBuilder.append(getSafeClassName(schema.id())).toString();
     }
     List<String> segments = Arrays.asList(schema.path().split("\\."));
     // TODO: Replace `segments.indexOf("schemas")` with 0?
     int i = segments.indexOf("schemas") + 1;
 
-    StringBuilder typeNameBuilder = new StringBuilder(packageName + ".");
     List<String> parentTypeNames = new ArrayList<>();
 
     boolean topLevel = true;
@@ -120,14 +125,14 @@ public class JavaNamer {
   }
 
   private String getRequestTypeName(String methodPath) {
-    StringBuilder typeNameBuilder = new StringBuilder();
+    StringBuilder typeNameBuilder = new StringBuilder(packageName + "." + serviceClassName);
     List<String> methodIdSegments = Arrays.asList(methodPath.split("\\."));
     for (int i = 1; i < methodIdSegments.size(); i += 2) {
-      typeNameBuilder.append(".");
+      typeNameBuilder.append("$");
 
-      Symbol symbol = JavaSymbol.from(methodIdSegments.get(i));
+      Symbol symbol = JavaSymbol.from(methodIdSegments.get(i), true);
       String segmentTypeName = getSafeClassName(symbol.name());
-      if (symbol.name().equals(serviceClassName)) {
+      if (segmentTypeName.equals(serviceClassName)) {
         if (i < methodIdSegments.size() - 1) {
           segmentTypeName += "Operations";
         } else { // Last segment.
@@ -136,7 +141,7 @@ public class JavaNamer {
       }
       typeNameBuilder.append(segmentTypeName);
     }
-    return serviceClassName + "." + typeNameBuilder.substring(1);
+    return typeNameBuilder.toString();
   }
 
   public String getRequestVarName() {
@@ -155,36 +160,87 @@ public class JavaNamer {
     return serviceClassName + "Example";
   }
 
-  public String getTypeName(Schema schema) {
-    return getTypeName(schema, false);
+  public String getServiceRequestFuncName(String methodPath) {
+    StringBuilder typeNameBuilder = new StringBuilder();
+    List<String> methodIdSegments = Arrays.asList(methodPath.split("\\."));
+    for (int i = 1; i < methodIdSegments.size(); i += 2) {
+      JavaSymbol symbol = JavaSymbol.from(methodIdSegments.get(i), true);
+      if (symbol.isReserved()) {
+        // Ex: "foobarFloat" instead of "FooBarFloat"
+        // ^ Uses API name instead of canonical name.
+        typeNameBuilder.append(document.name() + symbol.toUpperCamel().name());
+      } else {
+        typeNameBuilder.append(symbol.toLowerCamel().name());
+      }
+      if (i < methodIdSegments.size() - 1) {
+        typeNameBuilder.append("().");
+      }
+    }
+    return typeNameBuilder.toString();
   }
 
-  private String getTypeName(Schema schema, boolean boxed) {
+  public String getServiceTypeName() {
+    return packageName + "." + serviceClassName;
+  }
+
+  public String getServiceVarName() {
+    return JavaSymbol.from(serviceClassName, true).toLowerCamel().name() + "Service";
+  }
+
+  public JavaType getType(Schema schema) {
+    return getType(schema, false);
+  }
+
+  private JavaType getType(Schema schema, boolean boxed) {
     schema = schema.dereference();
     switch (schema.type()) {
+      default:
+        if (!schema.repeated()) {
+          break;
+        }
+        return JavaType.from(
+            "java.util.List", Collections.singletonList(getType(schema.withRepeated(false), true)));
       case ARRAY:
-        return "java.util.List<" + getTypeName(schema.items(), true) + ">";
+        return JavaType.from(
+            "java.util.List", Collections.singletonList(getType(schema.items(), true)));
       case OBJECT:
         if (schema.additionalProperties() != null) {
-          return "java.util.Map<java.lang.String, "
-              + getTypeName(schema.additionalProperties(), true)
-              + ">";
+          return JavaType.from(
+              "java.util.Map",
+              Arrays.asList(
+                  JavaType.from("java.lang.String"), getType(schema.additionalProperties(), true)));
         }
-        return getObjectTypeName(schema);
+        return JavaType.from(getObjectTypeName(schema));
     }
     String boxedTypeName = BOXED_TYPE_NAMES.get(schema.type(), schema.format());
-    if (boxedTypeName != null) {
-      return boxedTypeName;
+    if (boxed && boxedTypeName != null) {
+      return JavaType.from(boxedTypeName);
     }
-    return TYPE_NAMES.get(schema.type(), schema.format());
+    return JavaType.from(TYPE_NAMES.get(schema.type(), schema.format()));
   }
 
   private String getSafeClassName(String name) {
     String typeName = "";
-    JavaSymbol symbol = JavaSymbol.from(name);
+    JavaSymbol symbol = JavaSymbol.from(name, true);
     if (symbol.isReserved()) {
       typeName += serviceClassName;
     }
     return typeName + symbol.toUpperCamel().name();
+  }
+
+  @AutoValue
+  public abstract static class JavaType {
+
+    public static JavaType from(String typeName) {
+      return new AutoValue_JavaNamer_JavaType(typeName, new ArrayList<JavaType>());
+    }
+
+    public static JavaType from(String typeName, List<JavaType> parameterTypes) {
+      return new AutoValue_JavaNamer_JavaType(typeName, parameterTypes);
+    }
+
+    public abstract String typeName();
+
+    public abstract List<JavaType> parameterTypes();
   }
 }

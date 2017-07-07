@@ -199,7 +199,6 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.bigquery.Bigquery;
 import com.google.api.services.bigquery.model.DatasetList;
-import com.google.api.services.bigquery.model.DatasetList.Datasets;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
@@ -218,7 +217,7 @@ public class BigqueryExample {
       if (response.getDatasets() == null) {
         continue;
       }
-      for (Datasets datasets : response.getDatasets()) {
+      for (DatasetList.Datasets datasets : response.getDatasets()) {
         // TODO: Change code below to process each `datasets` resource:
         System.out.println(datasets);
       }
@@ -512,8 +511,8 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.bigquery.Bigquery;
-import com.google.api.services.bigquery.model.ErrorProto;
 import com.google.api.services.bigquery.model.GetQueryResultsResponse;
+import com.google.api.services.bigquery.model.TableRow;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
@@ -532,12 +531,12 @@ public class BigqueryExample {
     GetQueryResultsResponse response;
     do {
       response = request.execute();
-      if (response.getErrors() == null) {
+      if (response.getRows() == null) {
         continue;
       }
-      for (ErrorProto errorProto : response.getErrors()) {
-        // TODO: Change code below to process each `errorProto` resource:
-        System.out.println(errorProto);
+      for (TableRow tableRow : response.getRows()) {
+        // TODO: Change code below to process each `tableRow` resource:
+        System.out.println(tableRow);
       }
       request.setPageToken(response.getPageToken());
     } while (response.getPageToken() != null);
@@ -645,7 +644,6 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.bigquery.Bigquery;
 import com.google.api.services.bigquery.model.JobList;
-import com.google.api.services.bigquery.model.JobList.Jobs;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
@@ -664,7 +662,7 @@ public class BigqueryExample {
       if (response.getJobs() == null) {
         continue;
       }
-      for (Jobs jobs : response.getJobs()) {
+      for (JobList.Jobs jobs : response.getJobs()) {
         // TODO: Change code below to process each `jobs` resource:
         System.out.println(jobs);
       }
@@ -772,7 +770,6 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.bigquery.Bigquery;
 import com.google.api.services.bigquery.model.ProjectList;
-import com.google.api.services.bigquery.model.ProjectList.Projects;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
@@ -788,7 +785,7 @@ public class BigqueryExample {
       if (response.getProjects() == null) {
         continue;
       }
-      for (Projects projects : response.getProjects()) {
+      for (ProjectList.Projects projects : response.getProjects()) {
         // TODO: Change code below to process each `projects` resource:
         System.out.println(projects);
       }
@@ -1159,7 +1156,6 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.bigquery.Bigquery;
 import com.google.api.services.bigquery.model.TableList;
-import com.google.api.services.bigquery.model.TableList.Tables;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
@@ -1181,7 +1177,7 @@ public class BigqueryExample {
       if (response.getTables() == null) {
         continue;
       }
-      for (Tables tables : response.getTables()) {
+      for (TableList.Tables tables : response.getTables()) {
         // TODO: Change code below to process each `tables` resource:
         System.out.println(tables);
       }

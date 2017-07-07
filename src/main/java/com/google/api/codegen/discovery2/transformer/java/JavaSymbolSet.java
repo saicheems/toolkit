@@ -20,6 +20,6 @@ public class JavaSymbolSet extends SymbolSet {
 
   @Override
   public String add(String name) {
-    return add(JavaSymbol.from(name).toLowerCamel());
+    return add(JavaSymbol.from(name, false).toLowerCamel());
   }
 }

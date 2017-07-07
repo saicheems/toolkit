@@ -1985,14 +1985,14 @@ namespace StorageSample
                 response = request.Execute();
                 // response = await request.ExecuteAsync();
 
-                if (response.Prefixes == null)
+                if (response.Items == null)
                 {
                     continue;
                 }
-                foreach (string item in response.Prefixes)
+                foreach (Data.Object object2 in response.Items)
                 {
-                    // TODO: Change code below to process each `item` resource:
-                    Console.WriteLine(JsonConvert.SerializeObject(item));
+                    // TODO: Change code below to process each `object2` resource:
+                    Console.WriteLine(JsonConvert.SerializeObject(object2));
                 }
                 request.PageToken = response.NextPageToken;
             } while (response.NextPageToken != null);

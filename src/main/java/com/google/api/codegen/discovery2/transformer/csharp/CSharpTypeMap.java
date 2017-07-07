@@ -38,7 +38,7 @@ public class CSharpTypeMap implements TypeMap {
   @Override
   public String add(Schema schema) {
     Schema copy = schema;
-    // Loops over the schema to collect namespaceNames.
+    // Loops over the schema to collect getNamespaceNames.
     while (true) {
       Preconditions.checkNotNull(copy, "invalid schema");
       switch (copy.type()) {
@@ -78,7 +78,7 @@ public class CSharpTypeMap implements TypeMap {
     return namer.getRequestTypeName(method);
   }
 
-  void addUsingDirective(String namespaceName) {
+  void addNamespaceName(String namespaceName) {
     namespaceNames.put(namespaceName, "");
   }
 
@@ -88,6 +88,9 @@ public class CSharpTypeMap implements TypeMap {
         case BOOLEAN:
           return Boolean.valueOf(override).toString();
         case INTEGER:
+          if (schema.format() == Schema.Format.UINT32) {
+            return Long.valueOf(override).toString();
+          }
           return Integer.valueOf(override).toString();
         case NUMBER:
           return Double.valueOf(override).toString();
@@ -110,11 +113,11 @@ public class CSharpTypeMap implements TypeMap {
         // Fall-through if the schema is repeated.
       case ARRAY:
       case OBJECT:
-        return String.format("new %s()", namer.getTypeName(schema));
+        return String.format("new %s()", add(schema));
     }
     if (CSharpNamer.isSpecialEnum(schema)) {
       // TODO: Actually a special enum.
-      return String.format("(%s) 0", namer.getTypeName(schema));
+      return String.format("(%s) 0", add(schema));
     }
     // TODO: Validate that the table returns a non-null value? It shouldn't be possible...
     return ZEROS.get(schema.type(), schema.format());
@@ -130,7 +133,15 @@ public class CSharpTypeMap implements TypeMap {
     return "";
   }
 
-  Map<String, String> namespaceNames() {
+  public String getGetterFuncName(Schema schema) {
+    return "";
+  }
+
+  public String getSetterFuncName(Schema schema) {
+    return "";
+  }
+
+  Map<String, String> getNamespaceNames() {
     return new HashMap<>(namespaceNames);
   }
 

@@ -63,6 +63,9 @@ public abstract class SampleView implements ViewModel {
   public abstract String appName();
 
   @Nullable
+  public abstract List<String> importNames(); // Java
+
+  @Nullable
   public abstract List<UsingDirectiveView> usingDirectives(); // C#
 
   @Nullable
@@ -74,6 +77,9 @@ public abstract class SampleView implements ViewModel {
   public abstract String sampleNamespaceName(); // C#
 
   public abstract FieldView service();
+
+  @Nullable
+  public abstract String createServiceFuncName(); // Java
 
   public abstract List<FieldView> parameters();
 
@@ -107,6 +113,8 @@ public abstract class SampleView implements ViewModel {
 
     public abstract Builder appName(String val);
 
+    public abstract Builder importNames(List<String> val);
+
     public abstract Builder usingDirectives(List<UsingDirectiveView> val);
 
     public abstract Builder usingAliasDirectives(List<UsingDirectiveView> val);
@@ -116,6 +124,8 @@ public abstract class SampleView implements ViewModel {
     public abstract Builder sampleNamespaceName(String val);
 
     public abstract Builder service(FieldView val);
+
+    public abstract Builder createServiceFuncName(String val);
 
     public abstract Builder parameters(List<FieldView> val);
 

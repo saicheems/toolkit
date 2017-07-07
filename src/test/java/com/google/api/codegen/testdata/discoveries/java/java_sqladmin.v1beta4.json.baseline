@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -38,7 +38,7 @@ public class SqlAdminExample {
     // The ID of the Backup Run to delete. To find a Backup Run ID, use the list method.
     long id = 0L;  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.BackupRuns.Delete request = sqlAdminService.backupRuns().delete(project, instance, id);
 
     Operation response = request.execute();
@@ -47,7 +47,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -90,7 +90,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -101,7 +101,7 @@ public class SqlAdminExample {
     // The ID of this Backup Run.
     long id = 0L;  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.BackupRuns.Get request = sqlAdminService.backupRuns().get(project, instance, id);
 
     BackupRun response = request.execute();
@@ -110,7 +110,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -154,7 +154,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -165,7 +165,7 @@ public class SqlAdminExample {
     // TODO: Assign values to desired fields of `requestBody`:
     BackupRun requestBody = new BackupRun();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.BackupRuns.Insert request = sqlAdminService.backupRuns().insert(project, instance, requestBody);
 
     Operation response = request.execute();
@@ -174,7 +174,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -218,7 +218,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -226,7 +226,7 @@ public class SqlAdminExample {
     // Cloud SQL instance ID. This does not include the project ID.
     String instance = "my-instance";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.BackupRuns.List request = sqlAdminService.backupRuns().list(project, instance);
 
     BackupRunsListResponse response;
@@ -243,7 +243,7 @@ public class SqlAdminExample {
     } while (response.getNextPageToken() != null);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -286,7 +286,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -297,7 +297,7 @@ public class SqlAdminExample {
     // Name of the database to be deleted in the instance.
     String database = "my-database";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Databases.Delete request = sqlAdminService.databases().delete(project, instance, database);
 
     Operation response = request.execute();
@@ -306,7 +306,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -349,7 +349,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -360,7 +360,7 @@ public class SqlAdminExample {
     // Name of the database in the instance.
     String database = "my-database";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Databases.Get request = sqlAdminService.databases().get(project, instance, database);
 
     Database response = request.execute();
@@ -369,7 +369,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -413,7 +413,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -424,7 +424,7 @@ public class SqlAdminExample {
     // TODO: Assign values to desired fields of `requestBody`:
     Database requestBody = new Database();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Databases.Insert request = sqlAdminService.databases().insert(project, instance, requestBody);
 
     Operation response = request.execute();
@@ -433,7 +433,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -476,7 +476,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project for which to list Cloud SQL instances.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -484,7 +484,7 @@ public class SqlAdminExample {
     // Cloud SQL instance ID. This does not include the project ID.
     String instance = "my-instance";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Databases.List request = sqlAdminService.databases().list(project, instance);
 
     DatabasesListResponse response = request.execute();
@@ -493,7 +493,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -537,7 +537,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -552,7 +552,7 @@ public class SqlAdminExample {
     // fields will be changed:
     Database requestBody = new Database();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Databases.Patch request = sqlAdminService.databases().patch(project, instance, database, requestBody);
 
     Operation response = request.execute();
@@ -561,7 +561,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -605,7 +605,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -620,7 +620,7 @@ public class SqlAdminExample {
     // fields will be replaced:
     Database requestBody = new Database();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Databases.Update request = sqlAdminService.databases().update(project, instance, database, requestBody);
 
     Operation response = request.execute();
@@ -629,7 +629,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -672,9 +672,9 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Flags.List request = sqlAdminService.flags().list();
 
     FlagsListResponse response = request.execute();
@@ -683,7 +683,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -727,7 +727,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the source as well as the clone Cloud SQL instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -738,7 +738,7 @@ public class SqlAdminExample {
     // TODO: Assign values to desired fields of `requestBody`:
     InstancesCloneRequest requestBody = new InstancesCloneRequest();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.Clone request = sqlAdminService.instances().clone(project, instance, requestBody);
 
     Operation response = request.execute();
@@ -747,7 +747,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -790,7 +790,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance to be deleted.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -798,7 +798,7 @@ public class SqlAdminExample {
     // Cloud SQL instance ID. This does not include the project ID.
     String instance = "my-instance";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.Delete request = sqlAdminService.instances().delete(project, instance);
 
     Operation response = request.execute();
@@ -807,7 +807,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -851,7 +851,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance to be exported.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -862,7 +862,7 @@ public class SqlAdminExample {
     // TODO: Assign values to desired fields of `requestBody`:
     InstancesExportRequest requestBody = new InstancesExportRequest();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.Export request = sqlAdminService.instances().export(project, instance, requestBody);
 
     Operation response = request.execute();
@@ -871,7 +871,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -915,7 +915,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // ID of the project that contains the read replica.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -926,7 +926,7 @@ public class SqlAdminExample {
     // TODO: Assign values to desired fields of `requestBody`:
     InstancesFailoverRequest requestBody = new InstancesFailoverRequest();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.Failover request = sqlAdminService.instances().failover(project, instance, requestBody);
 
     Operation response = request.execute();
@@ -935,7 +935,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -978,7 +978,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -986,7 +986,7 @@ public class SqlAdminExample {
     // Database instance ID. This does not include the project ID.
     String instance = "my-instance";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.Get request = sqlAdminService.instances().get(project, instance);
 
     DatabaseInstance response = request.execute();
@@ -995,7 +995,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1039,7 +1039,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1050,7 +1050,7 @@ public class SqlAdminExample {
     // TODO: Assign values to desired fields of `requestBody`:
     InstancesImportRequest requestBody = new InstancesImportRequest();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.SQLAdminImport request = sqlAdminService.instances().sqladminImport(project, instance, requestBody);
 
     Operation response = request.execute();
@@ -1059,7 +1059,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1103,7 +1103,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project to which the newly created Cloud SQL instances should belong.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1111,7 +1111,7 @@ public class SqlAdminExample {
     // TODO: Assign values to desired fields of `requestBody`:
     DatabaseInstance requestBody = new DatabaseInstance();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.Insert request = sqlAdminService.instances().insert(project, requestBody);
 
     Operation response = request.execute();
@@ -1120,7 +1120,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1164,12 +1164,12 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project for which to list Cloud SQL instances.
     String project = "my-project";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.List request = sqlAdminService.instances().list(project);
 
     InstancesListResponse response;
@@ -1186,7 +1186,7 @@ public class SqlAdminExample {
     } while (response.getNextPageToken() != null);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1230,7 +1230,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1242,7 +1242,7 @@ public class SqlAdminExample {
     // fields will be changed:
     DatabaseInstance requestBody = new DatabaseInstance();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.Patch request = sqlAdminService.instances().patch(project, instance, requestBody);
 
     Operation response = request.execute();
@@ -1251,7 +1251,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1294,7 +1294,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // ID of the project that contains the read replica.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1302,7 +1302,7 @@ public class SqlAdminExample {
     // Cloud SQL read replica instance name.
     String instance = "my-instance";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.PromoteReplica request = sqlAdminService.instances().promoteReplica(project, instance);
 
     Operation response = request.execute();
@@ -1311,7 +1311,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1354,7 +1354,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1362,7 +1362,7 @@ public class SqlAdminExample {
     // Cloud SQL instance ID. This does not include the project ID.
     String instance = "my-instance";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.ResetSslConfig request = sqlAdminService.instances().resetSslConfig(project, instance);
 
     Operation response = request.execute();
@@ -1371,7 +1371,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1414,7 +1414,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance to be restarted.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1422,7 +1422,7 @@ public class SqlAdminExample {
     // Cloud SQL instance ID. This does not include the project ID.
     String instance = "my-instance";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.Restart request = sqlAdminService.instances().restart(project, instance);
 
     Operation response = request.execute();
@@ -1431,7 +1431,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1475,7 +1475,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1486,7 +1486,7 @@ public class SqlAdminExample {
     // TODO: Assign values to desired fields of `requestBody`:
     InstancesRestoreBackupRequest requestBody = new InstancesRestoreBackupRequest();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.RestoreBackup request = sqlAdminService.instances().restoreBackup(project, instance, requestBody);
 
     Operation response = request.execute();
@@ -1495,7 +1495,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1538,7 +1538,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // ID of the project that contains the read replica.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1546,7 +1546,7 @@ public class SqlAdminExample {
     // Cloud SQL read replica instance name.
     String instance = "my-instance";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.StartReplica request = sqlAdminService.instances().startReplica(project, instance);
 
     Operation response = request.execute();
@@ -1555,7 +1555,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1598,7 +1598,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // ID of the project that contains the read replica.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1606,7 +1606,7 @@ public class SqlAdminExample {
     // Cloud SQL read replica instance name.
     String instance = "my-instance";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.StopReplica request = sqlAdminService.instances().stopReplica(project, instance);
 
     Operation response = request.execute();
@@ -1615,7 +1615,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1659,7 +1659,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the Cloud SQL project.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1670,7 +1670,7 @@ public class SqlAdminExample {
     // TODO: Assign values to desired fields of `requestBody`:
     InstancesTruncateLogRequest requestBody = new InstancesTruncateLogRequest();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.TruncateLog request = sqlAdminService.instances().truncateLog(project, instance, requestBody);
 
     Operation response = request.execute();
@@ -1679,7 +1679,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1723,7 +1723,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1735,7 +1735,7 @@ public class SqlAdminExample {
     // fields will be replaced:
     DatabaseInstance requestBody = new DatabaseInstance();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Instances.Update request = sqlAdminService.instances().update(project, instance, requestBody);
 
     Operation response = request.execute();
@@ -1744,7 +1744,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1787,7 +1787,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1795,7 +1795,7 @@ public class SqlAdminExample {
     // Instance operation ID.
     String operation = "my-operation";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Operations.Get request = sqlAdminService.operations().get(project, operation);
 
     Operation response = request.execute();
@@ -1804,7 +1804,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1848,7 +1848,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1856,7 +1856,7 @@ public class SqlAdminExample {
     // Cloud SQL instance ID. This does not include the project ID.
     String instance = "";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Operations.List request = sqlAdminService.operations().list(project, instance);
 
     OperationsListResponse response;
@@ -1873,7 +1873,7 @@ public class SqlAdminExample {
     } while (response.getNextPageToken() != null);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1917,7 +1917,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the Cloud SQL project.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1928,7 +1928,7 @@ public class SqlAdminExample {
     // TODO: Assign values to desired fields of `requestBody`:
     SslCertsCreateEphemeralRequest requestBody = new SslCertsCreateEphemeralRequest();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.SslCerts.CreateEphemeral request = sqlAdminService.sslCerts().createEphemeral(project, instance, requestBody);
 
     SslCert response = request.execute();
@@ -1937,7 +1937,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -1980,7 +1980,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance to be deleted.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -1991,7 +1991,7 @@ public class SqlAdminExample {
     // Sha1 FingerPrint.
     String sha1Fingerprint = "my-sha1-fingerprint";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.SslCerts.Delete request = sqlAdminService.sslCerts().delete(project, instance, sha1Fingerprint);
 
     Operation response = request.execute();
@@ -2000,7 +2000,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -2043,7 +2043,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -2054,7 +2054,7 @@ public class SqlAdminExample {
     // Sha1 FingerPrint.
     String sha1Fingerprint = "my-sha1-fingerprint";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.SslCerts.Get request = sqlAdminService.sslCerts().get(project, instance, sha1Fingerprint);
 
     SslCert response = request.execute();
@@ -2063,7 +2063,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -2107,7 +2107,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project to which the newly created Cloud SQL instances should belong.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -2118,7 +2118,7 @@ public class SqlAdminExample {
     // TODO: Assign values to desired fields of `requestBody`:
     SslCertsInsertRequest requestBody = new SslCertsInsertRequest();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.SslCerts.Insert request = sqlAdminService.sslCerts().insert(project, instance, requestBody);
 
     SslCertsInsertResponse response = request.execute();
@@ -2127,7 +2127,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -2170,7 +2170,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project for which to list Cloud SQL instances.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -2178,7 +2178,7 @@ public class SqlAdminExample {
     // Cloud SQL instance ID. This does not include the project ID.
     String instance = "my-instance";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.SslCerts.List request = sqlAdminService.sslCerts().list(project, instance);
 
     SslCertsListResponse response = request.execute();
@@ -2187,7 +2187,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -2230,12 +2230,12 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project for which to list tiers.
     String project = "my-project";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Tiers.List request = sqlAdminService.tiers().list(project);
 
     TiersListResponse response = request.execute();
@@ -2244,7 +2244,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -2287,7 +2287,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -2301,7 +2301,7 @@ public class SqlAdminExample {
     // Name of the user in the instance.
     String name = "";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Users.Delete request = sqlAdminService.users().delete(project, instance, host, name);
 
     Operation response = request.execute();
@@ -2310,7 +2310,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -2354,7 +2354,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -2365,7 +2365,7 @@ public class SqlAdminExample {
     // TODO: Assign values to desired fields of `requestBody`:
     User requestBody = new User();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Users.Insert request = sqlAdminService.users().insert(project, instance, requestBody);
 
     Operation response = request.execute();
@@ -2374,7 +2374,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -2417,7 +2417,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -2425,7 +2425,7 @@ public class SqlAdminExample {
     // Database instance ID. This does not include the project ID.
     String instance = "my-instance";  // TODO: Update placeholder value.
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Users.List request = sqlAdminService.users().list(project, instance);
 
     UsersListResponse response = request.execute();
@@ -2434,7 +2434,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -2478,7 +2478,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
-public class SqlAdminExample {
+public class SQLAdminExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     // Project ID of the project that contains the instance.
     String project = "my-project";  // TODO: Update placeholder value.
@@ -2496,7 +2496,7 @@ public class SqlAdminExample {
     // fields will be replaced:
     User requestBody = new User();
 
-    SQLAdmin sqlAdminService = createSqlAdminService();
+    SQLAdmin sqlAdminService = createSQLAdminService();
     SQLAdmin.Users.Update request = sqlAdminService.users().update(project, instance, host, name, requestBody);
 
     Operation response = request.execute();
@@ -2505,7 +2505,7 @@ public class SqlAdminExample {
     System.out.println(response);
   }
 
-  public static SQLAdmin createSqlAdminService() throws IOException, GeneralSecurityException {
+  public static SQLAdmin createSQLAdminService() throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 

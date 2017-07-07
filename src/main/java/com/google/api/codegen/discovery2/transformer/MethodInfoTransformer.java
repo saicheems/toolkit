@@ -96,14 +96,15 @@ public class MethodInfoTransformer {
       Preconditions.checkState(!schema.properties().get(name).repeated());
     }
     // Priority order:
-    // 1. First array of objects
-    // 2. First array or map
-    // 3. First string
+    // 1. First array of objects.
+    // 2. First array or map.
+    // 3. First string.
 
     // Look for the first array of objects.
     for (String name : schema.properties().keySet()) {
       Schema resource = schema.properties().get(name);
-      if (resource.type() == Schema.Type.ARRAY && resource.items().type() == Schema.Type.OBJECT) {
+      if (resource.type() == Schema.Type.ARRAY
+          && resource.items().dereference().type() == Schema.Type.OBJECT) {
         return name;
       }
     }

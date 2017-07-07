@@ -56,21 +56,21 @@ public class CSharpSampleTransformer implements SampleTransformer {
     MethodInfoView methodInfo = MethodInfoTransformer.transform(method);
     builder.methodInfo(methodInfo);
 
-    typeMap.addUsingDirective("Google.Apis.Services"); // BaseClientService
+    typeMap.addNamespaceName("Google.Apis.Services"); // BaseClientService
     switch (document.authType()) {
       case ADC:
-        typeMap.addUsingDirective("Google.Apis.Auth.OAuth2"); // GoogleCredential
-        typeMap.addUsingDirective("System.Threading.Tasks"); // Task
+        typeMap.addNamespaceName("Google.Apis.Auth.OAuth2"); // GoogleCredential
+        typeMap.addNamespaceName("System.Threading.Tasks"); // Task
         break;
       case OAUTH_3L:
-        typeMap.addUsingDirective("Google.Apis.Auth.OAuth2"); // UserCredential
+        typeMap.addNamespaceName("Google.Apis.Auth.OAuth2"); // UserCredential
         break;
     }
     // `methodInfo.hasResponse()` also checks whether or not the response ID is "Empty", in which
     // case we don't generate the field.
     if (methodInfo.hasResponse()) {
-      typeMap.addUsingDirective("System"); // Console
-      typeMap.addUsingDirective("Newtonsoft.Json");
+      typeMap.addNamespaceName("System"); // Console
+      typeMap.addNamespaceName("Newtonsoft.Json");
     }
 
     CSharpNamer namer = new CSharpNamer(document);
@@ -156,9 +156,28 @@ public class CSharpSampleTransformer implements SampleTransformer {
               .dereference()
               .properties()
               .get(methodInfo.pageStreamingResourceDiscoveryFieldName());
-      FieldView pageStreamingResource =
-          FieldTransformer.transform(pageStreamingResourceSchema, null, typeMap, null);
-      String discoveryFieldName = pageStreamingResource.discoveryFieldName();
+      //FieldView pageStreamingResource =
+      //    FieldTransformer.transform(pageStreamingResourceSchema, null, typeMap, null);
+      boolean isArray = pageStreamingResourceSchema.items() != null;
+      boolean isMap = pageStreamingResourceSchema.additionalProperties() != null;
+
+      FieldView pageStreamingResource = FieldView.empty().withIsArray(isArray).withIsMap(isMap);
+
+      if (isArray) {
+        pageStreamingResource =
+            pageStreamingResource.withTypeName(typeMap.add(pageStreamingResourceSchema.items()));
+      } else if (isMap) {
+        typeMap.addNamespaceName("System.Collections.Generic"); // For "KeyValuePair".
+        pageStreamingResource =
+            pageStreamingResource.withTypeName(
+                typeMap.add(pageStreamingResourceSchema.additionalProperties()));
+      } else {
+        pageStreamingResource =
+            pageStreamingResource.withTypeName(typeMap.add(pageStreamingResourceSchema));
+      }
+
+      int i = pageStreamingResourceSchema.path().lastIndexOf(".");
+      String discoveryFieldName = pageStreamingResourceSchema.path().substring(i + 1);
 
       String varName;
       if (pageStreamingResourceSchema.additionalProperties() != null) {
@@ -168,8 +187,6 @@ public class CSharpSampleTransformer implements SampleTransformer {
         switch (itemsSchema.type()) {
           case OBJECT:
           case ARRAY:
-            // Derive `varName` from the last segment of the type name so names are generated in-line
-            // with the C# types. For example, "jobsData" instead of "jobs" for objects inside arrays.
             String typeNameSegments[] = pageStreamingResource.typeName().split("\\.");
             varName = symbolSet.add(typeNameSegments[typeNameSegments.length - 1]);
             break;
@@ -179,7 +196,10 @@ public class CSharpSampleTransformer implements SampleTransformer {
       } else {
         varName = symbolSet.add(discoveryFieldName);
       }
-      builder.pageStreamingResource(pageStreamingResource.withVarName(varName));
+      builder.pageStreamingResource(
+          pageStreamingResource
+              .withClassPropertyName(typeMap.getClassPropertyName(pageStreamingResourceSchema))
+              .withVarName(varName));
 
       Schema pageTokenSchema;
       if (!methodInfo.parametersPageTokenDiscoveryFieldName().isEmpty()) {
@@ -206,8 +226,8 @@ public class CSharpSampleTransformer implements SampleTransformer {
 
     List<UsingDirectiveView> usingDirectives = new ArrayList<>();
     List<UsingDirectiveView> usingAliasDirectives = new ArrayList<>();
-    for (String namespaceName : new TreeSet<>(typeMap.namespaceNames().keySet())) {
-      String alias = typeMap.namespaceNames().get(namespaceName);
+    for (String namespaceName : new TreeSet<>(typeMap.getNamespaceNames().keySet())) {
+      String alias = typeMap.getNamespaceNames().get(namespaceName);
       UsingDirectiveView usingDirectiveView = UsingDirectiveView.from(namespaceName, alias);
       if (alias.isEmpty()) {
         usingDirectives.add(usingDirectiveView);

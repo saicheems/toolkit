@@ -142,6 +142,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.cloudmonitoring.CloudMonitoring;
+import com.google.api.services.cloudmonitoring.model.ListMetricDescriptorsRequest;
 import com.google.api.services.cloudmonitoring.model.ListMetricDescriptorsResponse;
 import com.google.api.services.cloudmonitoring.model.MetricDescriptor;
 import java.io.IOException;
@@ -153,8 +154,11 @@ public class CloudMonitoringExample {
     // The project id. The value can be the numeric project ID or string-based project name.
     String project = "my-project";  // TODO: Update placeholder value.
 
+    // TODO: Assign values to desired fields of `requestBody`:
+    ListMetricDescriptorsRequest requestBody = new ListMetricDescriptorsRequest();
+
     CloudMonitoring cloudMonitoringService = createCloudMonitoringService();
-    CloudMonitoring.MetricDescriptors.List request = cloudMonitoringService.metricDescriptors().list(project);
+    CloudMonitoring.MetricDescriptors.List request = cloudMonitoringService.metricDescriptors().list(project, requestBody);
 
     ListMetricDescriptorsResponse response;
     do {
@@ -208,6 +212,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.cloudmonitoring.CloudMonitoring;
+import com.google.api.services.cloudmonitoring.model.ListTimeseriesRequest;
 import com.google.api.services.cloudmonitoring.model.ListTimeseriesResponse;
 import com.google.api.services.cloudmonitoring.model.Timeseries;
 import java.io.IOException;
@@ -227,8 +232,11 @@ public class CloudMonitoringExample {
     // End of the time interval (inclusive), which is expressed as an RFC 3339 timestamp.
     String youngest = "";  // TODO: Update placeholder value.
 
+    // TODO: Assign values to desired fields of `requestBody`:
+    ListTimeseriesRequest requestBody = new ListTimeseriesRequest();
+
     CloudMonitoring cloudMonitoringService = createCloudMonitoringService();
-    CloudMonitoring.Timeseries.List request = cloudMonitoringService.timeseries().list(project, metric, youngest);
+    CloudMonitoring.Timeseries.List request = cloudMonitoringService.timeseries().list(project, metric, youngest, requestBody);
 
     ListTimeseriesResponse response;
     do {
@@ -343,6 +351,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.cloudmonitoring.CloudMonitoring;
+import com.google.api.services.cloudmonitoring.model.ListTimeseriesDescriptorsRequest;
 import com.google.api.services.cloudmonitoring.model.ListTimeseriesDescriptorsResponse;
 import com.google.api.services.cloudmonitoring.model.TimeseriesDescriptor;
 import java.io.IOException;
@@ -362,8 +371,11 @@ public class CloudMonitoringExample {
     // End of the time interval (inclusive), which is expressed as an RFC 3339 timestamp.
     String youngest = "";  // TODO: Update placeholder value.
 
+    // TODO: Assign values to desired fields of `requestBody`:
+    ListTimeseriesDescriptorsRequest requestBody = new ListTimeseriesDescriptorsRequest();
+
     CloudMonitoring cloudMonitoringService = createCloudMonitoringService();
-    CloudMonitoring.TimeseriesDescriptors.List request = cloudMonitoringService.timeseriesDescriptors().list(project, metric, youngest);
+    CloudMonitoring.TimeseriesDescriptors.List request = cloudMonitoringService.timeseriesDescriptors().list(project, metric, youngest, requestBody);
 
     ListTimeseriesDescriptorsResponse response;
     do {

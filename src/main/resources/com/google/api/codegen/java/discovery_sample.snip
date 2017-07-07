@@ -16,7 +16,7 @@
      * 3. Install the Java client library on Maven or Gradle. Check installation
      *    instructions at https://github.com/google/google-api-java-client.
      *    On other build systems, you can add the jar files to your project from
-     *    https://developers.google.com/resources/api-libraries/download/{@class.apiInfo.name}/{@class.apiInfo.name}/java
+     *    https://developers.google.com/resources/api-libraries/download/{@class.apiInfo.name}/{@class.apiInfo.version}/java
    @default
      * 2. Install the Java client library on Maven or Gradle. Check installation
      *    instructions at https://github.com/google/google-api-java-client.
@@ -24,18 +24,125 @@
      *    https://developers.google.com/resources/api-libraries/download/{@class.apiInfo.name}/{@class.apiInfo.version}/java
    @end
    */
+  @join importName : class.importNames
+    import {@importName};
+  @end
 
-   public class {@class.sampleClassName} {
-     {@mainFunc(class)}
-   }
+  public class {@class.sampleClassName} {
+    {@mainFunc(class)}
+
+    {@createServiceFunc(class)}
+  }
 @end
 
 @private mainFunc(class)
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     @join parameter : class.parameters if class.parameters
-
       {@field(parameter, "", TRUE)}
+
     @end
+    @if class.methodInfo.hasRequestBody
+        {@field(class.requestBody, class.methodInfo.verb, FALSE)}
+
+    @end
+    @if class.methodInfo.supportsMediaUpload
+      // TODO: Add desired media content for upload. See
+      // https://developers.google.com/api-client-library/java/google-api-java-client/media-upload
+
+    @end
+    {@class.service.typeName} {@class.service.varName} = {@class.createServiceFuncName}();
+    {@field(class.request, "", FALSE)}
+
+    @if class.methodInfo.supportsMediaDownload
+      // TODO: Download media content if desired. See
+      // https://developers.google.com/api-client-library/java/google-api-java-client/media-download
+
+    @end
+    @if class.methodInfo.isPageStreaming
+      {@class.response.typeName} {@class.response.varName};
+      do {
+        {@class.response.varName} = {@class.request.varName}.execute();
+        if ({@class.response.varName}.{@class.pageStreamingResource.getterFuncName}() == null) {
+          continue;
+        }
+        @if class.pageStreamingResource.isMap
+          # "String" is reserved, so there's no possibility of a collision.
+          for (Map.Entry<String, {@class.pageStreamingResource.typeName}> {@class.pageStreamingResource.varName} : response.{@class.pageStreamingResource.getterFuncName}().entrySet()) {
+            // TODO: Change code below to process each `{@class.pageStreamingResource.varName}` entry:
+            System.out.println({@class.pageStreamingResource.varName}.getKey() + ": " + {@class.pageStreamingResource.varName}.getValue());
+          }
+        @else
+          @if class.pageStreamingResource.isArray
+            for ({@class.pageStreamingResource.typeName} {@class.pageStreamingResource.varName} : response.{@class.pageStreamingResource.getterFuncName}()) {
+              // TODO: Change code below to process each `{@class.pageStreamingResource.varName}` resource:
+              System.out.println({@class.pageStreamingResource.varName});
+            }
+          @else
+            // TODO: Change code below to process each `{@class.response.varName}.{@class.pageStreamingResource.getterFuncName}()` resource:
+            System.out.println({@class.response.varName}.{@class.pageStreamingResource.getterFuncName}());
+
+          @end
+        @end
+        @if class.methodInfo.parametersPageTokenDiscoveryFieldName
+          {@class.request.varName}.{@class.pageToken.setterFuncName}({@class.response.varName}.{@class.nextPageToken.getterFuncName}());
+        @else
+          {@class.requestBody.varName}.{@class.pageToken.setterFuncName}({@class.response.varName}.{@class.nextPageToken.getterFuncName}());
+        @end
+      } while ({@class.response.varName}.{@class.nextPageToken.getterFuncName}() != null);
+    @else
+      @if class.methodInfo.hasResponse
+        {@class.response.typeName} {@class.response.varName} = {@class.request.varName}.execute();
+
+        // TODO: Change code below to process the `{@class.response.varName}` object:
+        System.out.println({@class.response.varName});
+      @else
+        {@class.request.varName}.execute();
+      @end
+    @end
+  }
+@end
+
+@private createServiceFunc(class)
+  public static {@class.service.typeName} {@class.createServiceFuncName}() throws IOException, GeneralSecurityException {
+    HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+    JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+
+    @switch class.apiInfo.authType
+    @case "NONE"
+    @case "ADC"
+      GoogleCredential credential = GoogleCredential.getApplicationDefault();
+      if (credential.createScopedRequired()) {
+        credential =
+            credential.createScoped(Arrays.asList("https://www.googleapis.com/auth/cloud-platform"));
+      }
+
+    @case "OAUTH_3L"
+      // TODO: Change placeholder below to generate authentication credentials. See
+      // {@class.apiInfo.authInstructionsUrl}
+      //
+      @if class.methodInfo.isScopesSingular
+        // Authorize using the following scope:
+      @else
+        // Authorize using one of the following scopes:
+      @end
+      @join scope : class.methodInfo.scopes
+        //   "{@scope}"
+      @end
+      GoogleCredential credential = null;
+
+    @case "API_KEY"
+      // TODO: Change placeholder below to generate authentication credentials. See
+      // {@class.apiInfo.authInstructionsUrl}
+      GoogleCredential credential = null;
+
+    @end
+    @if class.apiInfo.authType == "NONE"
+      return new {@class.service.typeName}.Builder(httpTransport, jsonFactory, null)
+    @else
+      return new {@class.service.typeName}.Builder(httpTransport, jsonFactory, credential)
+    @end
+        .setApplicationName("{@class.appName}")
+        .build();
   }
 @end
 
@@ -58,29 +165,25 @@
 
         @end
     @end
-    @if class.isArray
-        List<{@class.typeName}> {@class.varName} = new List<{@class.typeName}>();  // TODO: Update placeholder value.
+    # If `class` is the request body...
+    @if httpVerb
+        @switch httpVerb
+        @case "PATCH"
+          // TODO: Assign values to desired fields of `{@class.varName}`. Only assigned
+          // fields will be changed:
+        @case "PUT"
+          // TODO: Assign values to desired fields of `{@class.varName}`. All existing
+          // fields will be replaced:
+        @default
+          // TODO: Assign values to desired fields of `{@class.varName}`:
+        @end
+
+
+    @end
+    @if printTodo
+        {@class.typeName} {@class.varName} = {@class.value};  // TODO: Update placeholder value.
     @else
-        # If `class` is the request body...
-        @if httpVerb
-            @switch httpVerb
-            @case "PATCH"
-                // TODO: Assign values to desired properties of `{@class.varName}`. Only assigned
-                // properties will be changed:
-            @case "PUT"
-                // TODO: Assign values to desired properties of `{@class.varName}`. All existing
-                // properties will be replaced:
-            @default
-                // TODO: Assign values to desired properties of `{@class.varName}`:
-            @end
-
-
-        @end
-        @if printTodo
-            {@class.typeName} {@class.varName} = {@class.value};  // TODO: Update placeholder value.
-        @else
-            {@class.typeName} {@class.varName} = {@class.value};
-        @end
+        {@class.typeName} {@class.varName} = {@class.value};
     @end
 
     @join subField : class.fields if class.fields
@@ -88,7 +191,7 @@
             {@class.varName}.add({@subField.varName})
         @else
             @if class.isMap
-                {@class.varName}.add({@subField.keyValue}, {@subField.value})
+                {@class.varName}.put({@subField.keyValue}, {@subField.value})
             @else
                 {@class.varName}.{@subField.classPropertyName} = {@subField.varName};
             @end

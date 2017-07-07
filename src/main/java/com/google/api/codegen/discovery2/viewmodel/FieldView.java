@@ -39,10 +39,12 @@ public abstract class FieldView {
         .discoveryFieldName("")
         .fieldName("")
         .fields(new ArrayList<FieldView>())
+        .getterFuncName("")
         .isArray(false)
         .isMap(false)
         .keyValue("")
         .required(false)
+        .setterFuncName("")
         .typeName("")
         .value("")
         .varName("")
@@ -53,6 +55,8 @@ public abstract class FieldView {
 
   public abstract List<FieldView> fields();
 
+  public abstract String getterFuncName();
+
   public abstract boolean isArray();
 
   public abstract boolean isMap();
@@ -60,6 +64,8 @@ public abstract class FieldView {
   public abstract String keyValue();
 
   public abstract boolean required();
+
+  public abstract String setterFuncName();
 
   public abstract Builder toBuilder();
 
@@ -69,12 +75,28 @@ public abstract class FieldView {
 
   public abstract String varName();
 
+  public FieldView withClassPropertyName(String classPropertyName) {
+    return toBuilder().classPropertyName(classPropertyName).build();
+  }
+
   public FieldView withDescription(String description) {
     return toBuilder().description(description).build();
   }
 
   public FieldView withFields(List<FieldView> fields) {
     return toBuilder().fields(fields).build();
+  }
+
+  public FieldView withIsArray(boolean isArray) {
+    return toBuilder().isArray(isArray).build();
+  }
+
+  public FieldView withIsMap(boolean isMap) {
+    return toBuilder().isMap(isMap).build();
+  }
+
+  public FieldView withGetterFuncName(String getterFuncName) {
+    return toBuilder().getterFuncName(getterFuncName).build();
   }
 
   public FieldView withKeyValue(String keyValue) {
@@ -107,6 +129,10 @@ public abstract class FieldView {
     public abstract Builder fieldName(String val);
 
     public abstract Builder fields(List<FieldView> val);
+
+    public abstract Builder getterFuncName(String val);
+
+    public abstract Builder setterFuncName(String val);
 
     public abstract Builder isArray(boolean val);
 

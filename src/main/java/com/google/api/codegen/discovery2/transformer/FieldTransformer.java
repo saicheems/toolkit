@@ -72,7 +72,7 @@ public class FieldTransformer {
     value = typeMap.getValue(schema, value);
 
     if (schema.type() == Schema.Type.OBJECT && schema.additionalProperties() != null) {
-      typeMap.add(schema); // So "System.Collections.Generic" is imported.
+      //typeMap.add(schema); // So "System.Collections.Generic" is imported.
       typeName = typeMap.add(schema.additionalProperties().dereference());
     } else if (schema.type() == Schema.Type.ARRAY) {
       typeName = typeMap.add(schema.items().dereference());
@@ -134,10 +134,12 @@ public class FieldTransformer {
         .discoveryFieldName(discoveryFieldName)
         .fieldName(typeMap.getFieldName(schema))
         .fields(fields)
+        .getterFuncName(typeMap.getGetterFuncName(schema))
         .isArray(schema.type() == Schema.Type.ARRAY || schema.repeated())
         .isMap(schema.type() == Schema.Type.OBJECT && schema.additionalProperties() != null)
         .keyValue("")
         .required(schema.required())
+        .setterFuncName(typeMap.getSetterFuncName(schema))
         .typeName(typeName)
         .value(value)
         .varName(varName)

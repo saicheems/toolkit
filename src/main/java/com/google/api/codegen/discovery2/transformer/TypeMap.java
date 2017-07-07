@@ -23,6 +23,10 @@ public interface TypeMap {
 
   String getClassPropertyName(Schema schema);
 
+  String getGetterFuncName(Schema schema);
+
+  String getSetterFuncName(Schema schema);
+
   String getFieldName(Schema schema);
 
   String getValue(Schema schema, String override);

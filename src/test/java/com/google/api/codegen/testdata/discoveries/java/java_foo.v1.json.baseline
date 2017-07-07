@@ -10,6 +10,7 @@
  *    On other build systems, you can add the jar files to your project from
  *    https://developers.google.com/resources/api-libraries/download/foo/v1/java
  */
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -22,7 +23,7 @@ import java.security.GeneralSecurityException;
 public class FooExample {
   public static void main(String args[]) throws IOException, GeneralSecurityException {
     Foo fooService = createFooService();
-    Foo.Baz.Get request = fooService.baz().get();
+    Foo.Bar.Get request = fooService.bar().get();
 
     Baz response = request.execute();
 
@@ -34,7 +35,11 @@ public class FooExample {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
-    return new Foo.Builder(httpTransport, jsonFactory, null)
+    // TODO: Change placeholder below to generate authentication credentials. See
+    // https://foo.com/bar
+    GoogleCredential credential = null;
+
+    return new Foo.Builder(httpTransport, jsonFactory, credential)
         .setApplicationName("Google-FooSample/0.1")
         .build();
   }

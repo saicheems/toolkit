@@ -152,7 +152,7 @@ public class CSharpNamer {
 
   public String getServiceNamespaceName() {
     String versionNoDots = document.version().replaceAll("\\.", "_");
-    return "Google.Apis." + getSafeClassName(serviceClassName) + "." + versionNoDots;
+    return "Google.Apis." + serviceClassName + "." + versionNoDots;
   }
 
   public String getServiceRequestFuncName(String methodPath) {
@@ -168,7 +168,7 @@ public class CSharpNamer {
   }
 
   public String getServiceTypeName() {
-    return getSafeClassName(serviceClassName) + "Service";
+    return serviceClassName + "Service";
   }
 
   public String getServiceVarName() {

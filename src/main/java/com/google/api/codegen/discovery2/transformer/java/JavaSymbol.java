@@ -23,21 +23,38 @@ import java.util.Set;
 @AutoValue
 public abstract class JavaSymbol implements Symbol {
 
-  public static JavaSymbol from(String name) {
-    return new AutoValue_JavaSymbol(name, RESERVED.contains(name));
+  public static JavaSymbol from(String name, boolean ignoreCase) {
+    String lowerCaseName = name.toLowerCase();
+    boolean reserved = RESERVED.contains(ignoreCase ? lowerCaseName : name);
+    if (ignoreCase) {
+      for (String s : UPPER_CAMEL_RESERVED) {
+        if (lowerCaseName.equals(s.toLowerCase())) {
+          reserved = true;
+          break;
+        }
+      }
+    } else {
+      reserved |= UPPER_CAMEL_RESERVED.contains(name);
+    }
+    return new AutoValue_JavaSymbol(name, false, reserved);
   }
 
   public JavaSymbol toLowerCamel() {
-    return from(NameUtil.lowerCamel(name()));
+    return from(NameUtil.lowerCamel(name()), ignoreCase());
   }
 
   public JavaSymbol toUpperCamel() {
-    return from(NameUtil.upperCamel(name()));
+    return from(NameUtil.upperCamel(name()), ignoreCase());
   }
 
   public abstract String name();
 
+  public abstract boolean ignoreCase();
+
   public abstract boolean isReserved();
+
+  private static final Set<String> UPPER_CAMEL_RESERVED =
+      ImmutableSet.<String>builder().add("Entry", "Float", "Integer", "Object", "String").build();
 
   // All lowercase because in Java the code generator checks the lowercase version of a name to
   // decide if it is reserved.
@@ -94,13 +111,13 @@ public abstract class JavaSymbol implements Symbol {
               "void",
               "volatile",
               "while",
-              "entry",
-              "float",
-              "integer",
-              "object",
-              "string",
               "true",
               "false",
-              "null")
+              "null",
+              "Entry",
+              "Float",
+              "Integer",
+              "Object",
+              "String")
           .build();
 }
