@@ -18,7 +18,7 @@ package com.google.api.codegen.discovery2.transformer;
 public class NameUtil {
 
   public static String upperCamel(String name) {
-    String segments[] = name.replaceAll("\\s", "").split("[\\./-]+");
+    String segments[] = name.replaceAll("\\s", "").split("[\\._/-]+");
     StringBuilder nameBuilder = new StringBuilder("");
     for (String segment : segments) {
       nameBuilder.append(segment.substring(0, 1).toUpperCase()).append(segment.substring(1));

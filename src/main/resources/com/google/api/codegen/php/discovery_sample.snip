@@ -176,7 +176,7 @@
             @if class.isMap
                 ${@class.varName}[{@subField.keyValue}] = {@subField.value};
             @else
-                ${@class.varName}.{@subField.classPropertyName} = {@subField.varName};
+                ${@class.varName}->{@subField.setterFuncName}({@subField.varName});
             @end
         @end
     @end

@@ -81,11 +81,13 @@ public abstract class SampleView implements ViewModel {
   @Nullable
   public abstract String clientVarName(); // Java
 
+  @Nullable
   public abstract FieldView service();
 
   @Nullable
   public abstract String createServiceFuncName(); // Java
 
+  @Nullable
   public abstract List<FieldView> parameters();
 
   @Nullable
@@ -94,6 +96,7 @@ public abstract class SampleView implements ViewModel {
   @Nullable
   public abstract FieldView requestBody();
 
+  @Nullable
   public abstract FieldView request();
 
   @Nullable

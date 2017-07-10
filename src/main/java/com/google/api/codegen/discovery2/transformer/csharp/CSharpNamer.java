@@ -202,6 +202,11 @@ public class CSharpNamer {
     return TYPE_NAMES.get(schema.type(), schema.format());
   }
 
+  public String getTopLevelEnumValueName(String value) {
+    return getSafeClassName(value);
+  }
+
+  // TODO: Rename to isTopLevelEnum.
   public static boolean isSpecialEnum(Schema schema) {
     String segments[] = schema.path().split("\\.");
     return schema.isEnum() && segments[segments.length - 2].equals("parameters");

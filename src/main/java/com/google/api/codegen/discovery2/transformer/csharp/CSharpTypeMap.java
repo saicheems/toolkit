@@ -96,6 +96,10 @@ public class CSharpTypeMap implements TypeMap {
           return Double.valueOf(override).toString();
         case STRING:
           String format = "\"%s\"";
+          if (CSharpNamer.isSpecialEnum(schema)) {
+            // TODO: Verify enum is valid?
+            return String.format("%s.%s", add(schema), namer.getTopLevelEnumValueName(override));
+          }
           switch (schema.format()) {
             case INT64:
             case UINT64:

@@ -28,7 +28,7 @@ public class TranslateExample {
 
     // The text to detect
     List<String> q = new ArrayList<>();  // TODO: Update placeholder value.
-    q.add(item)
+    q.add(item);
 
     Translate translateService = createTranslateService();
     Translate.Detections.List request = translateService.detections().list(q);
@@ -126,7 +126,7 @@ public class TranslateExample {
 
     // The text to translate
     List<String> q = new ArrayList<>();  // TODO: Update placeholder value.
-    q.add(item)
+    q.add(item);
 
     // The target language into which the text should be translated
     String target = "";  // TODO: Update placeholder value.
