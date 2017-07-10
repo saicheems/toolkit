@@ -114,7 +114,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Identifies the managed zone addressed by this request. Can be the managed zone name or id.
 $managedZone = 'my-managed-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->changes->listChanges($project, $managedZone, $optParams);
@@ -125,7 +125,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -268,7 +268,7 @@ $service = new Google_Service_Dns($client);
 // Identifies the project addressed by this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->managedZones->listManagedZones($project, $optParams);
@@ -279,7 +279,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -349,7 +349,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Identifies the managed zone addressed by this request. Can be the managed zone name or id.
 $managedZone = 'my-managed-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->resourceRecordSets->listResourceRecordSets($project, $managedZone, $optParams);
@@ -360,5 +360,5 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>

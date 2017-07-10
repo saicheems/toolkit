@@ -60,6 +60,7 @@ public abstract class SampleView implements ViewModel {
 
   public abstract MethodInfoView methodInfo();
 
+  @Nullable
   public abstract String appName();
 
   @Nullable
@@ -71,10 +72,14 @@ public abstract class SampleView implements ViewModel {
   @Nullable
   public abstract List<UsingDirectiveView> usingAliasDirectives(); // C#
 
+  @Nullable
   public abstract String sampleClassName(); // C#, Java
 
   @Nullable
   public abstract String sampleNamespaceName(); // C#
+
+  @Nullable
+  public abstract String clientVarName(); // Java
 
   public abstract FieldView service();
 
@@ -82,6 +87,9 @@ public abstract class SampleView implements ViewModel {
   public abstract String createServiceFuncName(); // Java
 
   public abstract List<FieldView> parameters();
+
+  @Nullable
+  public abstract FieldView optParams(); // PHP
 
   @Nullable
   public abstract FieldView requestBody();
@@ -93,6 +101,9 @@ public abstract class SampleView implements ViewModel {
 
   @Nullable
   public abstract FieldView pageStreamingResource();
+
+  @Nullable
+  public abstract FieldView pageStreamingResourceKey(); // PHP
 
   @Nullable
   public abstract FieldView pageToken();
@@ -123,11 +134,15 @@ public abstract class SampleView implements ViewModel {
 
     public abstract Builder sampleNamespaceName(String val);
 
+    public abstract Builder clientVarName(String val);
+
     public abstract Builder service(FieldView val);
 
     public abstract Builder createServiceFuncName(String val);
 
     public abstract Builder parameters(List<FieldView> val);
+
+    public abstract Builder optParams(FieldView val);
 
     public abstract Builder requestBody(FieldView val);
 
@@ -136,6 +151,8 @@ public abstract class SampleView implements ViewModel {
     public abstract Builder response(FieldView val);
 
     public abstract Builder pageStreamingResource(FieldView val);
+
+    public abstract Builder pageStreamingResourceKey(FieldView val);
 
     public abstract Builder pageToken(FieldView val);
 

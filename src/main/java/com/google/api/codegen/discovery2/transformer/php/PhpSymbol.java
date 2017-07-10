@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.api.codegen.discovery2.transformer.java;
+package com.google.api.codegen.discovery2.transformer.php;
 
 import com.google.api.codegen.discovery2.transformer.NameUtil;
 import com.google.api.codegen.discovery2.transformer.Symbol;
@@ -21,29 +21,19 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 
 @AutoValue
-public abstract class JavaSymbol implements Symbol {
+public abstract class PhpSymbol implements Symbol {
 
-  public static JavaSymbol from(String name, boolean ignoreCase) {
+  public static PhpSymbol from(String name, boolean ignoreCase) {
     String lowerCaseName = name.toLowerCase();
-    boolean reserved = RESERVED.contains(ignoreCase ? lowerCaseName : name);
-    if (ignoreCase) {
-      for (String s : UPPER_CAMEL_RESERVED) {
-        if (lowerCaseName.equals(s.toLowerCase())) {
-          reserved = true;
-          break;
-        }
-      }
-    } else {
-      reserved |= UPPER_CAMEL_RESERVED.contains(name);
-    }
-    return new AutoValue_JavaSymbol(name, ignoreCase, reserved);
+    return new AutoValue_PhpSymbol(
+        name, ignoreCase, RESERVED.contains(ignoreCase ? lowerCaseName : name));
   }
 
-  public JavaSymbol toLowerCamel() {
+  public PhpSymbol toLowerCamel() {
     return from(NameUtil.lowerCamel(name()), ignoreCase());
   }
 
-  public JavaSymbol toUpperCamel() {
+  public PhpSymbol toUpperCamel() {
     return from(NameUtil.upperCamel(name()), ignoreCase());
   }
 
@@ -53,71 +43,79 @@ public abstract class JavaSymbol implements Symbol {
 
   public abstract boolean isReserved();
 
-  private static final Set<String> UPPER_CAMEL_RESERVED =
-      ImmutableSet.<String>builder().add("Entry", "Float", "Integer", "Object", "String").build();
-
-  // All lowercase because in Java the code generator checks the lowercase version of a name to
-  // decide if it is reserved.
   private static final Set<String> RESERVED =
       ImmutableSet.<String>builder()
           .add(
               "abstract",
-              "assert",
-              "boolean",
+              "and",
+              "array",
+              "as",
               "break",
-              "byte",
+              "call",
+              "callable",
               "case",
               "catch",
-              "char",
+              "cfunction",
               "class",
+              "clone",
               "const",
               "continue",
+              "declare",
               "default",
               "do",
-              "double",
               "else",
-              "enum",
+              "elseif",
+              "empty",
+              "enddeclare",
+              "endfor",
+              "endforeach",
+              "endif",
+              "endswitch",
+              "endwhile",
               "extends",
               "final",
               "finally",
-              "float",
               "for",
+              "foreach",
+              "function",
+              "global",
               "goto",
               "if",
               "implements",
-              "import",
-              "instanceof",
-              "int",
               "interface",
-              "long",
-              "native",
+              "instanceof",
+              "list",
+              "namespace",
               "new",
-              "package",
+              "old_function",
+              "or",
+              "parent",
               "private",
               "protected",
               "public",
               "return",
-              "short",
               "static",
-              "strictfp",
-              "super",
               "switch",
-              "synchronized",
-              "this",
               "throw",
-              "throws",
-              "transient",
+              "trait",
               "try",
-              "void",
-              "volatile",
+              "unset",
+              "use",
+              "var",
               "while",
-              "true",
-              "false",
+              "xor",
+              "yield",
+              "bool",
+              "boolean",
+              "int",
+              "integer",
+              "file",
+              "float",
+              "double",
+              "string",
+              "array",
+              "object",
               "null",
-              "Entry",
-              "Float",
-              "Integer",
-              "Object",
-              "String")
+              "resource")
           .build();
 }

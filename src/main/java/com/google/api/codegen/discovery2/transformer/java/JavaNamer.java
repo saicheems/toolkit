@@ -68,12 +68,12 @@ public class JavaNamer {
     this.serviceClassName = JavaSymbol.from(document.canonicalName(), true).toUpperCamel().name();
   }
 
-  public String getCreateServiceFuncName() {
-    return "create" + serviceClassName + "Service";
-  }
-
   public String getAppName() {
     return String.format("Google-%sSample/0.1", serviceClassName);
+  }
+
+  public String getCreateServiceFuncName() {
+    return "create" + serviceClassName + "Service";
   }
 
   private String getObjectTypeName(Schema schema) {
@@ -120,6 +120,10 @@ public class JavaNamer {
     return typeNameBuilder.toString();
   }
 
+  public String getRequestBodyVarName() {
+    return "requestBody";
+  }
+
   public String getRequestTypeName(Method method) {
     return getRequestTypeName(method.path());
   }
@@ -148,12 +152,17 @@ public class JavaNamer {
     return "request";
   }
 
-  public String getRequestBodyVarName() {
-    return "requestBody";
-  }
-
   public String getResponseVarName() {
     return "response";
+  }
+
+  private String getSafeClassName(String name) {
+    String typeName = "";
+    JavaSymbol symbol = JavaSymbol.from(name, true);
+    if (symbol.isReserved()) {
+      typeName += serviceClassName;
+    }
+    return typeName + symbol.toUpperCamel().name();
   }
 
   public String getSampleClassName() {
@@ -219,28 +228,19 @@ public class JavaNamer {
     return JavaType.from(TYPE_NAMES.get(schema.type(), schema.format()));
   }
 
-  private String getSafeClassName(String name) {
-    String typeName = "";
-    JavaSymbol symbol = JavaSymbol.from(name, true);
-    if (symbol.isReserved()) {
-      typeName += serviceClassName;
-    }
-    return typeName + symbol.toUpperCamel().name();
-  }
-
   @AutoValue
   public abstract static class JavaType {
 
     public static JavaType from(String typeName) {
-      return new AutoValue_JavaNamer_JavaType(typeName, new ArrayList<JavaType>());
+      return new AutoValue_JavaNamer_JavaType(new ArrayList<JavaType>(), typeName);
     }
 
     public static JavaType from(String typeName, List<JavaType> parameterTypes) {
-      return new AutoValue_JavaNamer_JavaType(typeName, parameterTypes);
+      return new AutoValue_JavaNamer_JavaType(parameterTypes, typeName);
     }
 
-    public abstract String typeName();
-
     public abstract List<JavaType> parameterTypes();
+
+    public abstract String typeName();
   }
 }

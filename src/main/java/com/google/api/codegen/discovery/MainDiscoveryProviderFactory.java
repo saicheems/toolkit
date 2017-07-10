@@ -38,6 +38,7 @@ import com.google.api.codegen.discovery.transformer.ruby.RubySampleMethodToViewT
 import com.google.api.codegen.discovery2.transformer.SampleTransformer;
 import com.google.api.codegen.discovery2.transformer.csharp.CSharpSampleTransformer;
 import com.google.api.codegen.discovery2.transformer.java.JavaSampleTransformer;
+import com.google.api.codegen.discovery2.transformer.php.PhpSampleTransformer;
 import com.google.api.codegen.rendering.CommonSnippetSetRunner;
 import com.google.api.codegen.util.CommonRenderingUtil;
 import com.google.common.collect.ImmutableMap;
@@ -130,6 +131,9 @@ public class MainDiscoveryProviderFactory implements DiscoveryProviderFactory {
     }
     if (id.equals(JAVA)) {
       sampleTransformer = new JavaSampleTransformer();
+    }
+    if (id.equals(PHP)) {
+      sampleTransformer = new PhpSampleTransformer();
     }
 
     return ViewModelProvider.newBuilder()

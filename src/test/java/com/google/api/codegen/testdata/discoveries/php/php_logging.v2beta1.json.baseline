@@ -68,18 +68,18 @@ $service = new Google_Service_Logging($client);
 // "organizations/[ORGANIZATION_ID]"
 $parent = 'billingAccounts/my-billing-account';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->billingAccounts_logs->listBillingAccountsLogs($parent, $optParams);
 
-  foreach ($response['logNames'] as $item) {
-    // TODO: Change code below to process each `item` resource:
-    echo '<pre>', var_export($item, true), '</pre>', "\n";
+  foreach ($response['logNames'] as $logNames) {
+    // TODO: Change code below to process each `logNames` resource:
+    echo '<pre>', var_export($logNames, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -120,7 +120,7 @@ do {
   }
 
   $requestBody->setPageToken($response->getNextPageToken());
-} while ($requestBody->getPageToken());
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -184,7 +184,7 @@ $client->addScope('https://www.googleapis.com/auth/cloud-platform');
 
 $service = new Google_Service_Logging($client);
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->monitoredResourceDescriptors->listMonitoredResourceDescriptors($optParams);
@@ -195,7 +195,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -266,18 +266,18 @@ $service = new Google_Service_Logging($client);
 // "organizations/[ORGANIZATION_ID]"
 $parent = 'organizations/my-organization';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->organizations_logs->listOrganizationsLogs($parent, $optParams);
 
-  foreach ($response['logNames'] as $item) {
-    // TODO: Change code below to process each `item` resource:
-    echo '<pre>', var_export($item, true), '</pre>', "\n";
+  foreach ($response['logNames'] as $logNames) {
+    // TODO: Change code below to process each `logNames` resource:
+    echo '<pre>', var_export($logNames, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -348,18 +348,18 @@ $service = new Google_Service_Logging($client);
 // "organizations/[ORGANIZATION_ID]"
 $parent = 'projects/my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->projects_logs->listProjectsLogs($parent, $optParams);
 
-  foreach ($response['logNames'] as $item) {
-    // TODO: Change code below to process each `item` resource:
-    echo '<pre>', var_export($item, true), '</pre>', "\n";
+  foreach ($response['logNames'] as $logNames) {
+    // TODO: Change code below to process each `logNames` resource:
+    echo '<pre>', var_export($logNames, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -501,7 +501,7 @@ $service = new Google_Service_Logging($client);
 // "projects/[PROJECT_ID]"
 $parent = 'projects/my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->projects_metrics->listProjectsMetrics($parent, $optParams);
@@ -512,7 +512,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -703,7 +703,7 @@ $service = new Google_Service_Logging($client);
 // "projects/my-logging-project", "organizations/123456789".
 $parent = 'projects/my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->projects_sinks->listProjectsSinks($parent, $optParams);
@@ -714,7 +714,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*

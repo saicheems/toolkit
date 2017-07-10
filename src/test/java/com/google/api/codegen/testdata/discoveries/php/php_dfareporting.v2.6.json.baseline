@@ -280,7 +280,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->accountUserProfiles->listAccountUserProfiles($profileId, $optParams);
@@ -291,7 +291,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -442,7 +442,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->accounts->listAccounts($profileId, $optParams);
@@ -453,7 +453,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -642,7 +642,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->ads->listAds($profileId, $optParams);
@@ -653,7 +653,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -877,7 +877,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->advertiserGroups->listAdvertiserGroups($profileId, $optParams);
@@ -888,7 +888,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -1077,7 +1077,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->advertisers->listAdvertisers($profileId, $optParams);
@@ -1088,7 +1088,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -1280,7 +1280,7 @@ $profileId = '0';  // TODO: Update placeholder value.
 // Campaign ID in this association.
 $campaignId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->campaignCreativeAssociations->listCampaignCreativeAssociations($profileId, $campaignId, $optParams);
@@ -1291,7 +1291,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -1405,7 +1405,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->campaigns->listCampaigns($profileId, $optParams);
@@ -1416,7 +1416,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -1567,7 +1567,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->changeLogs->listChangeLogs($profileId, $optParams);
@@ -1578,7 +1578,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -1829,7 +1829,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->contentCategories->listContentCategories($profileId, $optParams);
@@ -1840,7 +1840,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -2231,7 +2231,7 @@ $profileId = '0';  // TODO: Update placeholder value.
 // Creative field ID for this creative field value.
 $creativeFieldId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->creativeFieldValues->listCreativeFieldValues($profileId, $creativeFieldId, $optParams);
@@ -2242,7 +2242,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -2472,7 +2472,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->creativeFields->listCreativeFields($profileId, $optParams);
@@ -2483,7 +2483,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -2672,7 +2672,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->creativeGroups->listCreativeGroups($profileId, $optParams);
@@ -2683,7 +2683,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -2872,7 +2872,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->creatives->listCreatives($profileId, $optParams);
@@ -2883,7 +2883,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -2996,7 +2996,7 @@ $service = new Google_Service_Dfareporting($client);
 // The DFA user profile ID.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 // TODO: Assign values to desired properties of `requestBody`:
 $requestBody = new Google_Service_Dfareporting_DimensionValueRequest();
@@ -3010,7 +3010,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -3080,7 +3080,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->directorySiteContacts->listDirectorySiteContacts($profileId, $optParams);
@@ -3091,7 +3091,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -3199,7 +3199,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->directorySites->listDirectorySites($profileId, $optParams);
@@ -3210,7 +3210,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -3587,7 +3587,7 @@ $reportId = '0';  // TODO: Update placeholder value.
 // The ID of the report file.
 $fileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 // TODO: To download media content, use:
 //
@@ -3628,18 +3628,18 @@ $service = new Google_Service_Dfareporting($client);
 // The DFA profile ID.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->files->listFiles($profileId, $optParams);
 
-  foreach ($response['items'] as $file) {
-    // TODO: Change code below to process each `file` resource:
-    echo '<pre>', var_export($file, true), '</pre>', "\n";
+  foreach ($response['items'] as $dfareportingFile) {
+    // TODO: Change code below to process each `dfareportingFile` resource:
+    echo '<pre>', var_export($dfareportingFile, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -3817,7 +3817,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->floodlightActivities->listFloodlightActivities($profileId, $optParams);
@@ -3828,7 +3828,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -4017,7 +4017,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->floodlightActivityGroups->listFloodlightActivityGroups($profileId, $optParams);
@@ -4028,7 +4028,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -4339,7 +4339,7 @@ $profileId = '0';  // TODO: Update placeholder value.
 // Project ID for order documents.
 $projectId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->inventoryItems->listInventoryItems($profileId, $projectId, $optParams);
@@ -4350,7 +4350,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -4960,7 +4960,7 @@ $profileId = '0';  // TODO: Update placeholder value.
 // Project ID for order documents.
 $projectId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->orderDocuments->listOrderDocuments($profileId, $projectId, $optParams);
@@ -4971,7 +4971,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -5047,7 +5047,7 @@ $profileId = '0';  // TODO: Update placeholder value.
 // Project ID for orders.
 $projectId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->orders->listOrders($profileId, $projectId, $optParams);
@@ -5058,7 +5058,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -5166,7 +5166,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->placementGroups->listPlacementGroups($profileId, $optParams);
@@ -5177,7 +5177,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -5401,7 +5401,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->placementStrategies->listPlacementStrategies($profileId, $optParams);
@@ -5412,7 +5412,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -5636,7 +5636,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->placements->listPlacements($profileId, $optParams);
@@ -5647,7 +5647,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -5944,7 +5944,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->projects->listProjects($profileId, $optParams);
@@ -5955,7 +5955,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -6220,7 +6220,7 @@ $profileId = '0';  // TODO: Update placeholder value.
 // Select only remarketing lists owned by this advertiser.
 $advertiserId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->remarketingLists->listRemarketingLists($profileId, $advertiserId, $optParams);
@@ -6231,7 +6231,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -6423,7 +6423,7 @@ $reportId = '0';  // TODO: Update placeholder value.
 // The ID of the report file.
 $fileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 // TODO: To download media content, use:
 //
@@ -6467,18 +6467,18 @@ $profileId = '0';  // TODO: Update placeholder value.
 // The ID of the parent report.
 $reportId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->reports_files->listReportsFiles($profileId, $reportId, $optParams);
 
-  foreach ($response['items'] as $file) {
-    // TODO: Change code below to process each `file` resource:
-    echo '<pre>', var_export($file, true), '</pre>', "\n";
+  foreach ($response['items'] as $dfareportingFile) {
+    // TODO: Change code below to process each `dfareportingFile` resource:
+    echo '<pre>', var_export($dfareportingFile, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -6586,7 +6586,7 @@ $service = new Google_Service_Dfareporting($client);
 // The DFA user profile ID.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->reports->listReports($profileId, $optParams);
@@ -6597,7 +6597,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -6827,7 +6827,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->sites->listSites($profileId, $optParams);
@@ -6838,7 +6838,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -7138,7 +7138,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->subaccounts->listSubaccounts($profileId, $optParams);
@@ -7149,7 +7149,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -7303,7 +7303,7 @@ $profileId = '0';  // TODO: Update placeholder value.
 // Select only targetable remarketing lists targetable by these advertisers.
 $advertiserId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->targetableRemarketingLists->listTargetableRemarketingLists($profileId, $advertiserId, $optParams);
@@ -7314,7 +7314,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -7422,7 +7422,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->targetingTemplates->listTargetingTemplates($profileId, $optParams);
@@ -7433,7 +7433,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See
@@ -7872,7 +7872,7 @@ $service = new Google_Service_Dfareporting($client);
 // User profile ID associated with this request.
 $profileId = '0';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->userRoles->listUserRoles($profileId, $optParams);
@@ -7883,7 +7883,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See

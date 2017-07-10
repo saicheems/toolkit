@@ -368,7 +368,7 @@ $service = new Google_Service_Storage($client);
 // A valid API project identifier.
 $project = '';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->buckets->listBuckets($project, $optParams);
@@ -379,7 +379,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1017,7 +1017,7 @@ $destinationBucket = 'my-destination-bucket';  // TODO: Update placeholder value
 // Encoding URI Path Parts.
 $destinationObject = 'my-destination-object';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 // TODO: Assign values to desired properties of `requestBody`:
 $requestBody = new Google_Service_Storage_ComposeRequest();
@@ -1074,7 +1074,7 @@ $destinationBucket = 'my-destination-bucket';  // TODO: Update placeholder value
 // object metadata's name value, if any.
 $destinationObject = 'my-destination-object';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 // TODO: Assign values to desired properties of `requestBody`:
 $requestBody = new Google_Service_Storage_StorageObject();
@@ -1158,7 +1158,7 @@ $bucket = 'my-bucket';  // TODO: Update placeholder value.
 // Encoding URI Path Parts.
 $object = 'my-object';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 // TODO: To download media content, use:
 //
@@ -1200,13 +1200,19 @@ $service = new Google_Service_Storage($client);
 // bucket value, if any.
 $bucket = 'my-bucket';  // TODO: Update placeholder value.
 
+$optParams = array();
+
 // TODO: Assign values to desired properties of `requestBody`:
 $requestBody = new Google_Service_Storage_StorageObject();
 
 // TODO: Add desired media content for upload. For more information, see
 // https://developers.google.com/api-client-library/php/guide/media_upload
 
-$response = $service->objects->insert($bucket, $requestBody);
+// TODO: To download media content, use:
+//
+// $optParams['alt'] = 'media';
+
+$response = $service->objects->insert($bucket, $requestBody, $optParams);
 
 // TODO: Change code below to process the `response` object:
 echo '<pre>', var_export($response, true), '</pre>', "\n";
@@ -1241,7 +1247,7 @@ $service = new Google_Service_Storage($client);
 // Name of the bucket in which to look for objects.
 $bucket = 'my-bucket';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->objects->listObjects($bucket, $optParams);
@@ -1252,7 +1258,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1382,7 +1388,7 @@ $bucket = 'my-bucket';  // TODO: Update placeholder value.
 // Encoding URI Path Parts.
 $object = 'my-object';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 // TODO: Assign values to desired properties of `requestBody`. All existing
 // properties will be replaced:

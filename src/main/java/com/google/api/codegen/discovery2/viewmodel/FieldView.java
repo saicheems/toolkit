@@ -83,6 +83,10 @@ public abstract class FieldView {
     return toBuilder().description(description).build();
   }
 
+  public FieldView withDiscoveryFieldName(String discoveryFieldName) {
+    return toBuilder().discoveryFieldName(discoveryFieldName).build();
+  }
+
   public FieldView withFields(List<FieldView> fields) {
     return toBuilder().fields(fields).build();
   }

@@ -462,7 +462,7 @@ $client = getClient();
 
 $service = new Google_Service_AdExchangeBuyer($client);
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->creatives->listCreatives($optParams);
@@ -473,7 +473,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 
 function getClient() {
   // TODO: Change placeholder below to generate authentication credentials. See

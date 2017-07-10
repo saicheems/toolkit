@@ -62,7 +62,7 @@ $client->addScope('https://www.googleapis.com/auth/cloud-platform');
 
 $service = new Google_Service_Cloudbilling($client);
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->billingAccounts->listBillingAccounts($optParams);
@@ -73,7 +73,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -106,7 +106,7 @@ $service = new Google_Service_Cloudbilling($client);
 // you want to list. For example, `billingAccounts/012345-567890-ABCDEF`.
 $name = 'billingAccounts/my-billing-account';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->billingAccounts_projects->listBillingAccountsProjects($name, $optParams);
@@ -117,7 +117,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*

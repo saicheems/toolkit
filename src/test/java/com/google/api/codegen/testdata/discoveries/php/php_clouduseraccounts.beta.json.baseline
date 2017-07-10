@@ -102,7 +102,7 @@ $service = new Google_Service_CloudUserAccounts($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->globalAccountsOperations->listGlobalAccountsOperations($project, $optParams);
@@ -113,7 +113,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -300,7 +300,7 @@ $service = new Google_Service_CloudUserAccounts($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->groups->listGroups($project, $optParams);
@@ -311,7 +311,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -624,7 +624,7 @@ $service = new Google_Service_CloudUserAccounts($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->users->listUsers($project, $optParams);
@@ -635,7 +635,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*

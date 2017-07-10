@@ -155,7 +155,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Cloud SQL instance ID. This does not include the project ID.
 $instance = 'my-instance';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->backupRuns->listBackupRuns($project, $instance, $optParams);
@@ -166,7 +166,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -759,7 +759,7 @@ $service = new Google_Service_SQLAdmin($client);
 // Project ID of the project for which to list Cloud SQL instances.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->instances->listInstances($project, $optParams);
@@ -770,7 +770,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1199,7 +1199,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Cloud SQL instance ID. This does not include the project ID.
 $instance = '';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->operations->listOperations($project, $instance, $optParams);
@@ -1210,7 +1210,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*

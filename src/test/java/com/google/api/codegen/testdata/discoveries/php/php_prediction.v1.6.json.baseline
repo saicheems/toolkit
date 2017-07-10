@@ -219,7 +219,7 @@ $service = new Google_Service_Prediction($client);
 // The project associated with the model.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->trainedmodels->listTrainedmodels($project, $optParams);
@@ -230,7 +230,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*

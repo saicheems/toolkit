@@ -1,0 +1,183 @@
+@snippet generate(class)
+  <?php
+  /*
+   * BEFORE RUNNING:
+   * ---------------
+   * 1. If not already done, enable the {@class.apiInfo.title}
+   *    and check the quota for your project at
+   *    https://console.developers.google.com/apis/api/{@class.apiInfo.name}
+   @switch class.apiInfo.authType
+   @case "ADC"
+     * 2. This sample uses Application Default Credentials for authentication.
+     *    If not already done, install the gcloud CLI from
+     *    https://cloud.google.com/sdk and run
+     *    `gcloud beta auth application-default login`.
+     *    For more information, see
+     *    https://developers.google.com/identity/protocols/application-default-credentials
+     * 3. Install the PHP client library with Composer. Check installation
+     *    instructions at https://github.com/google/google-api-php-client.
+   @default
+     * 2. Install the PHP client library with Composer. Check installation
+     *    instructions at https://github.com/google/google-api-php-client.
+   @end
+   */
+
+  // Autoload Composer.
+  require_once __DIR__ . '/vendor/autoload.php';
+
+  @switch class.apiInfo.authType
+  @case "OAUTH_3L"
+    ${@class.clientVarName} = getClient();
+  @default
+    ${@class.clientVarName} = new Google_Client();
+    ${@class.clientVarName}->setApplicationName('{@class.appName}');
+  @end
+  @switch class.apiInfo.authType
+  @case "ADC"
+    ${@class.clientVarName}->useApplicationDefaultCredentials();
+    ${@class.clientVarName}->addScope('https://www.googleapis.com/auth/cloud-platform');
+  @case "API_KEY"
+    ${@class.clientVarName}->setDeveloperKey('');  // TODO: Update placeholder with desired API key.
+  @default
+  @end
+
+  ${@class.service.varName} = new {@class.service.typeName}(${@class.clientVarName});
+  @join parameter : class.parameters if class.parameters
+
+    {@field(parameter, "", TRUE)}
+  @end
+  @if class.optParams.varName
+
+    {@field(class.optParams, "", FALSE)}
+  @end
+  @if class.methodInfo.hasRequestBody
+
+    {@field(class.requestBody, class.methodInfo.verb, FALSE)}
+  @end
+  @if class.methodInfo.supportsMediaUpload
+
+    // TODO: Add desired media content for upload. For more information, see
+    // https://developers.google.com/api-client-library/php/guide/media_upload
+  @end
+  @if class.methodInfo.supportsMediaDownload
+
+    // TODO: To download media content, use:
+    //
+    // ${@class.optParams.varName}['alt'] = 'media';
+  @end
+  @if class.methodInfo.isPageStreaming
+
+    do {
+      ${@class.response.varName} = {@class.request.value};
+
+      @if class.pageStreamingResource.isMap
+        foreach (${@class.response.varName}['{@class.pageStreamingResource.discoveryFieldName}'] as ${@class.pageStreamingResourceKey.varName} => ${@class.pageStreamingResource.varName}) {
+          // TODO: Change code below to process each ({@class.pageStreamingResourceKey.varName} => {@class.pageStreamingResource.varName}) element:
+          echo '<pre>', ${@class.pageStreamingResourceKey.varName}, ' => ', var_export(${@class.pageStreamingResource.varName}, true), '</pre>', "\n";
+        }
+      @else
+        @if class.pageStreamingResource.isArray
+          foreach (${@class.response.varName}['{@class.pageStreamingResource.discoveryFieldName}'] as ${@class.pageStreamingResource.varName}) {
+            // TODO: Change code below to process each `{@class.pageStreamingResource.varName}` resource:
+            echo '<pre>', var_export(${@class.pageStreamingResource.varName}, true), '</pre>', "\n";
+          }
+        @else
+          // TODO: Change code below to process each `{@class.response.varName}['{@class.pageStreamingResource.discoveryFieldName}']` resource:
+          echo '<pre>', var_export(${@class.response.varName}['{@class.pageStreamingResource.discoveryFieldName}'], true), '</pre>', "\n";
+        @end
+      @end
+
+      @if class.methodInfo.parametersPageTokenDiscoveryFieldName
+        ${@class.optParams.varName}['{@class.pageToken.discoveryFieldName}'] = ${@class.response.varName}->{@class.nextPageToken.getterFuncName}();
+      @else
+        ${@class.requestBody.varName}->{@class.pageToken.setterFuncName}(${@class.response.varName}->{@class.nextPageToken.getterFuncName}());
+      @end
+    } while (${@class.response.varName}->{@class.nextPageToken.getterFuncName}());
+  @else
+
+    @if class.methodInfo.hasResponse
+      ${@class.response.varName} = {@class.request.value};
+
+      // TODO: Change code below to process the `{@class.response.varName}` object:
+      echo '<pre>', var_export(${@class.response.varName}, true), '</pre>', "\n";
+    @else
+      {@class.request.value};
+    @end
+  @end
+  @if class.apiInfo.authType == "OAUTH_3L"
+
+    {@getClientFunc(class)}
+  @end
+  ?>
+@end
+
+@private getClientFunc(class)
+  function getClient() {
+    // TODO: Change placeholder below to generate authentication credentials. See
+    // {@class.apiInfo.authInstructionsUrl}
+    //
+    @if class.methodInfo.isScopesSingular
+      // Authorize using the following scope:
+    @else
+      // Authorize using one of the following scopes:
+    @end
+    @join scope : class.methodInfo.scopes
+      //   '{@scope}'
+    @end
+    return null;
+  }
+@end
+
+# If `httpVerb` is specified, the field is assumed to be the request body, which renders differently.
+@private field(class, httpVerb, printTodo)
+    @if class.fields
+        @join subField : class.fields
+            {@field(subField, "", TRUE)}
+
+        @end
+
+
+    @end
+    # Do not print documentation for the request body.
+    @if httpVerb == ""
+        @if class.description
+            @join line : util.getDocLines(class.description, 100)
+                // {@line}
+            @end
+
+
+        @end
+    @end
+    # If `class` is the request body...
+    @if httpVerb
+        @switch httpVerb
+        @case "PATCH"
+            // TODO: Assign values to desired properties of `{@class.varName}`. Only assigned
+            // properties will be changed:
+        @case "PUT"
+            // TODO: Assign values to desired properties of `{@class.varName}`. All existing
+            // properties will be replaced:
+        @default
+            // TODO: Assign values to desired properties of `{@class.varName}`:
+        @end
+
+
+    @end
+    @if printTodo
+        ${@class.varName} = {@class.value};  // TODO: Update placeholder value.
+    @else
+        ${@class.varName} = {@class.value};
+    @end
+
+    @join subField : class.fields if class.fields
+        @if class.isArray
+            array_push(${@class.varName}, ${@subField.varName});
+        @else
+            @if class.isMap
+                ${@class.varName}[{@subField.keyValue}] = {@subField.value};
+            @else
+                ${@class.varName}.{@subField.classPropertyName} = {@subField.varName};
+            @end
+        @end
+    @end
+@end

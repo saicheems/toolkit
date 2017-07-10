@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.api.codegen.discovery2.transformer.java;
+package com.google.api.codegen.discovery2.transformer.php;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.api.codegen.discovery.Document;
@@ -30,13 +30,11 @@ import com.google.api.codegen.viewmodel.ViewModel;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class JavaSampleTransformer implements SampleTransformer {
-
+public class PhpSampleTransformer implements SampleTransformer {
   @Override
   public ViewModel transform(Method method, String authInstructionsUrl, JsonNode override) {
     return createSampleView(method, authInstructionsUrl, override);
@@ -48,38 +46,22 @@ public class JavaSampleTransformer implements SampleTransformer {
     Preconditions.checkState(document != null);
     SampleView.Builder builder = SampleView.newBuilder();
 
-    JavaTypeMap typeMap = new JavaTypeMap(document);
-    SymbolSet symbolSet = new JavaSymbolSet();
-
-    if (document.authType() != Document.AuthType.NONE) {
-      typeMap.addImportName("com.google.api.client.googleapis.auth.oauth2.GoogleCredential");
-    }
-    typeMap.addImportName("com.google.api.client.googleapis.javanet.GoogleNetHttpTransport");
-    typeMap.addImportName("com.google.api.client.http.HttpTransport");
-    typeMap.addImportName("com.google.api.client.json.JsonFactory");
-    typeMap.addImportName("com.google.api.client.json.jackson2.JacksonFactory");
-    typeMap.addImportName("java.io.IOException");
-    typeMap.addImportName("java.security.GeneralSecurityException");
-    if (document.authType() == Document.AuthType.ADC) {
-      typeMap.addImportName("java.util.Arrays");
-    }
+    PhpTypeMap typeMap = new PhpTypeMap(document);
+    SymbolSet symbolSet = new PhpSymbolSet();
 
     builder.apiInfo(ApiInfoTransformer.transform(document, authInstructionsUrl));
     MethodInfoView methodInfo = MethodInfoTransformer.transform(method);
     builder.methodInfo(methodInfo);
 
-    JavaNamer namer = new JavaNamer(document);
-    builder.sampleClassName(namer.getSampleClassName());
-
-    symbolSet.add("args"); // public static void main(String args[])
+    PhpNamer namer = new PhpNamer(document);
+    builder.clientVarName(symbolSet.add("client"));
+    builder.appName(namer.getAppName());
 
     FieldView service =
         FieldView.empty()
             .withVarName(symbolSet.add(namer.getServiceVarName()))
             .withTypeName(typeMap.addService());
     builder.service(service);
-    builder.createServiceFuncName(namer.getCreateServiceFuncName());
-    builder.appName(namer.getAppName());
 
     List<FieldView> parameters = new ArrayList<>();
     JsonNode parametersOverride = override != null ? override.get("parameters") : null;
@@ -105,31 +87,45 @@ public class JavaSampleTransformer implements SampleTransformer {
     }
     builder.requestBody(requestBody);
 
-    List<FieldView> optionalParameters = new ArrayList<>();
+    List<FieldView> optParamsFields = new ArrayList<>();
     for (Map.Entry<String, Schema> parameter : new TreeMap<>(method.parameters()).entrySet()) {
       JsonNode parameterOverride =
           parametersOverride != null ? parametersOverride.get(parameter.getKey()) : null;
       if (parameter.getValue().required() || parameterOverride == null) {
         continue;
       }
-      optionalParameters.add(
+      optParamsFields.add(
           FieldTransformer.transform(parameter.getValue(), symbolSet, typeMap, parameterOverride));
     }
+    FieldView optParams = FieldView.empty();
+    if (optParamsFields.size() > 0
+        || methodInfo.supportsMediaDownload()
+        || (methodInfo.isPageStreaming()
+            && !methodInfo.parametersPageTokenDiscoveryFieldName().isEmpty())) {
+      optParams =
+          optParams
+              .withVarName(symbolSet.add("optParams"))
+              .withIsArray(true)
+              .withValue("array()")
+              .withFields(optParamsFields);
+    }
+    builder.optParams(optParams);
+
     List<String> argList = new ArrayList<>();
     for (FieldView parameter : parameters) {
-      argList.add(parameter.varName());
+      argList.add("$" + parameter.varName());
     }
     if (requestBody != null) {
-      argList.add(requestBody.varName());
+      argList.add("$" + requestBody.varName());
+    }
+    if (!optParams.varName().isEmpty()) {
+      argList.add("$" + optParams.varName());
     }
     builder.request(
         FieldView.empty()
-            .withFields(optionalParameters)
-            .withTypeName(typeMap.addRequest(method))
-            .withVarName(namer.getRequestVarName())
             .withValue(
                 String.format(
-                    "%s.%s(%s)",
+                    "$%s->%s(%s)",
                     service.varName(),
                     namer.getServiceRequestFuncName(method.path()),
                     Joiner.on(", ").join(argList))));
@@ -141,7 +137,6 @@ public class JavaSampleTransformer implements SampleTransformer {
               .withVarName(namer.getResponseVarName())
               .withTypeName(typeMap.add(responseSchema.dereference())));
     }
-
     if (methodInfo.isPageStreaming()) {
       Schema pageStreamingResourceSchema =
           responseSchema
@@ -153,16 +148,22 @@ public class JavaSampleTransformer implements SampleTransformer {
       boolean isArray = pageStreamingResourceSchema.items() != null;
       boolean isMap = pageStreamingResourceSchema.additionalProperties() != null;
 
-      FieldView pageStreamingResource = FieldView.empty().withIsArray(isArray).withIsMap(isMap);
+      FieldView pageStreamingResource =
+          FieldView.empty()
+              .withIsArray(isArray)
+              .withIsMap(isMap)
+              .withTypeName(namer.getTypeName(pageStreamingResourceSchema));
 
       if (isArray) {
         pageStreamingResource =
             pageStreamingResource.withTypeName(typeMap.add(pageStreamingResourceSchema.items()));
       } else if (isMap) {
-        typeMap.addImportName("java.util.Map");
         pageStreamingResource =
             pageStreamingResource.withTypeName(
                 typeMap.add(pageStreamingResourceSchema.additionalProperties()));
+
+        FieldView pageStreamingResourceKey = FieldView.empty().withVarName(symbolSet.add("name"));
+        builder.pageStreamingResourceKey(pageStreamingResourceKey);
       } else {
         pageStreamingResource =
             pageStreamingResource.withTypeName(typeMap.add(pageStreamingResourceSchema));
@@ -171,27 +172,26 @@ public class JavaSampleTransformer implements SampleTransformer {
       int i = pageStreamingResourceSchema.path().lastIndexOf(".");
       String discoveryFieldName = pageStreamingResourceSchema.path().substring(i + 1);
 
+      Schema element;
+      if (isArray) {
+        element = pageStreamingResourceSchema.items().dereference();
+      } else if (isMap) {
+        element = pageStreamingResourceSchema.additionalProperties().dereference();
+      } else {
+        element = pageStreamingResourceSchema.dereference();
+      }
+
       String varName;
-      if (pageStreamingResourceSchema.additionalProperties() != null) {
-        varName = symbolSet.add("item");
-      } else if (pageStreamingResourceSchema.items() != null) {
-        Schema itemsSchema = pageStreamingResourceSchema.items().dereference();
-        switch (itemsSchema.type()) {
-          case OBJECT:
-          case ARRAY:
-            // TODO: Check that type is actually an object.
-            String typeNameSegments[] = pageStreamingResource.typeName().split("\\.");
-            varName = symbolSet.add(typeNameSegments[typeNameSegments.length - 1]);
-            break;
-          default:
-            varName = symbolSet.add("item");
-        }
+      if (element.type() == Schema.Type.OBJECT) {
+        String typeNameSegments[] = typeMap.add(element).split("_");
+        varName = symbolSet.add(typeNameSegments[typeNameSegments.length - 1]);
       } else {
         varName = symbolSet.add(discoveryFieldName);
       }
       builder.pageStreamingResource(
           pageStreamingResource
-              .withGetterFuncName(typeMap.getGetterFuncName(pageStreamingResourceSchema))
+              .withDiscoveryFieldName(discoveryFieldName)
+              //.withGetterFuncName(typeMap.getGetterFuncName(pageStreamingResourceSchema))
               .withVarName(varName));
 
       Schema pageTokenSchema;
@@ -217,12 +217,8 @@ public class JavaSampleTransformer implements SampleTransformer {
       builder.nextPageToken(FieldTransformer.transform(nextPageTokenSchema, null, typeMap, null));
     }
 
-    List<String> importNames = new ArrayList<>(typeMap.getImportNames().values());
-    Collections.sort(importNames);
-    builder.importNames(importNames);
-
-    builder.templateFileName("java/discovery_sample.snip");
-    builder.outputPath(method.id() + ".frag.java");
+    builder.templateFileName("php/discovery_sample.snip");
+    builder.outputPath(method.id() + ".frag.php");
 
     return builder.build();
   }

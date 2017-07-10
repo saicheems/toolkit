@@ -103,7 +103,7 @@ $service = new Google_Service_CloudTrace($client);
 // ID of the Cloud project where the trace data is stored.
 $projectId = 'my-project-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->projects_traces->listProjectsTraces($projectId, $optParams);
@@ -114,5 +114,5 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>

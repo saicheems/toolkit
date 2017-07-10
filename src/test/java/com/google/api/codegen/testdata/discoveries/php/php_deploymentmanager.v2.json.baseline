@@ -222,7 +222,7 @@ $service = new Google_Service_DeploymentManager($client);
 // The project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->deployments->listDeployments($project, $optParams);
@@ -233,7 +233,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -516,7 +516,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // The name of the deployment for this request.
 $deployment = 'my-deployment';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->manifests->listManifests($project, $deployment, $optParams);
@@ -527,7 +527,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -597,7 +597,7 @@ $service = new Google_Service_DeploymentManager($client);
 // The project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->operations->listOperations($project, $optParams);
@@ -608,7 +608,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -684,18 +684,18 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // The name of the deployment for this request.
 $deployment = 'my-deployment';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->resources->listResources($project, $deployment, $optParams);
 
-  foreach ($response['resources'] as $resource) {
-    // TODO: Change code below to process each `resource` resource:
-    echo '<pre>', var_export($resource, true), '</pre>', "\n";
+  foreach ($response['resources'] as $deploymentmanagerResource) {
+    // TODO: Change code below to process each `deploymentmanagerResource` resource:
+    echo '<pre>', var_export($deploymentmanagerResource, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -727,7 +727,7 @@ $service = new Google_Service_DeploymentManager($client);
 // The project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->types->listTypes($project, $optParams);
@@ -738,5 +738,5 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>

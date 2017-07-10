@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class SymbolSet {
+public class SymbolSet {
 
   private static final Set<String> ACRONYMS = ImmutableSet.of("api", "http", "iam", "sql", "xml");
 
@@ -29,7 +29,17 @@ public abstract class SymbolSet {
     symbols = new HashSet<>();
   }
 
-  public abstract String add(String name);
+  public String add(String name) {
+    int suffix = 0;
+
+    String uniqueName;
+    do {
+      uniqueName = name + (suffix > 1 ? suffix : "");
+      suffix++;
+    } while (symbols.contains(uniqueName));
+    symbols.add(uniqueName);
+    return uniqueName;
+  }
 
   @Deprecated
   public String add(Symbol symbol) {

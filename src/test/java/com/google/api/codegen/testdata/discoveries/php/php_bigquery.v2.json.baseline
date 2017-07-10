@@ -140,18 +140,18 @@ $service = new Google_Service_Bigquery($client);
 // Project ID of the datasets to be listed
 $projectId = 'my-project-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->datasets->listDatasets($projectId, $optParams);
 
-  foreach ($response['datasets'] as $datasets) {
-    // TODO: Change code below to process each `datasets` resource:
-    echo '<pre>', var_export($datasets, true), '</pre>', "\n";
+  foreach ($response['datasets'] as $datasetListDatasets) {
+    // TODO: Change code below to process each `datasetListDatasets` resource:
+    echo '<pre>', var_export($datasetListDatasets, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -346,18 +346,18 @@ $projectId = 'my-project-id';  // TODO: Update placeholder value.
 // [Required] Job ID of the query job
 $jobId = 'my-job-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->jobs->getQueryResults($projectId, $jobId, $optParams);
 
-  foreach ($response['errors'] as $errorProto) {
-    // TODO: Change code below to process each `errorProto` resource:
-    echo '<pre>', var_export($errorProto, true), '</pre>', "\n";
+  foreach ($response['rows'] as $tableRow) {
+    // TODO: Change code below to process each `tableRow` resource:
+    echo '<pre>', var_export($tableRow, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getPageToken());
 ?>
 <?php
 /*
@@ -430,18 +430,18 @@ $service = new Google_Service_Bigquery($client);
 // Project ID of the jobs to list
 $projectId = 'my-project-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->jobs->listJobs($projectId, $optParams);
 
-  foreach ($response['jobs'] as $jobs) {
-    // TODO: Change code below to process each `jobs` resource:
-    echo '<pre>', var_export($jobs, true), '</pre>', "\n";
+  foreach ($response['jobs'] as $jobListJobs) {
+    // TODO: Change code below to process each `jobListJobs` resource:
+    echo '<pre>', var_export($jobListJobs, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -508,18 +508,18 @@ $client->addScope('https://www.googleapis.com/auth/cloud-platform');
 
 $service = new Google_Service_Bigquery($client);
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->projects->listProjects($optParams);
 
-  foreach ($response['projects'] as $projects) {
-    // TODO: Change code below to process each `projects` resource:
-    echo '<pre>', var_export($projects, true), '</pre>', "\n";
+  foreach ($response['projects'] as $projectListProjects) {
+    // TODO: Change code below to process each `projectListProjects` resource:
+    echo '<pre>', var_export($projectListProjects, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -601,7 +601,7 @@ $datasetId = 'my-dataset-id';  // TODO: Update placeholder value.
 // Table ID of the table to read
 $tableId = 'my-table-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->tabledata->listTabledata($projectId, $datasetId, $tableId, $optParams);
@@ -612,7 +612,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getPageToken());
 ?>
 <?php
 /*
@@ -767,18 +767,18 @@ $projectId = 'my-project-id';  // TODO: Update placeholder value.
 // Dataset ID of the tables to list
 $datasetId = 'my-dataset-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->tables->listTables($projectId, $datasetId, $optParams);
 
-  foreach ($response['tables'] as $tables) {
-    // TODO: Change code below to process each `tables` resource:
-    echo '<pre>', var_export($tables, true), '</pre>', "\n";
+  foreach ($response['tables'] as $tableListTables) {
+    // TODO: Change code below to process each `tableListTables` resource:
+    echo '<pre>', var_export($tableListTables, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*

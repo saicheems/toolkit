@@ -15,10 +15,11 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $client = new Google_Client();
 $client->setApplicationName('Google-FooSample/0.1');
+$client->setDeveloperKey('');  // TODO: Update placeholder with desired API key.
 
 $service = new Google_Service_Foo($client);
 
-$response = $service->baz->get();
+$response = $service->bar->get();
 
 // TODO: Change code below to process the `response` object:
 echo '<pre>', var_export($response, true), '</pre>', "\n";

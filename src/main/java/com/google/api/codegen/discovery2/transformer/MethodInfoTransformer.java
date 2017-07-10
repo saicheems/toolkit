@@ -103,6 +103,7 @@ public class MethodInfoTransformer {
     // Look for the first array of objects.
     for (String name : schema.properties().keySet()) {
       Schema resource = schema.properties().get(name);
+
       if (resource.type() == Schema.Type.ARRAY
           && resource.items().dereference().type() == Schema.Type.OBJECT) {
         return name;

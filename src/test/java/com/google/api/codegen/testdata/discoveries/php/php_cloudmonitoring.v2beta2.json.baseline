@@ -105,7 +105,7 @@ $service = new Google_Service_CloudMonitoring($client);
 // The project id. The value can be the numeric project ID or string-based project name.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 // TODO: Assign values to desired properties of `requestBody`:
 $requestBody = new Google_Service_CloudMonitoring_ListMetricDescriptorsRequest();
@@ -119,7 +119,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -159,7 +159,7 @@ $metric = 'my-metric';  // TODO: Update placeholder value.
 // End of the time interval (inclusive), which is expressed as an RFC 3339 timestamp.
 $youngest = '';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 // TODO: Assign values to desired properties of `requestBody`:
 $requestBody = new Google_Service_CloudMonitoring_ListTimeseriesRequest();
@@ -173,7 +173,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -251,7 +251,7 @@ $metric = 'my-metric';  // TODO: Update placeholder value.
 // End of the time interval (inclusive), which is expressed as an RFC 3339 timestamp.
 $youngest = '';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 // TODO: Assign values to desired properties of `requestBody`:
 $requestBody = new Google_Service_CloudMonitoring_ListTimeseriesDescriptorsRequest();
@@ -265,5 +265,5 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>

@@ -137,7 +137,7 @@ $service = new Google_Service_Appengine($client);
 // Part of `name`. The resource that owns the locations collection, if applicable.
 $appsId = 'my-apps-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->apps_locations->listAppsLocations($appsId, $optParams);
@@ -148,7 +148,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -218,7 +218,7 @@ $service = new Google_Service_Appengine($client);
 // Part of `name`. The name of the operation collection.
 $appsId = 'my-apps-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->apps_operations->listAppsOperations($appsId, $optParams);
@@ -229,7 +229,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -376,7 +376,7 @@ $service = new Google_Service_Appengine($client);
 // Part of `name`. Name of the resource requested. Example: apps/myapp.
 $appsId = 'my-apps-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->apps_services->listAppsServices($appsId, $optParams);
@@ -387,7 +387,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -728,7 +728,7 @@ $servicesId = 'my-services-id';  // TODO: Update placeholder value.
 // Part of `name`. See documentation of `appsId`.
 $versionsId = 'my-versions-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->apps_services_versions_instances->listAppsServicesVersionsInstances($appsId, $servicesId, $versionsId, $optParams);
@@ -739,7 +739,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -774,7 +774,7 @@ $appsId = 'my-apps-id';  // TODO: Update placeholder value.
 // Part of `name`. See documentation of `appsId`.
 $servicesId = 'my-services-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->apps_services_versions->listAppsServicesVersions($appsId, $servicesId, $optParams);
@@ -785,7 +785,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*

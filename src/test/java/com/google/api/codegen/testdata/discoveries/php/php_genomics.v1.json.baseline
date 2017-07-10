@@ -175,7 +175,7 @@ do {
   }
 
   $requestBody->setPageToken($response->getNextPageToken());
-} while ($requestBody->getPageToken());
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -357,7 +357,7 @@ do {
   }
 
   $requestBody->setPageToken($response->getNextPageToken());
-} while ($requestBody->getPageToken());
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -578,7 +578,7 @@ do {
   }
 
   $requestBody->setPageToken($response->getNextPageToken());
-} while ($requestBody->getPageToken());
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -747,7 +747,7 @@ $client->addScope('https://www.googleapis.com/auth/cloud-platform');
 
 $service = new Google_Service_Genomics($client);
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->datasets->listDatasets($optParams);
@@ -758,7 +758,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1013,7 +1013,7 @@ $service = new Google_Service_Genomics($client);
 // The name of the operation collection.
 $name = 'operations';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->operations->listOperations($name, $optParams);
@@ -1024,7 +1024,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1056,7 +1056,7 @@ $service = new Google_Service_Genomics($client);
 // Required. The ID of the read group set over which coverage is requested.
 $readGroupSetId = 'my-read-group-set-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->readgroupsets_coveragebuckets->listReadgroupsetsCoveragebuckets($readGroupSetId, $optParams);
@@ -1067,7 +1067,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1290,7 +1290,7 @@ do {
   }
 
   $requestBody->setPageToken($response->getNextPageToken());
-} while ($requestBody->getPageToken());
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1331,7 +1331,7 @@ do {
   }
 
   $requestBody->setPageToken($response->getNextPageToken());
-} while ($requestBody->getPageToken());
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1398,7 +1398,7 @@ $service = new Google_Service_Genomics($client);
 // The ID of the reference.
 $referenceId = 'my-reference-id';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->references_bases->listReferencesBases($referenceId, $optParams);
@@ -1407,7 +1407,7 @@ do {
   echo '<pre>', var_export($response['sequence'], true), '</pre>', "\n";
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1483,7 +1483,7 @@ do {
   }
 
   $requestBody->setPageToken($response->getNextPageToken());
-} while ($requestBody->getPageToken());
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1559,7 +1559,7 @@ do {
   }
 
   $requestBody->setPageToken($response->getNextPageToken());
-} while ($requestBody->getPageToken());
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1808,7 +1808,7 @@ do {
   }
 
   $requestBody->setPageToken($response->getNextPageToken());
-} while ($requestBody->getPageToken());
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -2064,5 +2064,5 @@ do {
   }
 
   $requestBody->setPageToken($response->getNextPageToken());
-} while ($requestBody->getPageToken());
+} while ($response->getNextPageToken());
 ?>

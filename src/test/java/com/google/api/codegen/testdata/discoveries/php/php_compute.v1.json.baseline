@@ -29,7 +29,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->addresses->aggregatedList($project, $optParams);
@@ -40,7 +40,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -198,7 +198,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the region for this request.
 $region = 'my-region';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->addresses->listAddresses($project, $region, $optParams);
@@ -209,7 +209,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -241,7 +241,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->autoscalers->aggregatedList($project, $optParams);
@@ -252,7 +252,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -410,7 +410,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the zone for this request.
 $zone = 'my-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->autoscalers->listAutoscalers($project, $zone, $optParams);
@@ -421,7 +421,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -540,7 +540,7 @@ $service = new Google_Service_Compute($client);
 // Name of the project scoping this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->backendServices->aggregatedList($project, $optParams);
@@ -551,7 +551,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -737,7 +737,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->backendServices->listBackendServices($project, $optParams);
@@ -748,7 +748,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -864,7 +864,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->diskTypes->aggregatedList($project, $optParams);
@@ -875,7 +875,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -951,7 +951,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // The name of the zone for this request.
 $zone = 'my-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->diskTypes->listDiskTypes($project, $zone, $optParams);
@@ -962,7 +962,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -994,7 +994,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->disks->aggregatedList($project, $optParams);
@@ -1005,7 +1005,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1207,7 +1207,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // The name of the zone for this request.
 $zone = 'my-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->disks->listDisks($project, $zone, $optParams);
@@ -1218,7 +1218,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1408,7 +1408,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->firewalls->listFirewalls($project, $optParams);
@@ -1419,7 +1419,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1535,7 +1535,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->forwardingRules->aggregatedList($project, $optParams);
@@ -1546,7 +1546,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1704,7 +1704,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the region scoping this request.
 $region = 'my-region';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->forwardingRules->listForwardingRules($project, $region, $optParams);
@@ -1715,7 +1715,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -1905,7 +1905,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->globalAddresses->listGlobalAddresses($project, $optParams);
@@ -1916,7 +1916,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -2062,7 +2062,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->globalForwardingRules->listGlobalForwardingRules($project, $optParams);
@@ -2073,7 +2073,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -2146,7 +2146,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->globalOperations->aggregatedList($project, $optParams);
@@ -2157,7 +2157,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -2262,7 +2262,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->globalOperations->listGlobalOperations($project, $optParams);
@@ -2273,7 +2273,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -2419,7 +2419,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->healthChecks->listHealthChecks($project, $optParams);
@@ -2430,7 +2430,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -2660,7 +2660,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->httpHealthChecks->listHttpHealthChecks($project, $optParams);
@@ -2671,7 +2671,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -2901,7 +2901,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->httpsHealthChecks->listHttpsHealthChecks($project, $optParams);
@@ -2912,7 +2912,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -3221,7 +3221,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->images->listImages($project, $optParams);
@@ -3232,7 +3232,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -3308,7 +3308,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->instanceGroupManagers->aggregatedList($project, $optParams);
@@ -3319,7 +3319,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -3521,7 +3521,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // The name of the zone where the managed instance group is located.
 $zone = 'my-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->instanceGroupManagers->listInstanceGroupManagers($project, $zone, $optParams);
@@ -3532,7 +3532,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -3827,7 +3827,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->instanceGroups->aggregatedList($project, $optParams);
@@ -3838,7 +3838,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -3996,7 +3996,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // The name of the zone where the instance group is located.
 $zone = 'my-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->instanceGroups->listInstanceGroups($project, $zone, $optParams);
@@ -4007,7 +4007,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -4045,7 +4045,7 @@ $zone = 'my-zone';  // TODO: Update placeholder value.
 // The name of the instance group from which you want to generate a list of included instances.
 $instanceGroup = 'my-instance-group';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 // TODO: Assign values to desired properties of `requestBody`:
 $requestBody = new Google_Service_Compute_InstanceGroupsListInstancesRequest();
@@ -4059,7 +4059,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -4293,7 +4293,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->instanceTemplates->listInstanceTemplates($project, $optParams);
@@ -4304,7 +4304,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -4383,7 +4383,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->instances->aggregatedList($project, $optParams);
@@ -4394,7 +4394,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -4728,7 +4728,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // The name of the zone for this request.
 $zone = 'my-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->instances->listInstances($project, $zone, $optParams);
@@ -4739,7 +4739,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -5243,7 +5243,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->machineTypes->aggregatedList($project, $optParams);
@@ -5254,7 +5254,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -5330,7 +5330,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // The name of the zone for this request.
 $zone = 'my-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->machineTypes->listMachineTypes($project, $zone, $optParams);
@@ -5341,7 +5341,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -5487,7 +5487,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->networks->listNetworks($project, $optParams);
@@ -5498,7 +5498,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -5881,7 +5881,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the region scoping this request.
 $region = 'my-region';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->regionAutoscalers->listRegionAutoscalers($project, $region, $optParams);
@@ -5892,7 +5892,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -6180,7 +6180,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the region scoping this request.
 $region = 'my-region';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->regionBackendServices->listRegionBackendServices($project, $region, $optParams);
@@ -6191,7 +6191,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -6527,7 +6527,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the region scoping this request.
 $region = 'my-region';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->regionInstanceGroupManagers->listRegionInstanceGroupManagers($project, $region, $optParams);
@@ -6538,7 +6538,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -6831,7 +6831,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the region scoping this request.
 $region = 'my-region';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->regionInstanceGroups->listRegionInstanceGroups($project, $region, $optParams);
@@ -6842,7 +6842,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -6880,7 +6880,7 @@ $region = 'my-region';  // TODO: Update placeholder value.
 // Name of the regional instance group for which we want to list the instances.
 $instanceGroup = 'my-instance-group';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 // TODO: Assign values to desired properties of `requestBody`:
 $requestBody = new Google_Service_Compute_RegionInstanceGroupsListInstancesRequest();
@@ -6894,7 +6894,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -7052,7 +7052,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the region for this request.
 $region = 'my-region';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->regionOperations->listRegionOperations($project, $region, $optParams);
@@ -7063,7 +7063,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -7133,7 +7133,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->regions->listRegions($project, $optParams);
@@ -7144,7 +7144,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -7176,7 +7176,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->routers->aggregatedList($project, $optParams);
@@ -7187,7 +7187,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -7386,7 +7386,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the region for this request.
 $region = 'my-region';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->routers->listRouters($project, $region, $optParams);
@@ -7397,7 +7397,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -7677,7 +7677,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->routes->listRoutes($project, $optParams);
@@ -7688,7 +7688,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -7796,7 +7796,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->snapshots->listSnapshots($project, $optParams);
@@ -7807,7 +7807,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -7953,7 +7953,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->sslCertificates->listSslCertificates($project, $optParams);
@@ -7964,7 +7964,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -7996,7 +7996,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->subnetworks->aggregatedList($project, $optParams);
@@ -8007,7 +8007,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -8209,7 +8209,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the region scoping this request.
 $region = 'my-region';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->subnetworks->listSubnetworks($project, $region, $optParams);
@@ -8220,7 +8220,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -8366,7 +8366,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->targetHttpProxies->listTargetHttpProxies($project, $optParams);
@@ -8377,7 +8377,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -8564,7 +8564,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->targetHttpsProxies->listTargetHttpsProxies($project, $optParams);
@@ -8575,7 +8575,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -8689,7 +8689,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->targetInstances->aggregatedList($project, $optParams);
@@ -8700,7 +8700,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -8858,7 +8858,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the zone scoping this request.
 $zone = 'my-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->targetInstances->listTargetInstances($project, $zone, $optParams);
@@ -8869,7 +8869,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -8989,7 +8989,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->targetPools->aggregatedList($project, $optParams);
@@ -9000,7 +9000,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -9202,7 +9202,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the region scoping this request.
 $region = 'my-region';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->targetPools->listTargetPools($project, $region, $optParams);
@@ -9213,7 +9213,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -9491,7 +9491,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->targetSslProxies->listTargetSslProxies($project, $optParams);
@@ -9502,7 +9502,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -9657,7 +9657,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->targetVpnGateways->aggregatedList($project, $optParams);
@@ -9668,7 +9668,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -9826,7 +9826,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the region for this request.
 $region = 'my-region';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->targetVpnGateways->listTargetVpnGateways($project, $region, $optParams);
@@ -9837,7 +9837,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -10024,7 +10024,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->urlMaps->listUrlMaps($project, $optParams);
@@ -10035,7 +10035,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -10192,7 +10192,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->vpnTunnels->aggregatedList($project, $optParams);
@@ -10203,7 +10203,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -10361,7 +10361,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the region for this request.
 $region = 'my-region';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->vpnTunnels->listVpnTunnels($project, $region, $optParams);
@@ -10372,7 +10372,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -10486,7 +10486,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the zone for request.
 $zone = 'my-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->zoneOperations->listZoneOperations($project, $zone, $optParams);
@@ -10497,7 +10497,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -10567,7 +10567,7 @@ $service = new Google_Service_Compute($client);
 // Project ID for this request.
 $project = 'my-project';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->zones->listZones($project, $optParams);
@@ -10578,5 +10578,5 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>

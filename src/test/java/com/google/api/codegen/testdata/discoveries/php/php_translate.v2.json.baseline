@@ -19,8 +19,11 @@ $client->setDeveloperKey('');  // TODO: Update placeholder with desired API key.
 
 $service = new Google_Service_Translate($client);
 
+$item = '';  // TODO: Update placeholder value.
+
 // The text to detect
-$q = [];  // TODO: Update placeholder value.
+$q = array();  // TODO: Update placeholder value.
+array_push($q, $item);
 
 $response = $service->detections->listDetections($q);
 
@@ -72,8 +75,11 @@ $client->setDeveloperKey('');  // TODO: Update placeholder with desired API key.
 
 $service = new Google_Service_Translate($client);
 
+$item = '';  // TODO: Update placeholder value.
+
 // The text to translate
-$q = [];  // TODO: Update placeholder value.
+$q = array();  // TODO: Update placeholder value.
+array_push($q, $item);
 
 // The target language into which the text should be translated
 $target = '';  // TODO: Update placeholder value.

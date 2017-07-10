@@ -155,7 +155,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // The name of the zone in which the update's target resides.
 $zone = 'my-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->rollingUpdates->listRollingUpdates($project, $zone, $optParams);
@@ -166,7 +166,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -204,7 +204,7 @@ $zone = 'my-zone';  // TODO: Update placeholder value.
 // The name of the update.
 $rollingUpdate = 'my-rolling-update';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->rollingUpdates->listInstanceUpdates($project, $zone, $rollingUpdate, $optParams);
@@ -215,7 +215,7 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
 <?php
 /*
@@ -414,7 +414,7 @@ $project = 'my-project';  // TODO: Update placeholder value.
 // Name of the zone scoping this request.
 $zone = 'my-zone';  // TODO: Update placeholder value.
 
-$optParams = [];
+$optParams = array();
 
 do {
   $response = $service->zoneOperations->listZoneOperations($project, $zone, $optParams);
@@ -425,5 +425,5 @@ do {
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
-} while ($optParams['pageToken']);
+} while ($response->getNextPageToken());
 ?>
