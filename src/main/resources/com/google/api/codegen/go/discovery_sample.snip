@@ -1,2 +1,216 @@
 @snippet generate(class)
+  package main
+
+  // BEFORE RUNNING:
+  // ---------------
+  // 1. If not already done, enable the {@class.apiInfo.title}
+  //    and check the quota for your project at
+  //    https://console.developers.google.com/apis/api/{@class.apiInfo.name}
+  @switch class.apiInfo.authType
+  @case "ADC"
+    // 2. This sample uses Application Default Credentials for authentication.
+    //    If not already done, install the gcloud CLI from
+    //    https://cloud.google.com/sdk/ and run
+    //    `gcloud beta auth application-default login`.
+    //    For more information, see
+    //    https://developers.google.com/identity/protocols/application-default-credentials
+    // 3. Install and update the Go dependencies by running `go get -u` in the
+    //    project directory.
+  @default
+    // 2. Install and update the Go dependencies by running `go get -u` in the
+    //    project directory.
+  @end
+
+  import (
+    @join importPath : class.standardLibraryImportPaths
+      "{@importPath}"
+    @end
+
+    @join importPath : class.thirdPartyImportPaths
+      "{@importPath}"
+    @end
+  )
+
+  {@mainFunc(class)}
+  @switch class.apiInfo.authType
+  @case "NONE"
+  @case "ADC"
+  @default
+
+    {@getClientFunc(class)}
+  @end
+@end
+
+@private mainFunc(class)
+  func main() {
+    {@class.contextVarName} := context.Background()
+
+    @switch class.apiInfo.authType
+    @case "NONE"
+      {@class.clientVarName} := &http.Client{}
+    @case "ADC"
+      # `scopeConsts` only has one scope (`foo.CloudPlatform`) if the auth type is "ADC".
+      @join scopeConst : class.scopeConsts
+        {@class.clientVarName}, err := google.DefaultClient({@class.contextVarName}, {@scopeConst})
+      @end
+
+      if err != nil {
+        log.Fatal(err)
+      }
+    @default
+      {@class.clientVarName}, err := {@class.getClientFuncName}({@class.contextVarName})
+      if err != nil {
+        log.Fatal(err)
+      }
+    @end
+
+    {@class.service.varName}, err := {@class.service.value}
+    if err != nil {
+      log.Fatal(err)
+    }
+    @join parameter : class.parameters if class.parameters
+
+        {@field(parameter, "")}
+    @end
+    @if class.methodInfo.hasRequestBody
+
+        {@field(class.requestBody, class.methodInfo.verb)}
+    @end
+    @if class.methodInfo.supportsMediaUpload
+      // TODO: Add desired media content for upload. For more information, see
+      // https://godoc.org/google.golang.org/api/{@class.apiInfo.name}/{@class.apiInfo.version}
+
+    @end
+
+    @if class.methodInfo.isPageStreaming
+      {@class.request.varName} := {@class.request.value}
+      if err := {@class.request.varName}.Pages({@class.contextVarName}, func({@class.response.varName} *{@class.response.typeName}) error {
+        @if class.pageStreamingResource.isMap
+          for {@class.pageStreamingResource.keyVarName}, {@class.pageStreamingResource.varName} := range {@class.response.varName}.{@class.pageStreamingResource.structFieldName} {
+            // TODO: Change code below to process each ({@class.pageStreamingResource.keyVarName}: {@class.pageStreamingResource.varName}) element:
+            fmt.Printf("%v: %#v\n", {@class.pageStreamingResource.keyVarName}, {@class.pageStreamingResource.varName})
+          }
+          return nil
+        @else
+          @if class.pageStreamingResource.isArray
+            for _, {@class.pageStreamingResource.varName} := range {@class.response.varName}.{@class.pageStreamingResource.structFieldName} {
+              // TODO: Change code below to process each `{@class.pageStreamingResource.varName}` resource:
+              fmt.Printf("%#v\n", {@class.pageStreamingResource.varName})
+            }
+            return nil
+          @else
+            // TODO: Change code below to process each `page.{@class.pageStreamingResource.structFieldName}` resource:
+            fmt.Printf("%#v\n", page.{@class.pageStreamingResource.structFieldName})
+
+            return nil
+          @end
+        @end
+      }); err != nil {
+        log.Fatal(err)
+      }
+    @else
+      @if class.methodInfo.supportsMediaDownload
+        // TODO: Use `Download` in place of `Do` below to download media content. For more information, see
+        // {@class.mediaDownloadDocLink}
+
+      @end
+      @if class.methodInfo.hasResponse
+        {@class.response.varName}, err := {@class.request.value}.Context({@class.contextVarName}).Do()
+        if err != nil {
+          log.Fatal(err)
+        }
+
+        // TODO: Change code below to process the `{@class.response.varName}` object:
+        fmt.Printf("%#v\n", {@class.response.varName})
+      @else
+        if err := {@class.request.value}.Context({@class.contextVarName}).Do(); err != nil {
+          log.Fatal(err)
+        }
+      @end
+    @end
+  }
+@end
+
+@private getClientFunc(class)
+  func {@class.getClientFuncName}({@class.contextVarName} context.Context) (*http.Client, error) {
+    // TODO: Change placeholder below to get authentication credentials. See
+    // {@class.apiInfo.authInstructionsUrl}
+    @if class.apiInfo.authType != "API_KEY"
+      //
+      @if class.methodInfo.isScopesSingular
+        // Authorize using the following scope:
+      @else
+        // Authorize using the following scopes:
+      @end
+      @join scopeConst : class.scopeConsts
+        //     {@scopeConst}
+      @end
+    @end
+    return nil, errors.New("not implemented")
+  }
+@end
+
+# If `httpVerb` is specified, the field is assumed to be the request body, which renders differently.
+@private field(class, httpVerb)
+  @if class.fields
+    @join subField : class.fields
+      {@field(subField, "")}
+
+    @end
+
+
+  @end
+  # Do not print documentation for the request body.
+  @if httpVerb == ""
+    @if class.description
+      @join line : util.getDocLines(class.description, 100)
+        // {@line}
+      @end
+
+
+    @end
+  @end
+  @if class.isMessage
+    {@class.varName} := {@class.value}{
+      # If `class` is the request body...
+      @if httpVerb
+        @switch httpVerb
+        @case "PATCH"
+          // TODO: Add desired fields of the request body. Only assigned fields
+          // will be changed.
+        @case "PUT"
+          // TODO: Add desired fields of the request body. All existing fields
+          // will be replaced.
+        @default
+          // TODO: Add desired fields of the request body.
+        @end
+
+      @end
+      @join subField : class.fields if class.fields
+
+        @if class.isArray
+          {@class.varName} = append({@class.varName}, {@subField.varName})
+        @else
+          @if class.isMap
+            {@class.varName}[{@subField.keyValue}] = {@subField.value}
+          @else
+            {@class.varName}.{@subField.classPropertyName} = {@subField.varName}
+          @end
+        @end
+    @end
+   }
+   @else
+     {@class.varName} := {@class.value}  // TODO: Update placeholder value.
+     @join subField : class.fields if class.fields
+       @if class.isArray
+         {@class.varName} = append({@class.varName}, {@subField.varName})
+       @else
+         @if class.isMap
+           {@class.varName}[{@subField.keyValue}] = {@subField.value}
+         @else
+           {@class.varName}.{@subField.classPropertyName} = {@subField.varName}
+         @end
+       @end
+    @end
+  @end
 @end

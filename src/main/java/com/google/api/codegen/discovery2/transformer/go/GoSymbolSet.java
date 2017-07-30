@@ -12,18 +12,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.api.codegen.discovery2.viewmodel;
+package com.google.api.codegen.discovery2.transformer.go;
 
-import com.google.auto.value.AutoValue;
+import com.google.api.codegen.discovery2.transformer.SymbolSet;
 
-@AutoValue
-public abstract class UsingDirectiveView {
+public class GoSymbolSet extends SymbolSet {
 
-  public static UsingDirectiveView from(String namespace, String alias) {
-    return new AutoValue_UsingDirectiveView(namespace, alias);
+  @Override
+  public String add(String name) {
+    return add(GoSymbol.from(name).toLowerCamel());
   }
-
-  public abstract String namespaceName();
-
-  public abstract String aliasName();
 }

@@ -31,7 +31,7 @@ public class CSharpTypeMap implements TypeMap {
   private static final String SYSTEM_COLLECTIONS_GENERIC = "System.Collections.Generic";
 
   public CSharpTypeMap(Document document) {
-    this.namer = new CSharpNamer(document);
+    namer = new CSharpNamer(document);
     namespaceNames = new HashMap<>();
   }
 
@@ -43,43 +43,47 @@ public class CSharpTypeMap implements TypeMap {
       Preconditions.checkNotNull(copy, "invalid schema");
       switch (copy.type()) {
         case ARRAY:
-          namespaceNames.put(SYSTEM_COLLECTIONS_GENERIC, "");
+          addNamespaceName(SYSTEM_COLLECTIONS_GENERIC, "");
           copy = copy.items();
           continue;
         case OBJECT:
           if (copy.additionalProperties() != null) { // Map
-            namespaceNames.put(SYSTEM_COLLECTIONS_GENERIC, "");
+            addNamespaceName(SYSTEM_COLLECTIONS_GENERIC, "");
             copy = copy.additionalProperties();
             continue;
           }
-          namespaceNames.put(namer.getServiceNamespaceName() + ".Data", "Data");
+          addNamespaceName(namer.getServiceNamespaceName() + ".Data", "Data");
           break;
       }
       if (schema.repeated()) {
-        namespaceNames.put(SYSTEM_COLLECTIONS_GENERIC, "");
+        addNamespaceName(SYSTEM_COLLECTIONS_GENERIC, "");
       }
       break;
     }
     if (CSharpNamer.isSpecialEnum(schema)) {
       // TODO: Actually a special enum.
-      namespaceNames.put(namer.getServiceNamespaceName(), "");
+      addNamespaceName(namer.getServiceNamespaceName(), "");
     }
     return namer.getTypeName(schema);
   }
 
   String addService() {
-    namespaceNames.put(namer.getServiceNamespaceName(), "");
+    addNamespaceName(namer.getServiceNamespaceName(), "");
     return namer.getServiceTypeName();
   }
 
   // Type name of the request, note this is different than the request body.
   String addRequest(Method method) {
-    namespaceNames.put(namer.getServiceNamespaceName(), "");
+    addNamespaceName(namer.getServiceNamespaceName(), "");
     return namer.getRequestTypeName(method);
   }
 
   void addNamespaceName(String namespaceName) {
-    namespaceNames.put(namespaceName, "");
+    addNamespaceName(namespaceName, "");
+  }
+
+  void addNamespaceName(String namespaceName, String aliasName) {
+    namespaceNames.put(namespaceName, aliasName);
   }
 
   public String getValue(Schema schema, String override) {
@@ -133,7 +137,7 @@ public class CSharpTypeMap implements TypeMap {
     return CSharpSymbol.from(segments[segments.length - 1]).toUpperCamel().name();
   }
 
-  public String getFieldName(Schema schema) {
+  public String getStructFieldName(Schema schema) {
     return "";
   }
 

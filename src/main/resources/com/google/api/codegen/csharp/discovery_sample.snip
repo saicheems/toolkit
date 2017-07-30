@@ -27,7 +27,7 @@
     @if class.usingAliasDirectives
 
         @join usingAliasDirective : class.usingAliasDirectives
-            using {@usingAliasDirective.alias} = {@usingAliasDirective.namespaceName};
+            using {@usingAliasDirective.aliasName} = {@usingAliasDirective.namespaceName};
         @end
     @end
 
@@ -218,17 +218,4 @@
             @end
         @end
     @end
-@end
-
-@private argList(class)
-  @if class.methodInfo.hasRequestBody
-      @if class.parameters
-          {@class.requestBody.varName},{@" "}
-      @else
-          {@class.requestBody.varName}
-      @end
-  @end
-  @join parameter : class.parameters on ", "
-    {@parameter.varName}
-  @end
 @end

@@ -18,6 +18,7 @@ import com.google.api.codegen.discovery.Document;
 import com.google.api.codegen.discovery.Method;
 import com.google.api.codegen.discovery.Schema;
 import com.google.api.codegen.discovery2.transformer.TypeMap;
+import com.google.api.codegen.discovery2.transformer.csharp.CSharpSymbol;
 import com.google.common.collect.ImmutableTable;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,12 +47,12 @@ public class JavaTypeMap implements TypeMap {
 
   private String add(String typeName) {
     // ["com.google.api.services.foo.v1.model.Foo", "Bar$Baz"]
-    String pieces[] = typeName.split("\\$", 2);
-    if (pieces.length > 1) {
-      pieces[1] = pieces[1].replace("$", ".");
+    String segments[] = typeName.split("\\$", 2);
+    if (segments.length > 1) {
+      segments[1] = segments[1].replace("$", ".");
     }
 
-    String baseTypeName = pieces[0];
+    String baseTypeName = segments[0];
     String baseClassName = baseTypeName.substring(baseTypeName.lastIndexOf(".") + 1);
 
     // If there's no package name, skip.
@@ -67,9 +68,9 @@ public class JavaTypeMap implements TypeMap {
 
     String fullTypeName = baseTypeName;
     String fullClassName = baseClassName;
-    if (pieces.length > 1) {
-      fullTypeName += "." + pieces[1];
-      fullClassName += "." + pieces[1];
+    if (segments.length > 1) {
+      fullTypeName += "." + segments[1];
+      fullClassName += "." + segments[1];
     }
 
     if (importNames.containsKey(baseClassName)) {
@@ -106,8 +107,10 @@ public class JavaTypeMap implements TypeMap {
     return typeNameBuilder.toString();
   }
 
-  public String getFieldName(Schema schema) {
-    return "";
+  public String getStructFieldName(Schema schema) {
+    String segments[] = schema.path().split("\\.");
+    // TODO: This isn't even close to matching what the client generator does, but it's good enough.
+    return CSharpSymbol.from(segments[segments.length - 1]).toUpperCamel().name();
   }
 
   public String getClassPropertyName(Schema schema) {

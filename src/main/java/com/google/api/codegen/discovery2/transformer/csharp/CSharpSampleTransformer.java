@@ -227,9 +227,9 @@ public class CSharpSampleTransformer implements SampleTransformer {
     List<UsingDirectiveView> usingDirectives = new ArrayList<>();
     List<UsingDirectiveView> usingAliasDirectives = new ArrayList<>();
     for (String namespaceName : new TreeSet<>(typeMap.getNamespaceNames().keySet())) {
-      String alias = typeMap.getNamespaceNames().get(namespaceName);
-      UsingDirectiveView usingDirectiveView = UsingDirectiveView.from(namespaceName, alias);
-      if (alias.isEmpty()) {
+      String aliasName = typeMap.getNamespaceNames().get(namespaceName);
+      UsingDirectiveView usingDirectiveView = UsingDirectiveView.from(namespaceName, aliasName);
+      if (aliasName.isEmpty()) {
         usingDirectives.add(usingDirectiveView);
       } else {
         usingAliasDirectives.add(usingDirectiveView);

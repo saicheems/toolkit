@@ -67,6 +67,12 @@ public abstract class SampleView implements ViewModel {
   public abstract List<String> importNames(); // Java
 
   @Nullable
+  public abstract List<String> standardLibraryImportPaths(); // Go
+
+  @Nullable
+  public abstract List<String> thirdPartyImportPaths(); // Go
+
+  @Nullable
   public abstract List<UsingDirectiveView> usingDirectives(); // C#
 
   @Nullable
@@ -82,10 +88,19 @@ public abstract class SampleView implements ViewModel {
   public abstract String clientVarName(); // Java
 
   @Nullable
+  public abstract String contextVarName(); // Go
+
+  @Nullable
+  public abstract List<String> scopeConsts(); // Go
+
+  @Nullable
   public abstract FieldView service();
 
   @Nullable
   public abstract String createServiceFuncName(); // Java
+
+  @Nullable
+  public abstract String getClientFuncName(); // Go
 
   @Nullable
   public abstract List<FieldView> parameters();
@@ -114,6 +129,9 @@ public abstract class SampleView implements ViewModel {
   @Nullable
   public abstract FieldView nextPageToken();
 
+  @Nullable
+  public abstract String mediaDownloadDocLink(); // Go
+
   @AutoValue.Builder
   public abstract static class Builder {
 
@@ -129,6 +147,10 @@ public abstract class SampleView implements ViewModel {
 
     public abstract Builder importNames(List<String> val);
 
+    public abstract Builder standardLibraryImportPaths(List<String> val);
+
+    public abstract Builder thirdPartyImportPaths(List<String> val);
+
     public abstract Builder usingDirectives(List<UsingDirectiveView> val);
 
     public abstract Builder usingAliasDirectives(List<UsingDirectiveView> val);
@@ -137,11 +159,17 @@ public abstract class SampleView implements ViewModel {
 
     public abstract Builder sampleNamespaceName(String val);
 
+    public abstract Builder contextVarName(String val);
+
     public abstract Builder clientVarName(String val);
+
+    public abstract Builder scopeConsts(List<String> val);
 
     public abstract Builder service(FieldView val);
 
     public abstract Builder createServiceFuncName(String val);
+
+    public abstract Builder getClientFuncName(String val);
 
     public abstract Builder parameters(List<FieldView> val);
 
@@ -160,6 +188,8 @@ public abstract class SampleView implements ViewModel {
     public abstract Builder pageToken(FieldView val);
 
     public abstract Builder nextPageToken(FieldView val);
+
+    public abstract Builder mediaDownloadDocLink(String val);
 
     public abstract SampleView build();
   }

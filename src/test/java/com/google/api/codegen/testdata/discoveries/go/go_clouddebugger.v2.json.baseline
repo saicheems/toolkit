@@ -172,7 +172,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -199,13 +198,9 @@ func main() {
   // ID of the breakpoint to delete.
   breakpointId := "my-breakpoint-id"  // TODO: Update placeholder value.
 
-  resp, err := clouddebuggerService.Debugger.Debuggees.Breakpoints.Delete(debuggeeId, breakpointId).Context(ctx).Do()
-  if err != nil {
+  if err := clouddebuggerService.Debugger.Debuggees.Breakpoints.Delete(debuggeeId, breakpointId).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 

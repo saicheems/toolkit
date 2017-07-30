@@ -27,7 +27,7 @@ public interface TypeMap {
 
   String getSetterFuncName(Schema schema);
 
-  String getFieldName(Schema schema);
+  String getStructFieldName(Schema schema);
 
   String getValue(Schema schema, String override);
 }

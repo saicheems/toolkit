@@ -22,6 +22,27 @@ import java.util.List;
 @AutoValue
 public abstract class FieldView {
 
+  public static FieldView empty() {
+    return newBuilder()
+        .classPropertyName("")
+        .description("")
+        .discoveryFieldName("")
+        .fields(new ArrayList<FieldView>())
+        .getterFuncName("")
+        .isArray(false)
+        .isMessage(false)
+        .isMap(false)
+        .keyValue("")
+        .keyVarName("")
+        .required(false)
+        .setterFuncName("")
+        .structFieldName("")
+        .typeName("")
+        .value("")
+        .varName("")
+        .build();
+  }
+
   public static Builder newBuilder() {
     return new AutoValue_FieldView.Builder();
   }
@@ -32,40 +53,25 @@ public abstract class FieldView {
 
   public abstract String discoveryFieldName();
 
-  public static FieldView empty() {
-    return newBuilder()
-        .classPropertyName("")
-        .description("")
-        .discoveryFieldName("")
-        .fieldName("")
-        .fields(new ArrayList<FieldView>())
-        .getterFuncName("")
-        .isArray(false)
-        .isMap(false)
-        .keyValue("")
-        .required(false)
-        .setterFuncName("")
-        .typeName("")
-        .value("")
-        .varName("")
-        .build();
-  }
-
-  public abstract String fieldName();
-
   public abstract List<FieldView> fields();
 
   public abstract String getterFuncName();
 
   public abstract boolean isArray();
 
+  public abstract boolean isMessage();
+
   public abstract boolean isMap();
 
   public abstract String keyValue();
 
+  public abstract String keyVarName();
+
   public abstract boolean required();
 
   public abstract String setterFuncName();
+
+  public abstract String structFieldName();
 
   public abstract Builder toBuilder();
 
@@ -91,6 +97,14 @@ public abstract class FieldView {
     return toBuilder().fields(fields).build();
   }
 
+  public FieldView withGetterFuncName(String getterFuncName) {
+    return toBuilder().getterFuncName(getterFuncName).build();
+  }
+
+  public FieldView withKeyVarName(String keyVarName) {
+    return toBuilder().keyVarName(keyVarName).build();
+  }
+
   public FieldView withIsArray(boolean isArray) {
     return toBuilder().isArray(isArray).build();
   }
@@ -99,12 +113,12 @@ public abstract class FieldView {
     return toBuilder().isMap(isMap).build();
   }
 
-  public FieldView withGetterFuncName(String getterFuncName) {
-    return toBuilder().getterFuncName(getterFuncName).build();
-  }
-
   public FieldView withKeyValue(String keyValue) {
     return toBuilder().keyValue(keyValue).build();
+  }
+
+  public FieldView withStructFieldName(String structFieldName) {
+    return toBuilder().structFieldName(structFieldName).build();
   }
 
   public FieldView withTypeName(String typeName) {
@@ -130,21 +144,25 @@ public abstract class FieldView {
 
     public abstract Builder discoveryFieldName(String val);
 
-    public abstract Builder fieldName(String val);
-
     public abstract Builder fields(List<FieldView> val);
 
     public abstract Builder getterFuncName(String val);
-
-    public abstract Builder setterFuncName(String val);
 
     public abstract Builder isArray(boolean val);
 
     public abstract Builder isMap(boolean val);
 
+    public abstract Builder isMessage(boolean val);
+
     public abstract Builder keyValue(String val);
 
+    public abstract Builder keyVarName(String val);
+
     public abstract Builder required(boolean val);
+
+    public abstract Builder setterFuncName(String val);
+
+    public abstract Builder structFieldName(String val);
 
     public abstract Builder typeName(String val);
 

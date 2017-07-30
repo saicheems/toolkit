@@ -65,7 +65,7 @@ public class JavaNamer {
         "com.google.api.services."
             + document.name()
             + (document.versionModule() ? "." + document.version() : "");
-    this.serviceClassName = JavaSymbol.from(document.canonicalName(), true).toUpperCamel().name();
+    serviceClassName = JavaSymbol.from(document.canonicalName(), true).toUpperCamel().name();
   }
 
   public String getAppName() {

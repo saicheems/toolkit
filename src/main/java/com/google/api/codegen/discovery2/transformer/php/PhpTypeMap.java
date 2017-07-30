@@ -49,7 +49,7 @@ public class PhpTypeMap implements TypeMap {
     return "set" + PhpSymbol.from(segments[segments.length - 1], true).toUpperCamel().name();
   }
 
-  public String getFieldName(Schema schema) {
+  public String getStructFieldName(Schema schema) {
     return "";
   }
 
