@@ -16,7 +16,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -45,13 +44,9 @@ func main() {
   // information about log names, see LogEntry.
   logName := "billingAccounts/my-billing-account/logs/my-log"  // TODO: Update placeholder value.
 
-  resp, err := loggingService.BillingAccounts.Logs.Delete(logName).Context(ctx).Do()
-  if err != nil {
+  if err := loggingService.BillingAccounts.Logs.Delete(logName).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -276,7 +271,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -305,13 +299,9 @@ func main() {
   // information about log names, see LogEntry.
   logName := "organizations/my-organization/logs/my-log"  // TODO: Update placeholder value.
 
-  resp, err := loggingService.Organizations.Logs.Delete(logName).Context(ctx).Do()
-  if err != nil {
+  if err := loggingService.Organizations.Logs.Delete(logName).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -384,7 +374,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -413,13 +402,9 @@ func main() {
   // information about log names, see LogEntry.
   logName := "projects/my-project/logs/my-log"  // TODO: Update placeholder value.
 
-  resp, err := loggingService.Projects.Logs.Delete(logName).Context(ctx).Do()
-  if err != nil {
+  if err := loggingService.Projects.Logs.Delete(logName).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -547,7 +532,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -572,13 +556,9 @@ func main() {
   // "projects/[PROJECT_ID]/metrics/[METRIC_ID]"
   metricName := "projects/my-project/metrics/my-metric"  // TODO: Update placeholder value.
 
-  resp, err := loggingService.Projects.Metrics.Delete(metricName).Context(ctx).Do()
-  if err != nil {
+  if err := loggingService.Projects.Metrics.Delete(metricName).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -813,7 +793,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -842,13 +821,9 @@ func main() {
   // is an error if the sink does not exist.
   sinkName := "projects/my-project/sinks/my-sink"  // TODO: Update placeholder value.
 
-  resp, err := loggingService.Projects.Sinks.Delete(sinkName).Context(ctx).Do()
-  if err != nil {
+  if err := loggingService.Projects.Sinks.Delete(sinkName).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 

@@ -194,9 +194,9 @@ func main() {
 
   req := bigqueryService.Datasets.List(projectId)
   if err := req.Pages(ctx, func(page *bigquery.DatasetList) error {
-    for _, datasets := range page.Datasets {
-      // TODO: Change code below to process each `datasets` resource:
-      fmt.Printf("%#v\n", datasets)
+    for _, datasetListDatasets := range page.Datasets {
+      // TODO: Change code below to process each `datasetListDatasets` resource:
+      fmt.Printf("%#v\n", datasetListDatasets)
     }
     return nil
   }); err != nil {
@@ -467,9 +467,9 @@ func main() {
 
   req := bigqueryService.Jobs.GetQueryResults(projectId, jobId)
   if err := req.Pages(ctx, func(page *bigquery.GetQueryResultsResponse) error {
-    for _, errorProto := range page.Errors {
-      // TODO: Change code below to process each `errorProto` resource:
-      fmt.Printf("%#v\n", errorProto)
+    for _, tableRow := range page.Rows {
+      // TODO: Change code below to process each `tableRow` resource:
+      fmt.Printf("%#v\n", tableRow)
     }
     return nil
   }); err != nil {
@@ -520,9 +520,9 @@ func main() {
   rb := &bigquery.Job{
     // TODO: Add desired fields of the request body.
   }
-
   // TODO: Add desired media content for upload. For more information, see
   // https://godoc.org/google.golang.org/api/bigquery/v2
+
 
   resp, err := bigqueryService.Jobs.Insert(projectId, rb).Context(ctx).Do()
   if err != nil {
@@ -575,9 +575,9 @@ func main() {
 
   req := bigqueryService.Jobs.List(projectId)
   if err := req.Pages(ctx, func(page *bigquery.JobList) error {
-    for _, jobs := range page.Jobs {
-      // TODO: Change code below to process each `jobs` resource:
-      fmt.Printf("%#v\n", jobs)
+    for _, jobListJobs := range page.Jobs {
+      // TODO: Change code below to process each `jobListJobs` resource:
+      fmt.Printf("%#v\n", jobListJobs)
     }
     return nil
   }); err != nil {
@@ -677,9 +677,9 @@ func main() {
 
   req := bigqueryService.Projects.List()
   if err := req.Pages(ctx, func(page *bigquery.ProjectList) error {
-    for _, projects := range page.Projects {
-      // TODO: Change code below to process each `projects` resource:
-      fmt.Printf("%#v\n", projects)
+    for _, projectListProjects := range page.Projects {
+      // TODO: Change code below to process each `projectListProjects` resource:
+      fmt.Printf("%#v\n", projectListProjects)
     }
     return nil
   }); err != nil {
@@ -1010,9 +1010,9 @@ func main() {
 
   req := bigqueryService.Tables.List(projectId, datasetId)
   if err := req.Pages(ctx, func(page *bigquery.TableList) error {
-    for _, tables := range page.Tables {
-      // TODO: Change code below to process each `tables` resource:
-      fmt.Printf("%#v\n", tables)
+    for _, tableListTables := range page.Tables {
+      // TODO: Change code below to process each `tableListTables` resource:
+      fmt.Printf("%#v\n", tableListTables)
     }
     return nil
   }); err != nil {

@@ -73,9 +73,9 @@ $optParams = array();
 do {
   $response = $service->billingAccounts_logs->listBillingAccountsLogs($parent, $optParams);
 
-  foreach ($response['logNames'] as $logNames) {
-    // TODO: Change code below to process each `logNames` resource:
-    echo '<pre>', var_export($logNames, true), '</pre>', "\n";
+  foreach ($response['logNames'] as $item) {
+    // TODO: Change code below to process each `item` resource:
+    echo '<pre>', var_export($item, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
@@ -271,9 +271,9 @@ $optParams = array();
 do {
   $response = $service->organizations_logs->listOrganizationsLogs($parent, $optParams);
 
-  foreach ($response['logNames'] as $logNames) {
-    // TODO: Change code below to process each `logNames` resource:
-    echo '<pre>', var_export($logNames, true), '</pre>', "\n";
+  foreach ($response['logNames'] as $item) {
+    // TODO: Change code below to process each `item` resource:
+    echo '<pre>', var_export($item, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();
@@ -353,9 +353,9 @@ $optParams = array();
 do {
   $response = $service->projects_logs->listProjectsLogs($parent, $optParams);
 
-  foreach ($response['logNames'] as $logNames) {
-    // TODO: Change code below to process each `logNames` resource:
-    echo '<pre>', var_export($logNames, true), '</pre>', "\n";
+  foreach ($response['logNames'] as $item) {
+    // TODO: Change code below to process each `item` resource:
+    echo '<pre>', var_export($item, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();

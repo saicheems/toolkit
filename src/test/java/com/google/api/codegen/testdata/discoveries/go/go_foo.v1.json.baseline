@@ -10,6 +10,7 @@ package main
 //    project directory.
 
 import (
+  "errors"
   "fmt"
   "log"
   "net/http"
@@ -21,18 +22,27 @@ import (
 func main() {
   ctx := context.Background()
 
-  c := &http.Client{}
+  c, err := getClient(ctx)
+  if err != nil {
+    log.Fatal(err)
+  }
 
   fooService, err := foo.New(c)
   if err != nil {
     log.Fatal(err)
   }
 
-  resp, err := fooService.Baz.Get().Context(ctx).Do()
+  resp, err := fooService.Bar.Get().Context(ctx).Do()
   if err != nil {
     log.Fatal(err)
   }
 
   // TODO: Change code below to process the `resp` object:
   fmt.Printf("%#v\n", resp)
+}
+
+func getClient(ctx context.Context) (*http.Client, error) {
+  // TODO: Change placeholder below to get authentication credentials. See
+  // https://foo.com/bar
+  return nil, errors.New("not implemented")
 }

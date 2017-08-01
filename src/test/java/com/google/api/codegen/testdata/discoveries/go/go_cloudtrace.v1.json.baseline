@@ -16,7 +16,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -45,13 +44,9 @@ func main() {
     // will be changed.
   }
 
-  resp, err := cloudtraceService.Projects.PatchTraces(projectId, rb).Context(ctx).Do()
-  if err != nil {
+  if err := cloudtraceService.Projects.PatchTraces(projectId, rb).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 

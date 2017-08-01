@@ -382,7 +382,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -407,13 +406,9 @@ func main() {
   // Required.
   projectId := "my-project-id"  // TODO: Update placeholder value.
 
-  resp, err := cloudresourcemanagerService.Projects.Delete(projectId).Context(ctx).Do()
-  if err != nil {
+  if err := cloudresourcemanagerService.Projects.Delete(projectId).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -750,7 +745,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -779,13 +773,9 @@ func main() {
     // TODO: Add desired fields of the request body.
   }
 
-  resp, err := cloudresourcemanagerService.Projects.Undelete(projectId, rb).Context(ctx).Do()
-  if err != nil {
+  if err := cloudresourcemanagerService.Projects.Undelete(projectId, rb).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 

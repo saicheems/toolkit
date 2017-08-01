@@ -116,7 +116,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -140,13 +139,9 @@ func main() {
   // The ID of the annotation to be deleted.
   annotationId := "my-annotation-id"  // TODO: Update placeholder value.
 
-  resp, err := genomicsService.Annotations.Delete(annotationId).Context(ctx).Do()
-  if err != nil {
+  if err := genomicsService.Annotations.Delete(annotationId).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -371,7 +366,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -395,13 +389,9 @@ func main() {
   // The ID of the annotation set to be deleted.
   annotationSetId := "my-annotation-set-id"  // TODO: Update placeholder value.
 
-  resp, err := genomicsService.Annotationsets.Delete(annotationSetId).Context(ctx).Do()
-  if err != nil {
+  if err := genomicsService.Annotationsets.Delete(annotationSetId).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -626,7 +616,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -650,13 +639,9 @@ func main() {
   // The ID of the call set to be deleted.
   callSetId := "my-call-set-id"  // TODO: Update placeholder value.
 
-  resp, err := genomicsService.Callsets.Delete(callSetId).Context(ctx).Do()
-  if err != nil {
+  if err := genomicsService.Callsets.Delete(callSetId).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -881,7 +866,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -905,13 +889,9 @@ func main() {
   // The ID of the dataset to be deleted.
   datasetId := "my-dataset-id"  // TODO: Update placeholder value.
 
-  resp, err := genomicsService.Datasets.Delete(datasetId).Context(ctx).Do()
-  if err != nil {
+  if err := genomicsService.Datasets.Delete(datasetId).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -1294,7 +1274,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -1322,13 +1301,9 @@ func main() {
     // TODO: Add desired fields of the request body.
   }
 
-  resp, err := genomicsService.Operations.Cancel(name, rb).Context(ctx).Do()
-  if err != nil {
+  if err := genomicsService.Operations.Cancel(name, rb).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -1500,7 +1475,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -1525,13 +1499,9 @@ func main() {
   // associated with this read group set.
   readGroupSetId := "my-read-group-set-id"  // TODO: Update placeholder value.
 
-  resp, err := genomicsService.Readgroupsets.Delete(readGroupSetId).Context(ctx).Do()
-  if err != nil {
+  if err := genomicsService.Readgroupsets.Delete(readGroupSetId).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -2219,7 +2189,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -2243,13 +2212,9 @@ func main() {
   // The ID of the variant to be deleted.
   variantId := "my-variant-id"  // TODO: Update placeholder value.
 
-  resp, err := genomicsService.Variants.Delete(variantId).Context(ctx).Do()
-  if err != nil {
+  if err := genomicsService.Variants.Delete(variantId).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -2367,7 +2332,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -2392,13 +2356,9 @@ func main() {
     // TODO: Add desired fields of the request body.
   }
 
-  resp, err := genomicsService.Variants.Merge(rb).Context(ctx).Do()
-  if err != nil {
+  if err := genomicsService.Variants.Merge(rb).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 
@@ -2624,7 +2584,6 @@ package main
 //    project directory.
 
 import (
-  "fmt"
   "log"
 
   "golang.org/x/net/context"
@@ -2648,13 +2607,9 @@ func main() {
   // The ID of the variant set to be deleted.
   variantSetId := "my-variant-set-id"  // TODO: Update placeholder value.
 
-  resp, err := genomicsService.Variantsets.Delete(variantSetId).Context(ctx).Do()
-  if err != nil {
+  if err := genomicsService.Variantsets.Delete(variantSetId).Context(ctx).Do(); err != nil {
     log.Fatal(err)
   }
-
-  // TODO: Change code below to process the `resp` object:
-  fmt.Printf("%#v\n", resp)
 }
 package main
 

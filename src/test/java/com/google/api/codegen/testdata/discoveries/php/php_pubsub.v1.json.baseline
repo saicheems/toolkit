@@ -846,9 +846,9 @@ $optParams = array();
 do {
   $response = $service->projects_topics_subscriptions->listProjectsTopicsSubscriptions($topic, $optParams);
 
-  foreach ($response['subscriptions'] as $subscriptions) {
-    // TODO: Change code below to process each `subscriptions` resource:
-    echo '<pre>', var_export($subscriptions, true), '</pre>', "\n";
+  foreach ($response['subscriptions'] as $item) {
+    // TODO: Change code below to process each `item` resource:
+    echo '<pre>', var_export($item, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getNextPageToken();

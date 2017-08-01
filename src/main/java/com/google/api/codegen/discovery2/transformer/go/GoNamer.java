@@ -112,8 +112,32 @@ public class GoNamer {
     if (!Strings.isNullOrEmpty(schema.id())) {
       return typeNameBuilder.append(GoSymbol.from(schema.id()).toUpperCamel().name()).toString();
     }
-    // TODO: Rest of it :/
-    return typeNameBuilder.append("Fuck").toString();
+
+    List<String> segments = Arrays.asList(schema.path().split("\\."));
+    // TODO: Replace `segments.indexOf("schemas")` with 0?
+    int i = segments.indexOf("schemas") + 1;
+
+    boolean addItem = true;
+
+    while (i < segments.size()) {
+      typeNameBuilder.append(GoSymbol.from(segments.get(i)).toUpperCamel().name());
+      while (i + 1 < segments.size() && segments.get(i + 1).equals("items")) {
+        // TODO: Tests should verify this multiple "item" chain possibility.
+        if (addItem) {
+          typeNameBuilder.append("Item");
+        }
+        i++;
+      }
+      if (i + 1 < segments.size() && segments.get(i + 1).equals("properties")) {
+        i++;
+      }
+      if (i + 1 < segments.size() && segments.get(i + 1).equals("additionalProperties")) {
+        i++;
+      }
+      addItem = false;
+      i++;
+    }
+    return typeNameBuilder.toString();
   }
 
   public String getRequestBodyVarName() {
@@ -150,7 +174,7 @@ public class GoNamer {
     // `prefix` is the last resource name, or the empty string if the method is top-level.
     String prefix = "";
     int i = methodIdSegments.size() - 3;
-    if (i > 1) {
+    if (i > 0) {
       prefix = GoSymbol.from(methodIdSegments.get(i)).toUpperCamel().name();
     }
     i = methodIdSegments.size() - 1;

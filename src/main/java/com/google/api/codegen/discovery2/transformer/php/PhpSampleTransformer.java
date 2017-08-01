@@ -186,7 +186,11 @@ public class PhpSampleTransformer implements SampleTransformer {
         String typeNameSegments[] = typeMap.add(element).split("_");
         varName = symbolSet.add(typeNameSegments[typeNameSegments.length - 1]);
       } else {
-        varName = symbolSet.add(discoveryFieldName);
+        if (isArray || isMap) {
+          varName = symbolSet.add("item");
+        } else {
+          varName = symbolSet.add(discoveryFieldName);
+        }
       }
       builder.pageStreamingResource(
           pageStreamingResource

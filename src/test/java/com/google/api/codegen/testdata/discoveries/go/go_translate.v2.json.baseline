@@ -32,8 +32,11 @@ func main() {
     log.Fatal(err)
   }
 
+  item := ""  // TODO: Update placeholder value.
+
   // The text to detect
   q := []string{}  // TODO: Update placeholder value.
+  q = append(q, item)
 
   resp, err := translateService.Detections.List(q).Context(ctx).Do()
   if err != nil {
@@ -129,8 +132,11 @@ func main() {
     log.Fatal(err)
   }
 
+  item := ""  // TODO: Update placeholder value.
+
   // The text to translate
   q := []string{}  // TODO: Update placeholder value.
+  q = append(q, item)
 
   // The target language into which the text should be translated
   target := ""  // TODO: Update placeholder value.
