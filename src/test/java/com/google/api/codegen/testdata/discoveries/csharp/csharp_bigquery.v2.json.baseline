@@ -564,14 +564,14 @@ namespace BigquerySample
                 response = request.Execute();
                 // response = await request.ExecuteAsync();
 
-                if (response.Rows == null)
+                if (response.Errors == null)
                 {
                     continue;
                 }
-                foreach (Data.TableRow tableRow in response.Rows)
+                foreach (Data.ErrorProto errorProto in response.Errors)
                 {
-                    // TODO: Change code below to process each `tableRow` resource:
-                    Console.WriteLine(JsonConvert.SerializeObject(tableRow));
+                    // TODO: Change code below to process each `errorProto` resource:
+                    Console.WriteLine(JsonConvert.SerializeObject(errorProto));
                 }
                 request.PageToken = response.PageToken;
             } while (response.PageToken != null);

@@ -467,9 +467,9 @@ func main() {
 
   req := bigqueryService.Jobs.GetQueryResults(projectId, jobId)
   if err := req.Pages(ctx, func(page *bigquery.GetQueryResultsResponse) error {
-    for _, tableRow := range page.Rows {
-      // TODO: Change code below to process each `tableRow` resource:
-      fmt.Printf("%#v\n", tableRow)
+    for _, errorProto := range page.Errors {
+      // TODO: Change code below to process each `errorProto` resource:
+      fmt.Printf("%#v\n", errorProto)
     }
     return nil
   }); err != nil {

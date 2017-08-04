@@ -23,7 +23,7 @@ credentials = GoogleCredentials.get_application_default()
 
 service = discovery.build('storagetransfer', 'v1', credentials=credentials)
 
-request = service.getGoogleServiceAccount()
+request = service.v1().getGoogleServiceAccount()
 response = request.execute()
 
 # TODO: Change code below to process the `response` dict:
@@ -211,7 +211,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -239,7 +238,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -335,7 +333,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -367,7 +364,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 

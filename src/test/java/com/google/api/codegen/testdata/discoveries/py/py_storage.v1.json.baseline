@@ -14,7 +14,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -232,7 +231,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -438,7 +436,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -467,7 +464,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -685,7 +681,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -1024,7 +1019,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -1115,6 +1109,10 @@ object_body = {
 
 # TODO: Add desired media content for upload. For more information, see
 # https://developers.google.com/api-client-library/python/guide/media_upload
+
+# TODO: Use `insert_media` in place of `insert` below to download media content.
+# For multipart download options, see
+# https://google.github.io/google-api-python-client/docs/epy/googleapiclient.http.MediaIoBaseDownload-class.html
 
 request = service.objects().insert(bucket=bucket, body=object_body)
 response = request.execute()

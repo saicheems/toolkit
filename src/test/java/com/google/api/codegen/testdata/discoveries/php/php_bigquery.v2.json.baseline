@@ -351,9 +351,9 @@ $optParams = array();
 do {
   $response = $service->jobs->getQueryResults($projectId, $jobId, $optParams);
 
-  foreach ($response['rows'] as $tableRow) {
-    // TODO: Change code below to process each `tableRow` resource:
-    echo '<pre>', var_export($tableRow, true), '</pre>', "\n";
+  foreach ($response['errors'] as $errorProto) {
+    // TODO: Change code below to process each `errorProto` resource:
+    echo '<pre>', var_export($errorProto, true), '</pre>', "\n";
   }
 
   $optParams['pageToken'] = $response->getPageToken();

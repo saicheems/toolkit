@@ -12,12 +12,15 @@ from pprint import pprint
 
 from googleapiclient import discovery
 
-developerKey = ''  # TODO: Update placeholder with desired API key.
+developer_key = ''  # TODO: Update placeholder with desired API key.
 
-service = discovery.build('translate', 'v2', developerKey=developerKey)
+service = discovery.build('translate', 'v2', developerKey=developer_key)
+
+item = ''  # TODO: Update placeholder value.
 
 # The text to detect
 q = []  # TODO: Update placeholder value.
+q.append(item)
 
 request = service.detections().list(q=q)
 response = request.execute()
@@ -37,9 +40,9 @@ from pprint import pprint
 
 from googleapiclient import discovery
 
-developerKey = ''  # TODO: Update placeholder with desired API key.
+developer_key = ''  # TODO: Update placeholder with desired API key.
 
-service = discovery.build('translate', 'v2', developerKey=developerKey)
+service = discovery.build('translate', 'v2', developerKey=developer_key)
 
 request = service.languages().list()
 response = request.execute()
@@ -59,12 +62,15 @@ from pprint import pprint
 
 from googleapiclient import discovery
 
-developerKey = ''  # TODO: Update placeholder with desired API key.
+developer_key = ''  # TODO: Update placeholder with desired API key.
 
-service = discovery.build('translate', 'v2', developerKey=developerKey)
+service = discovery.build('translate', 'v2', developerKey=developer_key)
+
+item = ''  # TODO: Update placeholder value.
 
 # The text to translate
 q = []  # TODO: Update placeholder value.
+q.append(item)
 
 # The target language into which the text should be translated
 target = ''  # TODO: Update placeholder value.

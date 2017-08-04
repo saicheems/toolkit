@@ -30,7 +30,7 @@ project = 'my-project'  # TODO: Update placeholder value.
 instance = 'my-instance'  # TODO: Update placeholder value.
 
 # The ID of the Backup Run to delete. To find a Backup Run ID, use the list method.
-id_ = str(0)  # TODO: Update placeholder value.
+id_ = '0'  # TODO: Update placeholder value.
 
 request = service.backupRuns().delete(project=project, instance=instance, id=id_)
 response = request.execute()
@@ -68,7 +68,7 @@ project = 'my-project'  # TODO: Update placeholder value.
 instance = 'my-instance'  # TODO: Update placeholder value.
 
 # The ID of this Backup Run.
-id_ = str(0)  # TODO: Update placeholder value.
+id_ = '0'  # TODO: Update placeholder value.
 
 request = service.backupRuns().get(project=project, instance=instance, id=id_)
 response = request.execute()
@@ -639,7 +639,7 @@ instances_import_request_body = {
     # TODO: Add desired entries to the request body.
 }
 
-request = service.instances().import(project=project, instance=instance, body=instances_import_request_body)
+request = service.instances().import_(project=project, instance=instance, body=instances_import_request_body)
 response = request.execute()
 
 # TODO: Change code below to process the `response` dict:

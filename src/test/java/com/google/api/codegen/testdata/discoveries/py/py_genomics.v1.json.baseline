@@ -80,7 +80,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -247,7 +246,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -414,7 +412,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -581,7 +578,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -855,7 +851,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -991,7 +986,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -1102,7 +1096,7 @@ import_read_group_sets_request_body = {
     # TODO: Add desired entries to the request body.
 }
 
-request = service.readgroupsets().import(body=import_read_group_sets_request_body)
+request = service.readgroupsets().import_(body=import_read_group_sets_request_body)
 response = request.execute()
 
 # TODO: Change code below to process the `response` dict:
@@ -1473,7 +1467,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -1546,7 +1539,7 @@ import_variants_request_body = {
     # TODO: Add desired entries to the request body.
 }
 
-request = service.variants().import(body=import_variants_request_body)
+request = service.variants().import_(body=import_variants_request_body)
 response = request.execute()
 
 # TODO: Change code below to process the `response` dict:
@@ -1566,7 +1559,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -1735,7 +1727,6 @@ BEFORE RUNNING:
 3. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 

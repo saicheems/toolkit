@@ -42,7 +42,6 @@ BEFORE RUNNING:
 2. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
 """
-
 from googleapiclient import discovery
 
 # TODO: Change placeholder below to generate authentication credentials. See

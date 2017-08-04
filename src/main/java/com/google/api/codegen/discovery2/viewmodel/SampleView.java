@@ -91,6 +91,9 @@ public abstract class SampleView implements ViewModel {
   public abstract String contextVarName(); // Go
 
   @Nullable
+  public abstract String credentialsVarName(); // Python
+
+  @Nullable
   public abstract List<String> scopeConsts(); // Go
 
   @Nullable
@@ -132,6 +135,12 @@ public abstract class SampleView implements ViewModel {
   @Nullable
   public abstract String mediaDownloadDocLink(); // Go
 
+  @Nullable
+  public abstract String lastServiceRequestFuncNameSegment(); // Python
+
+  @Nullable
+  public abstract String requestNextPageValue(); // Python
+
   @AutoValue.Builder
   public abstract static class Builder {
 
@@ -160,6 +169,8 @@ public abstract class SampleView implements ViewModel {
     public abstract Builder sampleNamespaceName(String val);
 
     public abstract Builder contextVarName(String val);
+
+    public abstract Builder credentialsVarName(String val);
 
     public abstract Builder clientVarName(String val);
 
@@ -190,6 +201,10 @@ public abstract class SampleView implements ViewModel {
     public abstract Builder nextPageToken(FieldView val);
 
     public abstract Builder mediaDownloadDocLink(String val);
+
+    public abstract Builder lastServiceRequestFuncNameSegment(String val);
+
+    public abstract Builder requestNextPageValue(String val);
 
     public abstract SampleView build();
   }

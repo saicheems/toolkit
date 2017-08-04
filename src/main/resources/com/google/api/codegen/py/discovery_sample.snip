@@ -1,0 +1,179 @@
+@snippet generate(class)
+    """
+    BEFORE RUNNING:
+    ---------------
+    1. If not already done, enable the {@class.apiInfo.title}
+       and check the quota for your project at
+       https://console.developers.google.com/apis/api/{@class.apiInfo.name}
+    @switch class.apiInfo.authType
+    @case "ADC"
+        2. This sample uses Application Default Credentials for authentication.
+           If not already done, install the gcloud CLI from
+           https://cloud.google.com/sdk and run
+           `gcloud beta auth application-default login`.
+           For more information, see
+           https://developers.google.com/identity/protocols/application-default-credentials
+        3. Install the Python client library for Google APIs by running
+           `pip install --upgrade google-api-python-client`
+    @default
+        2. Install the Python client library for Google APIs by running
+           `pip install --upgrade google-api-python-client`
+    @end
+    """
+    @if class.methodInfo.hasResponse
+        from pprint import pprint
+
+    @end
+    @if class.apiInfo.authType == "NONE"
+        import httplib2
+    @end
+    from googleapiclient import discovery
+    @if class.apiInfo.authType == "ADC"
+        from oauth2client.client import GoogleCredentials
+    @end
+
+    @if class.apiInfo.authType != "NONE"
+        @switch class.apiInfo.authType
+        @case "ADC"
+            {@class.credentialsVarName} = GoogleCredentials.get_application_default()
+        @case "OAUTH_3L"
+            @# TODO: Change placeholder below to generate authentication credentials. See
+            @# {@class.apiInfo.authInstructionsUrl}
+            @#
+            @if class.methodInfo.isScopesSingular
+                @# Authorize using the following scope:
+            @else
+                @# Authorize using one of the following scopes:
+            @end
+            @join scope : class.methodInfo.scopes
+                @#     '{@scope}'
+            @end
+            {@class.credentialsVarName} = None
+        @default
+            {@class.credentialsVarName} = ''  @# TODO: Update placeholder with desired API key.
+        @end
+
+
+    @end
+    {@class.service.varName} = {@class.service.value}
+    @join parameter : class.parameters if class.parameters
+
+        {@field(parameter, "")}
+    @end
+    @if class.methodInfo.hasRequestBody
+
+        {@field(class.requestBody, class.methodInfo.verb)}
+    @end
+    @if class.methodInfo.supportsMediaUpload
+
+        @# TODO: Add desired media content for upload. For more information, see
+        @# https://developers.google.com/api-client-library/python/guide/media_upload
+    @end
+    @if class.methodInfo.supportsMediaDownload
+
+        @# TODO: Use `{@class.lastServiceRequestFuncNameSegment}_media` in place of `{@class.lastServiceRequestFuncNameSegment}` below to download media content.
+        @# For multipart download options, see
+        @# https://google.github.io/google-api-python-client/docs/epy/googleapiclient.http.MediaIoBaseDownload-class.html
+    @end
+
+    {@class.request.varName} = {@class.request.value}
+    @if class.methodInfo.isPageStreaming
+        while {@class.request.varName} is not None:
+            {@class.response.varName} = {@class.request.varName}.execute()
+
+            @if class.pageStreamingResource.isMap
+                for {@class.pageStreamingResourceKey.varName}, {@class.pageStreamingResource.varName} in {@class.response.varName}['{@class.pageStreamingResource.discoveryFieldName}'].items():
+                    @# TODO: Change code below to process each ({@class.pageStreamingResourceKey.varName}, {@class.pageStreamingResource.varName}) item:
+                    pprint(({@class.pageStreamingResourceKey.varName}, {@class.pageStreamingResource.varName}))
+            @else
+                @if class.pageStreamingResource.isArray
+                for {@class.pageStreamingResource.varName} in {@class.response.varName}['{@class.pageStreamingResource.discoveryFieldName}']:
+                    @# TODO: Change code below to process each `{@class.pageStreamingResource.varName}` resource:
+                    pprint({@class.pageStreamingResource.varName})
+                @else
+                    @# TODO: Change code below to process each `{@class.response.varName}['{@class.pageStreamingResource.discoveryFieldName}']` resource:
+                    pprint({@class.response.varName}['{@class.pageStreamingResource.discoveryFieldName}'])
+                @end
+            @end
+
+            @if class.methodInfo.parametersPageTokenDiscoveryFieldName
+                {@class.request.varName} = {@class.requestNextPageValue}
+            @else
+                {@class.requestBody.varName}.{@class.pageToken.classPropertyName} = {@class.response.varName}.{@class.nextPageToken.classPropertyName}
+            @end
+    @else
+        @if class.methodInfo.hasResponse
+            {@class.response.varName} = {@class.request.varName}.execute()
+
+            @# TODO: Change code below to process the `{@class.response.varName}` dict:
+            pprint({@class.response.varName})
+        @else
+            {@class.request.varName}.execute()
+        @end
+    @end
+@end
+
+# If `httpVerb` is specified, the field is assumed to be the request body, which renders differently.
+@private field(class, httpVerb)
+    @if class.fields
+        @join subField : class.fields
+            {@field(subField, "")}
+
+        @end
+
+
+    @end
+    # Do not print documentation for the request body.
+    @if httpVerb == ""
+        @if class.description
+            @join line : util.getDocLines(class.description, 100)
+                @# {@line}
+            @end
+
+
+        @end
+    @end
+    @if class.isMessage
+        {@class.varName} = {
+            # If `class` is the request body...
+            @if httpVerb
+                @switch httpVerb
+                @case "PATCH"
+                    @# TODO: Add desired entries to the request body. Only assigned entries
+                    @# will be changed.
+                @case "PUT"
+                    @# TODO: Add desired entries to the request body. All existing entries
+                    @# will be replaced.
+                @default
+                    @# TODO: Add desired entries to the request body.
+                @end
+
+            @end
+            @join subField : class.fields if class.fields
+
+                @if class.isArray
+                    {@class.varName}.append({@subField.varName})
+                @else
+                    @if class.isMap
+                        {@class.varName}[{@subField.keyValue}] = {@subField.value}
+                    @else
+                        {@class.varName}['{@subField.discoveryFieldName}'] = {@subField.varName}
+                    @end
+                @end
+        @end
+     }
+     @else
+         {@class.varName} = {@class.value}  @# TODO: Update placeholder value.
+         @join subField : class.fields if class.fields
+             @if class.isArray
+                 {@class.varName}.append({@subField.varName})
+             @else
+                 @if class.isMap
+                     {@class.varName}[{@subField.keyValue}] = {@subField.value}
+                 @else
+                     {@class.varName}['{@subField.discoveryFieldName}'] = {@subField.varName}
+                 @end
+             @end
+        @end
+    @end
+@end

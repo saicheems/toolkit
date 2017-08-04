@@ -40,6 +40,7 @@ import com.google.api.codegen.discovery2.transformer.csharp.CSharpSampleTransfor
 import com.google.api.codegen.discovery2.transformer.go.GoSampleTransformer;
 import com.google.api.codegen.discovery2.transformer.java.JavaSampleTransformer;
 import com.google.api.codegen.discovery2.transformer.php.PhpSampleTransformer;
+import com.google.api.codegen.discovery2.transformer.py.PythonSampleTransformer;
 import com.google.api.codegen.rendering.CommonSnippetSetRunner;
 import com.google.api.codegen.util.CommonRenderingUtil;
 import com.google.common.collect.ImmutableMap;
@@ -138,6 +139,9 @@ public class MainDiscoveryProviderFactory implements DiscoveryProviderFactory {
     }
     if (id.equals(PHP)) {
       sampleTransformer = new PhpSampleTransformer();
+    }
+    if (id.equals(PYTHON)) {
+      sampleTransformer = new PythonSampleTransformer();
     }
 
     return ViewModelProvider.newBuilder()

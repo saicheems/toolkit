@@ -10,12 +10,13 @@ BEFORE RUNNING:
 """
 from pprint import pprint
 
-import httplib2
 from googleapiclient import discovery
 
-service = discovery.build('foo', 'v1', http=httplib2.Http(timeout=60), discoveryServiceUrl='localhost:8080/$discovery/foo?version=v1')
+developer_key = ''  # TODO: Update placeholder with desired API key.
 
-request = service.baz().get()
+service = discovery.build('foo', 'v1', developerKey=developer_key)
+
+request = service.bar().get()
 response = request.execute()
 
 # TODO: Change code below to process the `response` dict:

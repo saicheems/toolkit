@@ -92,13 +92,16 @@ public class MethodInfoTransformer {
     }
     schema = schema.dereference();
     for (String name : schema.properties().keySet()) {
-      // Check that it's impossible for a member of an object to be defined as repeated, there should only be array types.
+      // Check that it's impossible for a member of an object to be defined as repeated, there
+      // should only be array types.
       Preconditions.checkState(!schema.properties().get(name).repeated());
     }
     // Priority order:
     // 1. First array of objects.
     // 2. First array or map.
     // 3. First string.
+
+    // TODO: Handle case where there are multiple arrays of objects. The only way is probably to hardcode overrides. See "bigquery".
 
     // Look for the first array of objects.
     for (String name : schema.properties().keySet()) {

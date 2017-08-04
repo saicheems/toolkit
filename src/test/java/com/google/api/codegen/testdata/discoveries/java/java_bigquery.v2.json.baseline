@@ -511,8 +511,8 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.bigquery.Bigquery;
+import com.google.api.services.bigquery.model.ErrorProto;
 import com.google.api.services.bigquery.model.GetQueryResultsResponse;
-import com.google.api.services.bigquery.model.TableRow;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
@@ -531,12 +531,12 @@ public class BigqueryExample {
     GetQueryResultsResponse response;
     do {
       response = request.execute();
-      if (response.getRows() == null) {
+      if (response.getErrors() == null) {
         continue;
       }
-      for (TableRow tableRow : response.getRows()) {
-        // TODO: Change code below to process each `tableRow` resource:
-        System.out.println(tableRow);
+      for (ErrorProto errorProto : response.getErrors()) {
+        // TODO: Change code below to process each `errorProto` resource:
+        System.out.println(errorProto);
       }
       request.setPageToken(response.getPageToken());
     } while (response.getPageToken() != null);
