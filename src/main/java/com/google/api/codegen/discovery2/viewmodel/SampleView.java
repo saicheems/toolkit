@@ -141,6 +141,9 @@ public abstract class SampleView implements ViewModel {
   @Nullable
   public abstract String requestNextPageValue(); // Python
 
+  @Nullable
+  public abstract List<String> requirePaths(); // Ruby
+
   @AutoValue.Builder
   public abstract static class Builder {
 
@@ -205,6 +208,8 @@ public abstract class SampleView implements ViewModel {
     public abstract Builder lastServiceRequestFuncNameSegment(String val);
 
     public abstract Builder requestNextPageValue(String val);
+
+    public abstract Builder requirePaths(List<String> val);
 
     public abstract SampleView build();
   }

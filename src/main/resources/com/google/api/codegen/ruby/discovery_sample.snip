@@ -1,0 +1,25 @@
+@snippet generate(class)
+  @# BEFORE RUNNING:
+  @# ---------------
+  @# 1. If not already done, enable the {@class.apiInfo.title}
+  @#    and check the quota for your project at
+  @#    https://console.developers.google.com/apis/api/{@class.apiInfo.name}
+  @switch class.apiInfo.authType
+  @case "ADC"
+    @# 2. This sample uses Application Default Credentials for authentication.
+    @#    If not already done, install the gcloud CLI from
+    @#    https://cloud.google.com/sdk and run
+    @#    `gcloud beta auth application-default login`.
+    @#    For more information, see
+    @#    https://developers.google.com/identity/protocols/application-default-credentials
+    @# 3. Install the Ruby client library and Application Default Credentials
+    @#    library by running `gem install google-api-client` and
+    @#    `gem install googleauth`
+  @default
+    @# 2. Install the Ruby client library by running `gem install google-api-client`
+  @end
+
+  @join requirePath : class.requirePaths
+    require {@requirePath}
+  @end
+@end
